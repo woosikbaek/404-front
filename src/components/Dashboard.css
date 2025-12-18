@@ -171,11 +171,6 @@
   overflow: hidden;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
 .card-header {
   padding: 14px 16px 10px;
   border-bottom: 2px solid #f0f0f0;
@@ -234,11 +229,6 @@
   text-align: center;
   border: 2px solid #f0f0f0;
   transition: all 0.3s ease;
-}
-
-.stat-box:hover {
-  border-color: #ddd;
-  background: #f5f5f5;
 }
 
 .stat-box label {
@@ -354,11 +344,6 @@
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
-.detail-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
 .device-summary-list {
   display: flex;
   flex-direction: column;
@@ -374,12 +359,6 @@
   border-radius: 6px;
   border: 2px solid #f0f0f0;
   transition: all 0.2s;
-}
-
-.device-summary-item:hover {
-  background: white;
-  border-color: #ddd;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .device-summary-item .device-color {
@@ -414,12 +393,6 @@
   border-radius: 10px;
   padding: 16px;
   transition: all 0.3s ease;
-}
-
-.device-item:hover {
-  border-color: #ddd;
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .device-header {

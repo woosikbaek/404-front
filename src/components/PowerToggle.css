@@ -15,11 +15,6 @@
   transition: all 0.3s ease;
 }
 
-.power-toggle-container:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px);
-}
-
 .power-status {
   display: flex;
   align-items: center;
@@ -72,21 +67,9 @@
   color: white;
 }
 
-.power-button.off:hover:not(:disabled) {
-  background-color: #059669;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
-}
-
 .power-button.on {
   background-color: #ef4444;
   color: white;
-}
-
-.power-button.on:hover:not(:disabled) {
-  background-color: #dc2626;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
 }
 
 .power-button:disabled {

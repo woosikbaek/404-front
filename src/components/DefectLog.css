@@ -108,10 +108,6 @@
   transition: background-color 0.3s;
 }
 
-.refresh-button:hover {
-  background-color: #5568d3;
-}
-
 .defects-content {
   display: flex;
   flex-direction: column;
@@ -153,12 +149,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.defect-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  border-color: #667eea;
 }
 
 .defect-image-wrapper {
@@ -276,10 +266,6 @@
   justify-content: center;
   z-index: 1;
   transition: background-color 0.3s;
-}
-
-.modal-close:hover {
-  background: rgba(0, 0, 0, 0.7);
 }
 
 .modal-image {
