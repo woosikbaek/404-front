@@ -1,13 +1,6 @@
-body {
-  font-family: 'Segoe UI', 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-}
-
-.App {
-  min-height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.dashboard-container {
+  padding: 0;
+  background: transparent;
 }
 
 /* ============ 헤더 ============ */
@@ -16,10 +9,10 @@ body {
   justify-content: space-between;
   align-items: center;
   background: white;
-  padding: 30px 40px;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  margin-bottom: 30px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin-bottom: 12px;
 }
 
 .header-content {
@@ -28,15 +21,15 @@ body {
 
 .header h1 {
   color: #1a1a1a;
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   letter-spacing: -0.5px;
 }
 
 .header-subtitle {
   color: #666;
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -106,12 +99,12 @@ body {
 }
 
 .alert {
-  padding: 16px 20px;
-  border-radius: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
   animation: slideIn 0.3s ease-out;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   backdrop-filter: blur(10px);
 }
 
@@ -143,7 +136,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
   grid-template-rows: auto auto;
-  gap: 24px;
+  gap: 12px;
   max-width: 1600px;
   margin: 0 auto;
 }
@@ -169,48 +162,43 @@ body {
   flex-direction: column;
 }
 
-.card-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
 /* ============ 카드 스타일 ============ */
 .card {
   background: white;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .card-header {
-  padding: 24px 24px 16px;
+  padding: 14px 16px 10px;
   border-bottom: 2px solid #f0f0f0;
 }
 
 .card-header h2 {
   color: #1a1a1a;
-  margin: 0 0 4px 0;
-  font-size: 24px;
+  margin: 0 0 2px 0;
+  font-size: 18px;
   font-weight: 700;
 }
 
 .card-subtitle {
   color: #888;
-  font-size: 13px;
+  font-size: 10px;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .card-content {
-  padding: 24px;
+  flex: 1;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
 }
@@ -235,14 +223,14 @@ body {
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin-top: 16px;
+  gap: 6px;
+  margin-top: 10px;
 }
 
 .stat-box {
   background: #f9f9f9;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 8px;
+  border-radius: 6px;
   text-align: center;
   border: 2px solid #f0f0f0;
   transition: all 0.3s ease;
@@ -256,21 +244,21 @@ body {
 .stat-box label {
   display: block;
   color: #666;
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
 }
 
 .stat-value {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   color: #1a1a1a;
 }
 
 .stat-value.large {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .stat-value.success {
@@ -284,53 +272,53 @@ body {
 /* ============ 통계 행 ============ */
 .stat-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
 .stat-cell {
   background: #f9f9f9;
-  padding: 16px;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 8px;
   text-align: center;
 }
 
 .stat-cell label {
   display: block;
   color: #666;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
 }
 
 .stat-cell .value {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 700;
 }
 
 /* ============ 차트 컨테이너 ============ */
 .chart-container {
   background: #f9f9f9;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
   border: 2px solid #f0f0f0;
   flex-shrink: 0;
 }
 
 .chart-container.small {
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   flex: 1;
-  min-height: 300px;
+  min-height: 200px;
 }
 
 /* ============ 섹션 ============ */
 .section {
-  margin-top: 16px;
-  padding-top: 16px;
+  margin-top: 8px;
+  padding-top: 8px;
   border-top: 2px solid #f0f0f0;
   flex: 1;
   display: flex;
@@ -339,11 +327,79 @@ body {
 
 .section h3 {
   color: #1a1a1a;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 700;
   margin-bottom: 16px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.detail-btn {
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.detail-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.device-summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.device-summary-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 6px;
+  border: 2px solid #f0f0f0;
+  transition: all 0.2s;
+}
+
+.device-summary-item:hover {
+  background: white;
+  border-color: #ddd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.device-summary-item .device-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.device-summary-item .device-name {
+  flex: 1;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 12px;
+}
+
+.device-summary-item .device-value {
+  font-weight: 700;
+  color: #ef4444;
+  font-size: 14px;
 }
 
 /* ============ 장치 목록 ============ */

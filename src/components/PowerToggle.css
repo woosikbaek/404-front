@@ -1,33 +1,46 @@
 .power-toggle-container {
+  position: fixed;
+  top: 20px;
+  right: 8px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem;
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+.power-toggle-container:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
 }
 
 .power-status {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: white;
-  font-size: 1.2rem;
+  gap: 0.4rem;
+  color: #1a1a1a;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
 .status-label {
-  opacity: 0.9;
+  opacity: 0.7;
+  font-size: 0.8rem;
 }
 
 .status-indicator {
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+  font-size: 0.75rem;
 }
 
 .status-indicator.on {
@@ -43,15 +56,15 @@
 }
 
 .power-button {
-  padding: 1rem 2rem;
+  padding: 0.6rem 1.2rem;
   border: none;
-  border-radius: 50px;
-  font-size: 1.1rem;
+  border-radius: 24px;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 180px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .power-button.off {
@@ -89,11 +102,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .power-icon {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
 }
 
 @keyframes pulse {

@@ -7,6 +7,7 @@ import DefectLog from './components/DefectLog'
 function App() {
   const [isPowerOn, setIsPowerOn] = useState(false)
   const [statsData, setStatsData] = useState(null)
+  const [activeTab, setActiveTab] = useState('dashboard')
 
   const handlePowerChange = (newPowerState) => {
     setIsPowerOn(newPowerState)
@@ -18,15 +19,35 @@ function App() {
 
   return (
     <div className="app-container">
-      <header className="app-header">
-        <h1 className="app-title">🏭 공정 시스템 관리</h1>
-        <p className="app-subtitle">실시간 공정 모니터링 및 불량 검출 시스템</p>
-      </header>
       
       <main className="app-main">
         <PowerToggle onPowerChange={handlePowerChange} />
-        <Dashboard isPowerOn={isPowerOn} onStatsUpdate={handleStatsUpdate} />
-        <DefectLog isPowerOn={isPowerOn} />
+        
+        {/* 탭 메뉴 */}
+        <div className="tab-container">
+          <button 
+            className={`tab-button ${activeTab === 'dashboard' ? 'active' : ''}`}
+            onClick={() => setActiveTab('dashboard')}
+          >
+            📊 대시보드
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'defectlog' ? 'active' : ''}`}
+            onClick={() => setActiveTab('defectlog')}
+          >
+            📋 불량 로그
+          </button>
+        </div>
+
+        {/* 탭 컨텐츠 */}
+        <div className="tab-content">
+          {activeTab === 'dashboard' && (
+            <Dashboard isPowerOn={isPowerOn} onStatsUpdate={handleStatsUpdate} />
+          )}
+          {activeTab === 'defectlog' && (
+            <DefectLog isPowerOn={isPowerOn} />
+          )}
+        </div>
       </main>
 
       <footer className="app-footer">

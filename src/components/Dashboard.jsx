@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import SensorDetailModal from './SensorDetailModal';
 import './Dashboard.css';
 
 // 원형 차트 색상
 const COLORS = ['#28a745', '#dc3545'];
 const DEVICE_COLORS = ['#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6'];
 
-function App() {
+function Dashboard() {
   const [stats, setStats] = useState({
     total_count: 0,
     overall: {
@@ -31,6 +32,7 @@ function App() {
 
   const [alerts, setAlerts] = useState([]);
   const [connected, setConnected] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // 초기 데이터 받아오기 (REST API)
@@ -164,7 +166,7 @@ function App() {
   ];
 
   return (
-    <div className="App">
+    <div className="dashboard-container">
       <header className="header">
         <div className="header-content">
           <h1>🚗 자동차 검사 실시간 대시보드</h1>
@@ -195,14 +197,14 @@ function App() {
           
           <div className="card-content">
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height={250}>
+              <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
                   <Pie
                     data={overallChartData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
+                    innerRadius={40}
+                    outerRadius={70}
                     paddingAngle={2}
                     dataKey="value"
                   >
@@ -251,14 +253,14 @@ function App() {
           <div className="card-content">
             {/* 전체 불량 vs 센서 불량 도넛 */}
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height={250}>
+              <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
                   <Pie
                     data={sensorComparisonChartData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
+                    innerRadius={40}
+                    outerRadius={70}
                     paddingAngle={2}
                     dataKey="value"
                   >
@@ -287,55 +289,22 @@ function App() {
               </div>
             </div>
 
-            {/* 장치별 불량 */}
+            {/* 장치별 불량 요약 */}
             <div className="section">
-              <h3>장치별 상세 분석</h3>
+              <div className="section-header">
+                <h3>장치별 상세 분석</h3>
+                <button className="detail-btn" onClick={() => setIsModalOpen(true)}>
+                  상세보기 →
+                </button>
+              </div>
               
-              {sensorChartData.length > 0 && (
-                <div className="chart-container small">
-                  <ResponsiveContainer width="100%" height={250}>
-                    <BarChart data={sensorChartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                      <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                      <YAxis tick={{ fontSize: 12 }} />
-                      <Tooltip formatter={(value) => `${value}건`} />
-                      <Bar 
-                        dataKey="value" 
-                        fill="#3b82f6" 
-                        radius={[6, 6, 0, 0]}
-                        maxBarSize={40}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              )}
-
-              <div className="device-list">
+              <div className="device-summary-list">
                 {Object.keys(stats.sensor.by_device).length > 0 ? (
-                  Object.entries(stats.sensor.by_device).map(([device, info], idx) => (
-                    <div key={device} className="device-item">
-                      <div className="device-header">
-                        <div className="device-color" style={{ backgroundColor: DEVICE_COLORS[idx % DEVICE_COLORS.length] }}></div>
-                        <span className="device-name">{device}</span>
-                      </div>
-                      <div className="device-stats">
-                        <div className="device-stat">
-                          <span className="label">차량 불량</span>
-                          <span className="value">{info.defect_car_count}대</span>
-                        </div>
-                        <div className="device-stat">
-                          <span className="label">차량 비율</span>
-                          <span className="value">{info.car_defect_rate}%</span>
-                        </div>
-                        <div className="device-stat">
-                          <span className="label">불량 건수</span>
-                          <span className="value">{info.defect_log_count}건</span>
-                        </div>
-                        <div className="device-stat">
-                          <span className="label">건수 비율</span>
-                          <span className="value">{info.log_defect_rate}%</span>
-                        </div>
-                      </div>
+                  Object.entries(stats.sensor.by_device).slice(0, 3).map(([device, info], idx) => (
+                    <div key={device} className="device-summary-item">
+                      <div className="device-color" style={{ backgroundColor: DEVICE_COLORS[idx % DEVICE_COLORS.length] }}></div>
+                      <span className="device-name">{device}</span>
+                      <span className="device-value">{info.defect_log_count}건</span>
                     </div>
                   ))
                 ) : (
@@ -356,14 +325,14 @@ function App() {
           <div className="card-content">
             {/* 전체 불량 vs 외관 불량 도넛 */}
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height={250}>
+              <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
                   <Pie
                     data={cameraComparisonChartData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
+                    innerRadius={40}
+                    outerRadius={70}
                     paddingAngle={2}
                     dataKey="value"
                   >
@@ -394,8 +363,15 @@ function App() {
           </div>
         </div>
       </div>
+
+      {/* 센서 상세분석 모달 */}
+      <SensorDetailModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        sensorData={stats.sensor}
+      />
     </div>
   );
 }
 
-export default App;
+export default Dashboard;
