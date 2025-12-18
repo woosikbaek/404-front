@@ -6,12 +6,41 @@
   margin: 2rem 0;
 }
 
+.defect-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #ef4444;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .defect-log-title {
   color: #1f2937;
   font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 3px solid #ef4444;
-  padding-bottom: 0.5rem;
+  margin: 0;
+}
+
+.connection-status {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.connection-status.connected {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.connection-status.disconnected {
+  background-color: #fee2e2;
+  color: #991b1b;
 }
 
 .defect-log-idle {
@@ -24,6 +53,7 @@
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  align-items: center;
   margin-bottom: 2rem;
   padding: 1rem;
   background-color: #f9fafb;
@@ -40,6 +70,16 @@
   font-weight: 600;
   color: #374151;
   white-space: nowrap;
+}
+
+.defects-count {
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  background-color: #667eea;
+  color: white;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .date-input,

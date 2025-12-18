@@ -1,168 +1,401 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import './Dashboard.css';
 
-function Dashboard({ isPowerOn }) {
-  const [progressData, setProgressData] = useState({
-    currentStep: 0,
-    totalSteps: 0,
-    percentage: 0,
-    processName: '',
-    status: 'idle',
-    startTime: null,
-    estimatedEndTime: null,
+// 원형 차트 색상
+const COLORS = ['#28a745', '#dc3545'];
+const DEVICE_COLORS = ['#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6'];
+
+function App() {
+  const [stats, setStats] = useState({
+    total_count: 0,
+    overall: {
+      normal_car_count: 0,
+      defect_car_count: 0,
+      defect_rate: 0,
+      defect_log_count: 0
+    },
+    sensor: {
+      defect_car_count: 0,
+      defect_rate: 0,
+      defect_log_count: 0,
+      by_device: {}
+    },
+    camera: {
+      defect_car_count: 0,
+      defect_rate: 0,
+      defect_log_count: 0
+    }
   });
 
-  useEffect(() => {
-    if (!isPowerOn) {
-      setProgressData({
-        currentStep: 0,
-        totalSteps: 0,
-        percentage: 0,
-        processName: '',
-        status: 'idle',
-        startTime: null,
-        estimatedEndTime: null,
-      });
-      return;
-    }
+  const [alerts, setAlerts] = useState([]);
+  const [connected, setConnected] = useState(false);
 
-    // 백엔드에서 실시간 공정 진행도 데이터 가져오기
-    const fetchProgress = async () => {
+  useEffect(() => {
+    // 초기 데이터 받아오기 (REST API)
+    const fetchInitialData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/process/progress');
-        if (response.ok) {
-          const data = await response.json();
-          setProgressData(data);
-        }
+        const response = await fetch('http://192.168.1.78:5000/dashboard/summary');
+        const data = await response.json();
+        console.log('초기 데이터:', data);
+        setStats(data);
       } catch (error) {
-        console.error('진행도 조회 오류:', error);
+        console.error('초기 데이터 로드 실패:', error);
+        addAlert('❌ 초기 데이터를 불러올 수 없습니다', 'error');
       }
     };
 
-    // 초기 데이터 로드
-    fetchProgress();
+    fetchInitialData();
 
-    // 5초마다 데이터 갱신
-    const interval = setInterval(fetchProgress, 5000);
+    // WebSocket 연결
+    const socket = io('http://192.168.1.78:5000', {
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 5
+    });
 
-    return () => clearInterval(interval);
-  }, [isPowerOn]);
+    // 연결 성공
+    socket.on('connect', () => {
+      console.log('서버 연결됨');
+      setConnected(true);
+    });
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'running':
-        return '#10b981';
-      case 'paused':
-        return '#f59e0b';
-      case 'error':
-        return '#ef4444';
-      case 'completed':
-        return '#3b82f6';
-      default:
-        return '#6b7280';
-    }
+    // 초기 통계 수신
+    socket.on('stats', (data) => {
+      console.log('초기 통계 수신:', data);
+      setStats(data);
+    });
+
+    // 통계 업데이트
+    socket.on('stats_update', (data) => {
+      console.log('통계 업데이트:', data);
+      setStats(data);
+    });
+
+    // 센서 불량
+    socket.on('sensor_defect', (data) => {
+      console.log('센서 불량:', data);
+      addAlert(`⚠️ 센서 불량 감지: ${data.device}`, 'error');
+    });
+
+    // 카메라 불량
+    socket.on('camera_defect', (data) => {
+      console.log('카메라 불량:', data);
+      addAlert('⚠️ 외관 불량 감지됨', 'error');
+    });
+
+    // 차량 추가
+    socket.on('car_added', (data) => {
+      console.log('새 차량:', data);
+      addAlert('🚗 새 차량 추가됨', 'success');
+    });
+
+    // 연결 끊김
+    socket.on('disconnect', () => {
+      console.log('서버 연결 끊김');
+      setConnected(false);
+    });
+
+    // 에러
+    socket.on('error', (error) => {
+      console.error('Socket 에러:', error);
+      addAlert('❌ 연결 오류', 'error');
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  const addAlert = (message, type) => {
+    const id = Date.now();
+    setAlerts(prev => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setAlerts(prev => prev.filter(a => a.id !== id));
+    }, 5000);
   };
 
-  const getStatusText = (status) => {
-    switch (status) {
-      case 'running':
-        return '진행 중';
-      case 'paused':
-        return '일시 정지';
-      case 'error':
-        return '오류 발생';
-      case 'completed':
-        return '완료';
-      default:
-        return '대기 중';
-    }
-  };
+  // 전체 통계 원형 차트 데이터
+  const overallChartData = [
+    { name: '정상 차량', value: stats.overall.normal_car_count },
+    { name: '불량 차량', value: stats.overall.defect_car_count }
+  ];
+
+  // 센서 불량 차량 원형 차트 데이터
+  const sensorCarChartData = [
+    { name: '정상 차량', value: stats.total_count - stats.sensor.defect_car_count },
+    { name: '불량 차량', value: stats.sensor.defect_car_count }
+  ];
+
+  // 센서 장치별 원형 차트 데이터 (건수)
+  const sensorChartData = Object.entries(stats.sensor.by_device)
+    .filter(([_, info]) => info.defect_log_count > 0)
+    .map(([device, info]) => ({
+      name: device,
+      value: info.defect_log_count
+    }));
+
+  // 센서 장치별 차량 원형 차트 데이터
+  const sensorDeviceCarChartData = Object.entries(stats.sensor.by_device)
+    .filter(([_, info]) => info.defect_car_count > 0)
+    .map(([device, info]) => ({
+      name: device,
+      value: info.defect_car_count
+    }));
+
+  // 외관 불량 차량 원형 차트 데이터
+  const cameraCarChartData = [
+    { name: '정상 차량', value: stats.total_count - stats.camera.defect_car_count },
+    { name: '불량 차량', value: stats.camera.defect_car_count }
+  ];
+
+  // 센서 불량 비율 (전체 불량 중 센서 불량)
+  const sensorComparisonChartData = [
+    { name: '센서 불량 차량', value: stats.sensor.defect_car_count },
+    { name: '기타 불량 차량', value: stats.overall.defect_car_count - stats.sensor.defect_car_count }
+  ];
+
+  // 외관 불량 비율 (전체 불량 중 외관 불량)
+  const cameraComparisonChartData = [
+    { name: '외관 불량 차량', value: stats.camera.defect_car_count },
+    { name: '기타 불량 차량', value: stats.overall.defect_car_count - stats.camera.defect_car_count }
+  ];
 
   return (
-    <div className="dashboard-container">
-      <h2 className="dashboard-title">공정 진행 현황</h2>
-      
-      <div className="dashboard-content">
-        {!isPowerOn ? (
-          <div className="dashboard-idle">
-            <p className="idle-message">시스템이 꺼져있습니다</p>
-            <p className="idle-hint">전원을 켜서 공정을 시작하세요</p>
+    <div className="App">
+      <header className="header">
+        <div className="header-content">
+          <h1>🚗 자동차 검사 실시간 대시보드</h1>
+          <p className="header-subtitle">센서 및 외관 검사 통계</p>
+        </div>
+        <div className="connection-status">
+          <span className={`status ${connected ? 'connected' : 'disconnected'}`}>
+            <span className="status-dot"></span>
+            {connected ? '연결됨' : '연결 끊김'}
+          </span>
+        </div>
+      </header>
+
+      <div className="alerts-container">
+        {alerts.map(alert => (
+          <div key={alert.id} className={`alert alert-${alert.type}`}>
+            {alert.message}
           </div>
-        ) : (
-          <>
-            <div className="progress-header">
-              <div className="process-info">
-                <h3 className="process-name">
-                  {progressData.processName || '공정 대기 중...'}
-                </h3>
-                <span 
-                  className="status-badge"
-                  style={{ backgroundColor: getStatusColor(progressData.status) }}
-                >
-                  {getStatusText(progressData.status)}
-                </span>
+        ))}
+      </div>
+
+      <div className="dashboard">
+        {/* 전체 통계 카드 */}
+        <div className="card summary-card">
+          <div className="card-header">
+            <h2>📊 전체 검사 현황</h2>
+          </div>
+          
+          <div className="card-content">
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={overallChartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {overallChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => `${value}대`} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="stat-grid">
+              <div className="stat-box">
+                <label>총 차량 수</label>
+                <div className="stat-value large">{stats.total_count}</div>
               </div>
-              <div className="time-info">
-                {progressData.startTime && (
-                  <div className="time-item">
-                    <span className="time-label">시작 시간:</span>
-                    <span className="time-value">{new Date(progressData.startTime).toLocaleTimeString()}</span>
-                  </div>
-                )}
-                {progressData.estimatedEndTime && (
-                  <div className="time-item">
-                    <span className="time-label">예상 완료:</span>
-                    <span className="time-value">{new Date(progressData.estimatedEndTime).toLocaleTimeString()}</span>
-                  </div>
-                )}
+              <div className="stat-box">
+                <label>정상 차량</label>
+                <div className="stat-value success">{stats.overall.normal_car_count}</div>
+              </div>
+              <div className="stat-box">
+                <label>불량 차량</label>
+                <div className="stat-value error">{stats.overall.defect_car_count}</div>
+              </div>
+              <div className="stat-box">
+                <label>전체 불량률</label>
+                <div className="stat-value error">{stats.overall.defect_rate}%</div>
+              </div>
+              <div className="stat-box">
+                <label>전체 불량 건수</label>
+                <div className="stat-value error">{stats.overall.defect_log_count}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 센서 검사 카드 */}
+        <div className="card sensor-card">
+          <div className="card-header">
+            <h2>🔧 센서 검사</h2>
+            <span className="card-subtitle">센서 검사 데이터</span>
+          </div>
+
+          <div className="card-content">
+            {/* 전체 불량 vs 센서 불량 도넛 */}
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={sensorComparisonChartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {sensorComparisonChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => `${value}대`} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="stat-row">
+              <div className="stat-cell">
+                <label>불량 차량</label>
+                <div className="value error">{stats.sensor.defect_car_count}대</div>
+              </div>
+              <div className="stat-cell">
+                <label>불량률</label>
+                <div className="value error">{stats.sensor.defect_rate}%</div>
+              </div>
+              <div className="stat-cell">
+                <label>불량 건수</label>
+                <div className="value error">{stats.sensor.defect_log_count}건</div>
               </div>
             </div>
 
-            <div className="progress-bar-container">
-              <div className="progress-bar-wrapper">
-                <div 
-                  className="progress-bar-fill"
-                  style={{ 
-                    width: `${progressData.percentage}%`,
-                    backgroundColor: getStatusColor(progressData.status)
-                  }}
-                >
-                  <span className="progress-text">{progressData.percentage}%</span>
+            {/* 장치별 불량 */}
+            <div className="section">
+              <h3>장치별 상세 분석</h3>
+              
+              {sensorChartData.length > 0 && (
+                <div className="chart-container small">
+                  <ResponsiveContainer width="100%" height={250}>
+                    <BarChart data={sensorChartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                      <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} />
+                      <Tooltip formatter={(value) => `${value}건`} />
+                      <Bar 
+                        dataKey="value" 
+                        fill="#3b82f6" 
+                        radius={[6, 6, 0, 0]}
+                        maxBarSize={40}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
+              )}
+
+              <div className="device-list">
+                {Object.keys(stats.sensor.by_device).length > 0 ? (
+                  Object.entries(stats.sensor.by_device).map(([device, info], idx) => (
+                    <div key={device} className="device-item">
+                      <div className="device-header">
+                        <div className="device-color" style={{ backgroundColor: DEVICE_COLORS[idx % DEVICE_COLORS.length] }}></div>
+                        <span className="device-name">{device}</span>
+                      </div>
+                      <div className="device-stats">
+                        <div className="device-stat">
+                          <span className="label">차량 불량</span>
+                          <span className="value">{info.defect_car_count}대</span>
+                        </div>
+                        <div className="device-stat">
+                          <span className="label">차량 비율</span>
+                          <span className="value">{info.car_defect_rate}%</span>
+                        </div>
+                        <div className="device-stat">
+                          <span className="label">불량 건수</span>
+                          <span className="value">{info.defect_log_count}건</span>
+                        </div>
+                        <div className="device-stat">
+                          <span className="label">건수 비율</span>
+                          <span className="value">{info.log_defect_rate}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="no-data">불량 데이터 없음 ✓</p>
+                )}
               </div>
-              <div className="step-info">
-                <span>{progressData.currentStep} / {progressData.totalSteps} 단계</span>
-              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 카메라 검사 카드 */}
+        <div className="card camera-card">
+          <div className="card-header">
+            <h2>📷 외관 검사</h2>
+            <span className="card-subtitle">카메라 외관 검사 데이터</span>
+          </div>
+
+          <div className="card-content">
+            {/* 전체 불량 vs 외관 불량 도넛 */}
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={cameraComparisonChartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {cameraComparisonChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => `${value}대`} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
 
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-icon">📊</div>
-                <div className="stat-content">
-                  <div className="stat-label">현재 단계</div>
-                  <div className="stat-value">{progressData.currentStep}</div>
-                </div>
+            <div className="stat-row">
+              <div className="stat-cell">
+                <label>불량 차량</label>
+                <div className="value error">{stats.camera.defect_car_count}대</div>
               </div>
-              <div className="stat-card">
-                <div className="stat-icon">🎯</div>
-                <div className="stat-content">
-                  <div className="stat-label">전체 단계</div>
-                  <div className="stat-value">{progressData.totalSteps}</div>
-                </div>
+              <div className="stat-cell">
+                <label>불량률</label>
+                <div className="value error">{stats.camera.defect_rate}%</div>
               </div>
-              <div className="stat-card">
-                <div className="stat-icon">⚡</div>
-                <div className="stat-content">
-                  <div className="stat-label">진행률</div>
-                  <div className="stat-value">{progressData.percentage}%</div>
-                </div>
+              <div className="stat-cell">
+                <label>불량 건수</label>
+                <div className="value error">{stats.camera.defect_log_count}건</div>
               </div>
             </div>
-          </>
-        )}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Dashboard;
+export default App;

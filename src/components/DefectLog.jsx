@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import io from 'socket.io-client';
 import './DefectLog.css';
 
 function DefectLog({ isPowerOn }) {
@@ -8,34 +9,72 @@ function DefectLog({ isPowerOn }) {
     defectType: 'all',
   });
   const [selectedImage, setSelectedImage] = useState(null);
+  const [connected, setConnected] = useState(false);
+  const socketRef = useRef(null);
 
   useEffect(() => {
     if (!isPowerOn) {
+      setDefects([]);
+      setConnected(false);
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
       return;
     }
 
-    fetchDefects();
-    
-    // 30초마다 새로운 불량 데이터 확인
-    const interval = setInterval(fetchDefects, 30000);
-    return () => clearInterval(interval);
-  }, [isPowerOn, filters]);
+    // Socket.IO 연결
+    socketRef.current = io('http://192.168.1.78:5000', {
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 5
+    });
 
-  const fetchDefects = async () => {
-    try {
-      const params = new URLSearchParams();
-      if (filters.date) params.append('date', filters.date);
-      if (filters.defectType !== 'all') params.append('type', filters.defectType);
+    socketRef.current.on('connect', () => {
+      console.log('🟢 DefectLog 웹소켓 연결됨');
+      setConnected(true);
+    });
 
-      const response = await fetch(`http://localhost:8080/api/defects?${params}`);
-      if (response.ok) {
-        const data = await response.json();
-        setDefects(data);
+    socketRef.current.on('disconnect', () => {
+      console.log('🔴 DefectLog 웹소켓 연결 해제됨');
+      setConnected(false);
+    });
+
+    // 초기 불량 데이터 수신
+    socketRef.current.on('initial_defects', (data) => {
+      console.log('📋 초기 불량 데이터 수신:', data);
+      setDefects(data);
+    });
+
+    // 실시간 불량 데이터 업데이트
+    socketRef.current.on('defect_update', (data) => {
+      console.log('🔴 새로운 불량 감지:', data);
+      setDefects(prevDefects => [data, ...prevDefects]);
+    });
+
+    // 센서 불량 데이터
+    socketRef.current.on('sensor_defect', (data) => {
+      console.log('⚠️ 센서 불량:', data);
+      setDefects(prevDefects => [data, ...prevDefects]);
+    });
+
+    // 카메라 불량 데이터
+    socketRef.current.on('camera_defect', (data) => {
+      console.log('📷 카메라 불량:', data);
+      setDefects(prevDefects => [data, ...prevDefects]);
+    });
+
+    socketRef.current.on('error', (error) => {
+      console.error('웹소켓 오류:', error);
+    });
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
       }
-    } catch (error) {
-      console.error('불량 데이터 조회 오류:', error);
-    }
-  };
+    };
+  }, [isPowerOn]);
 
   const defectTypes = [
     { value: 'all', label: '전체' },
@@ -74,11 +113,36 @@ function DefectLog({ isPowerOn }) {
     }, {});
   };
 
-  const groupedDefects = groupByDate(defects);
+  const filterDefects = () => {
+    let filtered = [...defects];
+
+    // 날짜 필터
+    if (filters.date) {
+      filtered = filtered.filter(defect => {
+        const defectDate = new Date(defect.timestamp).toLocaleDateString('en-CA'); // YYYY-MM-DD
+        return defectDate === filters.date;
+      });
+    }
+
+    // 불량 유형 필터
+    if (filters.defectType !== 'all') {
+      filtered = filtered.filter(defect => defect.type === filters.defectType);
+    }
+
+    return filtered;
+  };
+
+  const filteredDefects = filterDefects();
+  const groupedDefects = groupByDate(filteredDefects);
 
   return (
     <div className="defect-log-container">
-      <h2 className="defect-log-title">불량 검출 로그</h2>
+      <div className="defect-log-header">
+        <h2 className="defect-log-title">불량 검출 로그</h2>
+        <div className={`connection-status ${connected ? 'connected' : 'disconnected'}`}>
+          {connected ? '🟢 연결됨' : '🔴 연결 안됨'}
+        </div>
+      </div>
 
       {!isPowerOn ? (
         <div className="defect-log-idle">
@@ -112,13 +176,13 @@ function DefectLog({ isPowerOn }) {
                 ))}
               </select>
             </div>
-            <button onClick={fetchDefects} className="refresh-button">
-              🔄 새로고침
-            </button>
+            <div className="defects-count">
+              총 {filteredDefects.length}개의 불량
+            </div>
           </div>
 
           <div className="defects-content">
-            {defects.length === 0 ? (
+            {filteredDefects.length === 0 ? (
               <div className="no-defects">
                 <p>검출된 불량이 없습니다</p>
               </div>

@@ -6,9 +6,14 @@ import DefectLog from './components/DefectLog'
 
 function App() {
   const [isPowerOn, setIsPowerOn] = useState(false)
+  const [statsData, setStatsData] = useState(null)
 
   const handlePowerChange = (newPowerState) => {
     setIsPowerOn(newPowerState)
+  }
+
+  const handleStatsUpdate = (data) => {
+    setStatsData(data)
   }
 
   return (
@@ -20,7 +25,7 @@ function App() {
       
       <main className="app-main">
         <PowerToggle onPowerChange={handlePowerChange} />
-        <Dashboard isPowerOn={isPowerOn} />
+        <Dashboard isPowerOn={isPowerOn} onStatsUpdate={handleStatsUpdate} />
         <DefectLog isPowerOn={isPowerOn} />
       </main>
 
