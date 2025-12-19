@@ -18,16 +18,19 @@ const Login = ({ onLoginSuccess }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          employee_number: employeeNumber, 
+          employeeNumber: employeeNumber, 
           password: password 
         })
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('로그인 실패');
+        // 서버에서 반환한 에러 메시지 사용
+        throw new Error(data.message || data.error || '로그인 실패');
       }
 
-      const { access_token, refresh_token } = await response.json();
+      const { access_token, refresh_token } = data;
 
       // 토큰 저장
       localStorage.setItem('access_token', access_token);
@@ -36,7 +39,7 @@ const Login = ({ onLoginSuccess }) => {
       // 로그인 성공 콜백
       onLoginSuccess();
     } catch (err) {
-      setError('사원번호 또는 비밀번호가 올바르지 않습니다.');
+      setError(err.message || '사원번호 또는 비밀번호가 올바르지 않습니다.');
       console.error('Login error:', err);
     } finally {
       setIsLoading(false);
