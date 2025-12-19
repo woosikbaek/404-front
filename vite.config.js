@@ -4,4 +4,20 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/auth': {
+        target: 'http://192.168.1.78:5000',
+        changeOrigin: true,
+      },
+      '/dashboard': {
+        target: 'http://192.168.1.78:5000',
+        changeOrigin: true,
+      },
+      '/sensor': {
+        target: 'http://192.168.1.78:5000',
+        changeOrigin: true,
+      }
+    }
+  }
 })
