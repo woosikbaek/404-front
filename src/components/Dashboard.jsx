@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import SensorDetailModal from './SensorDetailModal';
 import './Dashboard.css';
 
@@ -300,11 +300,11 @@ function Dashboard() {
               
               <div className="device-summary-list">
                 {Object.keys(stats.sensor.by_device).length > 0 ? (
-                  Object.entries(stats.sensor.by_device).slice(0, 3).map(([device, info], idx) => (
+                  Object.entries(stats.sensor.by_device).map(([device, info], idx) => (
                     <div key={device} className="device-summary-item">
                       <div className="device-color" style={{ backgroundColor: DEVICE_COLORS[idx % DEVICE_COLORS.length] }}></div>
                       <span className="device-name">{device}</span>
-                      <span className="device-value">{info.defect_log_count}건</span>
+                      <span className="device-value" style={{ float: 'right' }}>{info.defect_log_count}건</span>
                     </div>
                   ))
                 ) : (
