@@ -165,12 +165,18 @@ function Dashboard() {
     { name: '기타 불량 차량', value: stats.overall.defect_car_count - stats.camera.defect_car_count }
   ];
 
+  // 로그인한 유저 이름 가져오기
+  const userName = localStorage.getItem('name') || '---';
+
   return (
     <div className="dashboard-container">
       <header className="header">
         <div className="header-content">
           <h1>🚗 자동차 검사 실시간 대시보드</h1>
           <p className="header-subtitle">센서 및 외관 검사 통계</p>
+        </div>
+        <div className="worker-info" style={{ color: '#222', fontWeight: 500, marginTop: 8, marginBottom: 4 }}>
+          근무자 : {userName}
         </div>
         <div className="connection-status">
           <span className={`status ${connected ? 'connected' : 'disconnected'}`}>

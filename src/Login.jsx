@@ -35,6 +35,7 @@ const Login = ({ onLoginSuccess }) => {
       // 토큰 저장
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('refresh_token', refresh_token);
+      localStorage.setItem('name', data.employee.name);
 
       // 로그인 성공 콜백
       onLoginSuccess();
