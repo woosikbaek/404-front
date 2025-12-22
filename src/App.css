@@ -1,24 +1,23 @@
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background: #d7dbdf;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body, #root, .app-container {
-  background-color: #d7dbdf !important;
-  background-image: none !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
 #root {
-  width: 100%;
   min-height: 100vh;
+  background: #d7dbdf;
 }
 
 .app-container {
   min-height: 100vh;
-  background: rgb(223, 223, 223);;
+  background: #d7dbdf;
   display: flex;
   flex-direction: column;
 }

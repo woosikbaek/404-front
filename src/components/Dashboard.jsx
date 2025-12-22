@@ -172,7 +172,7 @@ function Dashboard() {
     <div className="dashboard-container">
       <header className="header">
         <div className="header-content">
-          <h1>🚗 자동차 검사 실시간 대시보드</h1>
+          <h1>자동차 검사 실시간 대시보드</h1>
           <p className="header-subtitle">센서 및 외관 검사 통계</p>
         </div>
         <div className="worker-info" style={{ color: '#222', fontWeight: 500, marginTop: 8, marginBottom: 4 }}>
@@ -198,7 +198,7 @@ function Dashboard() {
         {/* 전체 통계 카드 */}
         <div className="card summary-card">
           <div className="card-header">
-            <h2>📊 전체 검사 현황</h2>
+            <h2>전체 검사 현황</h2>
           </div>
           
           <div className="card-content">
@@ -252,7 +252,7 @@ function Dashboard() {
         {/* 센서 검사 카드 */}
         <div className="card sensor-card">
           <div className="card-header">
-            <h2>🔧 센서 검사</h2>
+            <h2>센서 검사</h2>
             <span className="card-subtitle">센서 검사 데이터</span>
           </div>
 
@@ -324,7 +324,7 @@ function Dashboard() {
         {/* 카메라 검사 카드 */}
         <div className="card camera-card">
           <div className="card-header">
-            <h2>📷 외관 검사</h2>
+            <h2>외관 검사</h2>
             <span className="card-subtitle">카메라 외관 검사 데이터</span>
           </div>
 

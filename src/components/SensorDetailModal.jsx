@@ -17,7 +17,7 @@ function SensorDetailModal({ isOpen, onClose, sensorData }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>🔧 센서 장치별 상세 분석</h2>
+          <h2>센서 장치별 상세 분석</h2>
           <button className="modal-close-btn" onClick={onClose}>✕</button>
         </div>
 
