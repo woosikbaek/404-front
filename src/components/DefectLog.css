@@ -1,318 +1,203 @@
+/* 전체 컨테이너 */
 .defect-log-container {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  margin: 2rem 0;
-}
-
-.defect-log-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 3px solid #ef4444;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.defect-log-title {
-  color: #1f2937;
-  font-size: 1.8rem;
-  margin: 0;
-}
-
-.connection-status {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.connection-status.connected {
-  background-color: #d1fae5;
-  color: #065f46;
-}
-
-.connection-status.disconnected {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-.defect-log-idle {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: #6b7280;
-}
-
-.filter-section {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background-color: #f9fafb;
+  padding: 20px;
   border-radius: 8px;
+  background: #f8fafc;
 }
 
-.filter-group {
-  display: flex;
+/* 제목 */
+.defect-log-title {
+  margin-bottom: 16px;
+  font-size: 22px;
+  color: #1f2937;
+}
+
+/* ===== 헤더 ===== */
+.log-header {
+  display: grid;
+  grid-template-columns: 120px 56px 1fr 220px;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.filter-group label {
+  padding: 10px 16px;
   font-weight: 600;
   color: #374151;
-  white-space: nowrap;
+  background: #f1f5f9;
+  border-radius: 8px;
+  margin-bottom: 6px;
 }
 
-.defects-count {
-  margin-left: auto;
-  padding: 0.5rem 1rem;
-  background-color: #667eea;
-  color: white;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.9rem;
+.log-header > div:nth-child(3) {
+  text-align: center; /* 결과 헤더 가운데 */
 }
 
-.date-input,
-.type-select {
-  padding: 0.5rem 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
+.log-header > div:nth-child(4) {
+  text-align: right; /* 날짜 헤더 오른쪽 */
 }
 
-.date-input:focus,
-.type-select:focus {
-  outline: none;
-  border-color: #667eea;
+/* ===== 리스트 ===== */
+.log-list {
+  max-height: 600px;
+  overflow-y: auto;
 }
 
-.refresh-button {
-  padding: 0.5rem 1rem;
-  background-color: #667eea;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.defects-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.no-defects {
-  text-align: center;
-  padding: 3rem;
-  color: #6b7280;
-  font-size: 1.2rem;
-}
-
-.date-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.date-header {
-  color: #1f2937;
-  font-size: 1.4rem;
-  font-weight: 700;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e5e7eb;
-}
-
-.defects-grid {
+.log-row {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.defect-card {
-  background: white;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  overflow: hidden;
+  grid-template-columns: 120px 56px 1fr 220px;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.defect-image-wrapper {
-  position: relative;
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  background-color: #f3f4f6;
+.log-row:hover {
+  background: #f9fafb;
 }
 
-.defect-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.defect-type-badge {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  color: white;
+/* 차량번호 */
+.log-col.car {
   font-weight: 600;
-  font-size: 0.85rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: #111827;
 }
 
-.defect-info {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.defect-time {
+/* 결과 */
+.log-col.result {
+  text-align: center;
   font-weight: 700;
-  color: #1f2937;
-  font-size: 1rem;
+  color: #dc2626;
 }
 
-.defect-details {
-  display: flex;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.detail-label {
+/* 날짜 */
+.log-col.time {
+  text-align: right;
+  font-size: 14px;
   color: #6b7280;
-  font-weight: 600;
 }
 
-.detail-value {
-  color: #1f2937;
+/* 이미지 미리보기 */
+.preview-img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
 }
 
-.defect-severity {
-  font-size: 0.9rem;
-  color: #4b5563;
-}
-
-.severity-high {
-  color: #ef4444;
+.preview-placeholder {
+  width: 36px;
+  height: 36px;
+  background: #e5e7eb;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 700;
+  border-radius: 4px;
 }
 
-.severity-medium {
-  color: #f59e0b;
-  font-weight: 700;
-}
-
-.severity-low {
-  color: #10b981;
-  font-weight: 700;
-}
-
+/* ===== 모달 ===== */
 .image-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 2rem;
 }
 
 .modal-content {
-  background: white;
+  background: #ffffff;
+  padding: 20px;
   border-radius: 12px;
-  max-width: 900px;
-  max-height: 90vh;
-  overflow: auto;
+  max-width: 620px;
+  width: 100%;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-
-.modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-  transition: background-color 0.3s;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
 .modal-image {
   width: 100%;
-  display: block;
+  border-radius: 8px;
+  margin-bottom: 12px;
 }
 
-.modal-info {
-  padding: 2rem;
-}
-
-.modal-info h3 {
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: none;
+  background: #f1f5f9;
   color: #1f2937;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: #e5e7eb;
 }
 
 .modal-info p {
-  color: #4b5563;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
+  margin: 6px 0;
+  color: #374151;
+  font-size: 14px;
 }
 
-@media (max-width: 768px) {
-  .defect-log-container {
-    padding: 1rem;
-  }
+/* ===== 페이지네이션 ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
 
-  .filter-section {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.pagination button {
+  min-width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2px solid #c7d2fe;
+  background-color: #ffffff;
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 14px;
+}
 
-  .filter-group {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.pagination .nav-btn {
+  font-size: 18px;
+  font-weight: 900;
+  background-color: #f1f5f9;
+}
 
-  .defects-grid {
-    grid-template-columns: 1fr;
-  }
+.pagination button:hover {
+  background-color: #e0e7ff;
+}
 
-  .image-modal {
-    padding: 1rem;
-  }
+.pagination button.active {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
 
-  .modal-content {
-    max-width: 100%;
-  }
+.pagination button:disabled {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.modal-info {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #374151;
+}
+
+.modal-info p {
+  margin: 4px 0;
 }
