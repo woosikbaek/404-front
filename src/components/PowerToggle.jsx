@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './PowerToggle.css';
+import styles from './PowerToggle.module.css';
 
 function PowerToggle({ onPowerChange }) {
   const [isPowerOn, setIsPowerOn] = useState(false);
@@ -41,25 +41,25 @@ function PowerToggle({ onPowerChange }) {
   };
 
   return (
-    <div className="power-toggle-container">
-      <div className="power-status">
-        <span className="status-label">공정 시스템 상태:</span>
-        <span className={`status-indicator ${isPowerOn ? 'on' : 'off'}`}>
+    <div className={styles.powerToggleContainer}>
+      <div className={styles.powerStatus}>
+        <span className={styles.statusLabel}>공정 시스템 상태:</span>
+        <span className={`${styles.statusIndicator} ${isPowerOn ? styles.statusIndicatorOn : styles.statusIndicatorOff}`}>
           {isPowerOn ? 'ON' : 'OFF'}
         </span>
       </div>
       <button
-        className={`power-button ${isPowerOn ? 'on' : 'off'} ${isLoading ? 'loading' : ''}`}
+        className={`${styles.powerButton} ${isPowerOn ? styles.powerButtonOn : styles.powerButtonOff} ${isLoading ? styles.powerButtonLoading : ''}`}
         onClick={handleToggle}
         disabled={isLoading}
       >
-        <div className="button-inner">
+        <div className={styles.buttonInner}>
           {isLoading ? (
             <span>처리 중...</span>
           ) : (
             <>
-              <span className="power-icon">{isPowerOn ? '⏻' : '⏽'}</span>
-              <span className="power-text">{isPowerOn ? '전원 끄기' : '전원 켜기'}</span>
+              <span className={styles.powerIcon}>{isPowerOn ? '⏻' : '⏽'}</span>
+              <span>{isPowerOn ? '전원 끄기' : '전원 켜기'}</span>
             </>
           )}
         </div>

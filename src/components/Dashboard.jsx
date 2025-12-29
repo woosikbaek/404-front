@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import SensorDetailModal from './SensorDetailModal';
-import './Dashboard.css';
+import styles from './Dashboard.module.css';
 
 // 원형 차트 색상
 const COLORS = ['#28a745', '#dc3545'];
@@ -169,40 +169,40 @@ function Dashboard() {
   const userName = localStorage.getItem('name') || '---';
 
   return (
-    <div className="dashboard-container">
-      <header className="header">
-        <div className="header-content">
+    <div className={styles.dashboardContainer}>
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
           <h1>자동차 검사 실시간 대시보드</h1>
-          <p className="header-subtitle">센서 및 외관 검사 통계</p>
+          <p className={styles.headerSubtitle}>센서 및 외관 검사 통계</p>
         </div>
         <div className="worker-info" style={{ color: '#222', fontWeight: 500, marginTop: 8, marginBottom: 4 }}>
           근무자 : {userName}
         </div>
-        <div className="connection-status">
-          <span className={`status ${connected ? 'connected' : 'disconnected'}`}>
-            <span className="status-dot"></span>
+        <div className={styles.connectionStatus}>
+          <span className={`${styles.status} ${connected ? styles.connected : styles.disconnected}`}>
+            <span className={styles.statusDot}></span>
             {connected ? '연결됨' : '연결 끊김'}
           </span>
         </div>
       </header>
 
-      <div className="alerts-container">
+      <div className={styles.alertsContainer}>
         {alerts.map(alert => (
-          <div key={alert.id} className={`alert alert-${alert.type}`}>
+          <div key={alert.id} className={`${styles.alert} ${alert.type === 'error' ? styles.alertError : styles.alertSuccess}`}>
             {alert.message}
           </div>
         ))}
       </div>
 
-      <div className="dashboard">
+      <div className={styles.dashboard}>
         {/* 전체 통계 카드 */}
-        <div className="card summary-card">
-          <div className="card-header">
+        <div className={`${styles.card} ${styles.summaryCard}`}>
+          <div className={`${styles.cardHeader} ${styles.summaryCardHeader}`}>
             <h2>전체 검사 현황</h2>
           </div>
           
-          <div className="card-content">
-            <div className="chart-container">
+          <div className={styles.cardContent}>
+            <div className={styles.chartContainer}>
               <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
                   <Pie
@@ -224,41 +224,41 @@ function Dashboard() {
               </ResponsiveContainer>
             </div>
 
-            <div className="stat-grid">
-              <div className="stat-box">
+            <div className={styles.statGrid}>
+              <div className={styles.statBox}>
                 <label>총 차량 수</label>
-                <div className="stat-value large">{stats.total_count}</div>
+                <div className={`${styles.statValue} ${styles.large}`}>{stats.total_count}</div>
               </div>
-              <div className="stat-box">
+              <div className={styles.statBox}>
                 <label>정상 차량</label>
-                <div className="stat-value success">{stats.overall.normal_car_count}</div>
+                <div className={`${styles.statValue} ${styles.success}`}>{stats.overall.normal_car_count}</div>
               </div>
-              <div className="stat-box">
+              <div className={styles.statBox}>
                 <label>불량 차량</label>
-                <div className="stat-value error">{stats.overall.defect_car_count}</div>
+                <div className={`${styles.statValue} ${styles.error}`}>{stats.overall.defect_car_count}</div>
               </div>
-              <div className="stat-box">
+              <div className={styles.statBox}>
                 <label>전체 불량률</label>
-                <div className="stat-value error">{stats.overall.defect_rate}%</div>
+                <div className={`${styles.statValue} ${styles.error}`}>{stats.overall.defect_rate}%</div>
               </div>
-              <div className="stat-box">
+              <div className={styles.statBox}>
                 <label>전체 불량 건수</label>
-                <div className="stat-value error">{stats.overall.defect_log_count}</div>
+                <div className={`${styles.statValue} ${styles.error}`}>{stats.overall.defect_log_count}</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* 센서 검사 카드 */}
-        <div className="card sensor-card">
-          <div className="card-header">
+        <div className={`${styles.card} ${styles.sensorCard}`}>
+          <div className={`${styles.cardHeader} ${styles.sensorCardHeader}`}>
             <h2>센서 검사</h2>
-            <span className="card-subtitle">센서 검사 데이터</span>
+            <span className={styles.cardSubtitle}>센서 검사 데이터</span>
           </div>
 
-          <div className="card-content">
+          <div className={styles.cardContent}>
             {/* 전체 불량 vs 센서 불량 도넛 */}
-            <div className="chart-container">
+            <div className={styles.chartContainer}>
               <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
                   <Pie
@@ -280,41 +280,41 @@ function Dashboard() {
               </ResponsiveContainer>
             </div>
 
-            <div className="stat-row">
-              <div className="stat-cell">
+            <div className={styles.statRow}>
+              <div className={styles.statCell}>
                 <label>불량 차량</label>
-                <div className="value error">{stats.sensor.defect_car_count}대</div>
+                <div className={`${styles.value} ${styles.error}`}>{stats.sensor.defect_car_count}대</div>
               </div>
-              <div className="stat-cell">
+              <div className={styles.statCell}>
                 <label>불량률</label>
-                <div className="value error">{stats.sensor.defect_rate}%</div>
+                <div className={`${styles.value} ${styles.error}`}>{stats.sensor.defect_rate}%</div>
               </div>
-              <div className="stat-cell">
+              <div className={styles.statCell}>
                 <label>불량 건수</label>
-                <div className="value error">{stats.sensor.defect_log_count}건</div>
+                <div className={`${styles.value} ${styles.error}`}>{stats.sensor.defect_log_count}건</div>
               </div>
             </div>
 
             {/* 장치별 불량 요약 */}
-            <div className="section">
-              <div className="section-header">
+            <div className={styles.section}>
+              <div className={styles.sectionHeader}>
                 <h3>장치별 상세 분석</h3>
-                <button className="detail-btn" onClick={() => setIsModalOpen(true)}>
+                <button className={styles.detailBtn} onClick={() => setIsModalOpen(true)}>
                   상세보기 →
                 </button>
               </div>
               
-              <div className="device-summary-list">
+              <div className={styles.deviceSummaryList}>
                 {Object.keys(stats.sensor.by_device).length > 0 ? (
                   Object.entries(stats.sensor.by_device).map(([device, info], idx) => (
-                    <div key={device} className="device-summary-item">
-                      <div className="device-color" style={{ backgroundColor: DEVICE_COLORS[idx % DEVICE_COLORS.length] }}></div>
-                      <span className="device-name">{device}</span>
-                      <span className="device-value" style={{ float: 'right' }}>{info.defect_log_count}건</span>
+                    <div key={device} className={styles.deviceSummaryItem}>
+                      <div className={styles.deviceColor} style={{ backgroundColor: DEVICE_COLORS[idx % DEVICE_COLORS.length] }}></div>
+                      <span className={styles.deviceName}>{device}</span>
+                      <span className={styles.deviceValue} style={{ float: 'right' }}>{info.defect_log_count}건</span>
                     </div>
                   ))
                 ) : (
-                  <p className="no-data">불량 데이터 없음 ✓</p>
+                  <p className={styles.noData}>불량 데이터 없음 ✓</p>
                 )}
               </div>
             </div>
@@ -322,15 +322,15 @@ function Dashboard() {
         </div>
 
         {/* 카메라 검사 카드 */}
-        <div className="card camera-card">
-          <div className="card-header">
+        <div className={`${styles.card} ${styles.cameraCard}`}>
+          <div className={`${styles.cardHeader} ${styles.cameraCardHeader}`}>
             <h2>외관 검사</h2>
-            <span className="card-subtitle">카메라 외관 검사 데이터</span>
+            <span className={styles.cardSubtitle}>카메라 외관 검사 데이터</span>
           </div>
 
-          <div className="card-content">
+          <div className={styles.cardContent}>
             {/* 전체 불량 vs 외관 불량 도넛 */}
-            <div className="chart-container">
+            <div className={styles.chartContainer}>
               <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
                   <Pie
@@ -352,18 +352,18 @@ function Dashboard() {
               </ResponsiveContainer>
             </div>
 
-            <div className="stat-row">
-              <div className="stat-cell">
+            <div className={styles.statRow}>
+              <div className={styles.statCell}>
                 <label>불량 차량</label>
-                <div className="value error">{stats.camera.defect_car_count}대</div>
+                <div className={`${styles.value} ${styles.error}`}>{stats.camera.defect_car_count}대</div>
               </div>
-              <div className="stat-cell">
+              <div className={styles.statCell}>
                 <label>불량률</label>
-                <div className="value error">{stats.camera.defect_rate}%</div>
+                <div className={`${styles.value} ${styles.error}`}>{stats.camera.defect_rate}%</div>
               </div>
-              <div className="stat-cell">
+              <div className={styles.statCell}>
                 <label>불량 건수</label>
-                <div className="value error">{stats.camera.defect_log_count}건</div>
+                <div className={`${styles.value} ${styles.error}`}>{stats.camera.defect_log_count}건</div>
               </div>
             </div>
           </div>

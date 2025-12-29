@@ -1,4 +1,4 @@
-.power-toggle-container {
+.powerToggleContainer {
   position: fixed;
   top: 87px;
   right: 8px;
@@ -15,7 +15,7 @@
   transition: all 0.3s ease;
 }
 
-.power-status {
+.powerStatus {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -24,12 +24,12 @@
   font-weight: 600;
 }
 
-.status-label {
+.statusLabel {
   opacity: 0.7;
   font-size: 0.8rem;
 }
 
-.status-indicator {
+.statusIndicator {
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
   font-weight: 700;
@@ -38,19 +38,19 @@
   font-size: 0.75rem;
 }
 
-.status-indicator.on {
+.statusIndicatorOn {
   background-color: #10b981;
   color: white;
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
 }
 
-.status-indicator.off {
+.statusIndicatorOff {
   background-color: #ef4444;
   color: white;
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
 }
 
-.power-button {
+.powerButton {
   padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 24px;
@@ -62,33 +62,33 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
-.power-button.off {
+.powerButtonOff {
   background-color: #10b981;
   color: white;
 }
 
-.power-button.on {
+.powerButtonOn {
   background-color: #ef4444;
   color: white;
 }
 
-.power-button:disabled {
+.powerButton:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.power-button.loading {
+.powerButtonLoading {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-.button-inner {
+.buttonInner {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
 }
 
-.power-icon {
+.powerIcon {
   font-size: 1.1rem;
 }
 
@@ -100,3 +100,4 @@
     opacity: 0.7;
   }
 }
+

@@ -1,5 +1,5 @@
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import './SensorDetailModal.css';
+import styles from './SensorDetailModal.module.css';
 
 const DEVICE_COLORS = ['#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6'];
 
@@ -14,17 +14,17 @@ function SensorDetailModal({ isOpen, onClose, sensorData }) {
     }));
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
+    <div className={styles.sensorModalOverlay} onClick={onClose}>
+      <div className={styles.sensorModalContent} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.sensorModalHeader}>
           <h2>센서 장치별 상세 분석</h2>
-          <button className="modal-close-btn" onClick={onClose}>✕</button>
+          <button className={styles.sensorModalCloseBtn} onClick={onClose}>✕</button>
         </div>
 
-        <div className="modal-body">
+        <div className={styles.sensorModalBody}>
           {/* 차트 영역 */}
           {sensorChartData.length > 0 && (
-            <div className="chart-section">
+            <div className={styles.chartSection}>
               <h3>장치별 불량 건수</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={sensorChartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
@@ -47,64 +47,64 @@ function SensorDetailModal({ isOpen, onClose, sensorData }) {
           )}
 
           {/* 장치별 상세 목록 */}
-          <div className="device-detail-section">
+          <div className={styles.deviceDetailSection}>
             <h3>장치별 상세 정보</h3>
-            <div className="device-detail-list">
+            <div className={styles.deviceDetailList}>
               {Object.keys(sensorData.by_device || {}).length > 0 ? (
                 Object.entries(sensorData.by_device).map(([device, info], idx) => (
-                  <div key={device} className="device-detail-item">
-                    <div className="device-detail-header">
-                      <div className="device-color" style={{ backgroundColor: DEVICE_COLORS[idx % DEVICE_COLORS.length] }}></div>
-                      <span className="device-name">{device}</span>
+                  <div key={device} className={styles.deviceDetailItem}>
+                    <div className={styles.deviceDetailHeader}>
+                      <div className={styles.deviceColor} style={{ backgroundColor: DEVICE_COLORS[idx % DEVICE_COLORS.length] }}></div>
+                      <span className={styles.deviceName}>{device}</span>
                     </div>
-                    <div className="device-detail-stats">
-                      <div className="detail-stat-card">
-                        <span className="detail-label">차량 불량 수</span>
-                        <span className="detail-value error">{info.defect_car_count}대</span>
+                    <div className={styles.deviceDetailStats}>
+                      <div className={styles.detailStatCard}>
+                        <span className={styles.detailLabel}>차량 불량 수</span>
+                        <span className={`${styles.detailValue} ${styles.detailValueError}`}>{info.defect_car_count}대</span>
                       </div>
-                      <div className="detail-stat-card">
-                        <span className="detail-label">차량 불량률</span>
-                        <span className="detail-value error">{info.car_defect_rate}%</span>
+                      <div className={styles.detailStatCard}>
+                        <span className={styles.detailLabel}>차량 불량률</span>
+                        <span className={`${styles.detailValue} ${styles.detailValueError}`}>{info.car_defect_rate}%</span>
                       </div>
-                      <div className="detail-stat-card">
-                        <span className="detail-label">불량 건수</span>
-                        <span className="detail-value warning">{info.defect_log_count}건</span>
+                      <div className={styles.detailStatCard}>
+                        <span className={styles.detailLabel}>불량 건수</span>
+                        <span className={`${styles.detailValue} ${styles.detailValueWarning}`}>{info.defect_log_count}건</span>
                       </div>
-                      <div className="detail-stat-card">
-                        <span className="detail-label">건수 비율</span>
-                        <span className="detail-value warning">{info.log_defect_rate}%</span>
+                      <div className={styles.detailStatCard}>
+                        <span className={styles.detailLabel}>건수 비율</span>
+                        <span className={`${styles.detailValue} ${styles.detailValueWarning}`}>{info.log_defect_rate}%</span>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="no-data">불량 데이터 없음 ✓</p>
+                <p className={styles.sensorNoData}>불량 데이터 없음 ✓</p>
               )}
             </div>
           </div>
 
           {/* 요약 통계 */}
-          <div className="summary-section">
+          <div className={styles.summarySection}>
             <h3>전체 센서 검사 요약</h3>
-            <div className="summary-grid">
-              <div className="summary-card">
-                <span className="summary-label">총 불량 차량</span>
-                <span className="summary-value error">{sensorData.defect_car_count || 0}대</span>
+            <div className={styles.summaryGrid}>
+              <div className={styles.summaryCard}>
+                <span className={styles.summaryLabel}>총 불량 차량</span>
+                <span className={`${styles.summaryValue} ${styles.summaryValueError}`}>{sensorData.defect_car_count || 0}대</span>
               </div>
-              <div className="summary-card">
-                <span className="summary-label">총 불량 건수</span>
-                <span className="summary-value error">{sensorData.defect_log_count || 0}건</span>
+              <div className={styles.summaryCard}>
+                <span className={styles.summaryLabel}>총 불량 건수</span>
+                <span className={`${styles.summaryValue} ${styles.summaryValueError}`}>{sensorData.defect_log_count || 0}건</span>
               </div>
-              <div className="summary-card">
-                <span className="summary-label">불량률</span>
-                <span className="summary-value error">{sensorData.defect_rate || 0}%</span>
+              <div className={styles.summaryCard}>
+                <span className={styles.summaryLabel}>불량률</span>
+                <span className={`${styles.summaryValue} ${styles.summaryValueError}`}>{sensorData.defect_rate || 0}%</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="modal-footer">
-          <button className="modal-btn-close" onClick={onClose}>닫기</button>
+        <div className={styles.sensorModalFooter}>
+          <button className={styles.sensorModalBtnClose} onClick={onClose}>닫기</button>
         </div>
       </div>
     </div>

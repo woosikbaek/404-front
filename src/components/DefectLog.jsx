@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
-import './DefectLog.css';
+import styles from './DefectLog.module.css';
 
 const API_BASE = 'http://192.168.1.78:5000';
 const ITEMS_PER_PAGE = 8;
@@ -84,20 +84,20 @@ function DefectLog() {
           </span>
         </div>
       </header>
-      <div className="defect-log-container">
-        <h2 className="defect-log-title">불량 로그</h2>
+      <div className={styles.defectLogContainer}>
+        <h2 className={styles.defectLogTitle}>불량 로그</h2>
 
         {/* ===== 헤더 ===== */}
-        <div className="log-header">
-          <div className="log-col car">차량번호</div>
-          <div className="log-col preview">이미지</div>
-          <div className="log-col result_text">결과</div>
-          <div className="log-col time">날짜</div>
+        <div className={styles.logHeader}>
+          <div className={`${styles.logCol} ${styles.logColCar}`}>차량번호</div>
+          <div className={styles.logCol}>이미지</div>
+          <div className={styles.logCol}>결과</div>
+          <div className={`${styles.logCol} ${styles.logColTime}`}>날짜</div>
         </div>
 
         {/* ===== 리스트 ===== */}
-        <div className="log-list">
-          {pagedLogs.length === 0 && <div className="no-logs">표시할 로그 없음</div>}
+        <div className={styles.logList}>
+          {pagedLogs.length === 0 && <div className={styles.noLogs}>표시할 로그 없음</div>}
 
           {pagedLogs.map((log, index) => {
             const imageUrl = log.image
@@ -107,24 +107,24 @@ function DefectLog() {
             return (
               <div
                 key={index}
-                className="log-row"
+                className={styles.logRow}
                 onClick={() => setSelectedLog(log)}
               >
-                <div className="log-col car">{log.car_id}</div>
-                <div className="log-col preview">
+                <div className={`${styles.logCol} ${styles.logColCar}`}>{log.car_id}</div>
+                <div className={styles.logCol}>
                   {imageUrl ? (
                     <img
-                      className="preview-img"
+                      className={styles.previewImg}
                       src={imageUrl}
                       alt="preview"
                       onError={() => console.error('❌ IMAGE FAIL:', imageUrl)}
                     />
                   ) : (
-                    <div className="preview-placeholder">-</div>
+                    <div className={styles.previewPlaceholder}>-</div>
                   )}
                 </div>
-                <div className="log-col result">{log.result ?? '-'}</div>
-                <div className="log-col time">
+                <div className={`${styles.logCol} ${styles.logColResult}`}>{log.result ?? '-'}</div>
+                <div className={`${styles.logCol} ${styles.logColTime}`}>
                   {log.created_at
                     ? new Date(log.created_at).toLocaleString('ko-KR')
                     : '-'}
@@ -136,9 +136,9 @@ function DefectLog() {
 
         {/* ===== 페이지네이션 ===== */}
         {totalPages > 1 && (
-          <div className="pagination">
+          <div className={styles.pagination}>
             <button
-              className="nav-btn"
+              className={styles.navBtn}
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
             >
@@ -148,7 +148,7 @@ function DefectLog() {
             {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map(page => (
               <button
                 key={page}
-                className={`page-btn ${page === currentPage ? 'active' : ''}`}
+                className={`${styles.pageBtn} ${page === currentPage ? styles.active : ''}`}
                 onClick={() => setCurrentPage(page)}
               >
                 {page}
@@ -156,7 +156,7 @@ function DefectLog() {
             ))}
 
             <button
-              className="nav-btn"
+              className={styles.navBtn}
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
             >
@@ -167,15 +167,15 @@ function DefectLog() {
 
         {/* ===== 이미지 모달 ===== */}
         {selectedLog && (
-          <div className="image-modal" onClick={() => setSelectedLog(null)}>
-            <div className="modal-content" onClick={e => e.stopPropagation()}>
-              <button className="modal-close" onClick={() => setSelectedLog(null)}>✕</button>
+          <div className={styles.imageModal} onClick={() => setSelectedLog(null)}>
+            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+              <button className={styles.modalClose} onClick={() => setSelectedLog(null)}>✕</button>
               {selectedLog.image ? (
-                <img className="modal-image" src={`${API_BASE}/camera${selectedLog.image}`} alt="detail" />
+                <img className={styles.modalImage} src={`${API_BASE}/camera${selectedLog.image}`} alt="detail" />
               ) : (
-                <div className="no-image">이미지 없음</div>
+                <div className={styles.noImage}>이미지 없음</div>
               )}
-              <div className="modal-info">
+              <div className={styles.modalInfo}>
                 <p><strong>차량번호:</strong> {selectedLog.car_id}</p>
                 <p><strong>결과:</strong> {selectedLog.result ?? '-'}</p>
                 <p><strong>날짜:</strong> {new Date(selectedLog.created_at).toLocaleString('ko-KR')}</p>

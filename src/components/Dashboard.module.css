@@ -1,4 +1,4 @@
-.dashboard-container {
+.dashboardContainer {
   padding: 0;
   background: transparent;
 }
@@ -15,7 +15,7 @@
   margin-bottom: 12px;
 }
 
-.header-content {
+.headerContent {
   flex: 1;
 }
 
@@ -27,7 +27,7 @@
   letter-spacing: -0.5px;
 }
 
-.header-subtitle {
+.headerSubtitle {
   color: #666;
   font-size: 11px;
   font-weight: 500;
@@ -35,7 +35,7 @@
   text-transform: uppercase;
 }
 
-.connection-status {
+.connectionStatus {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -54,26 +54,26 @@
   padding: 0;
 }
 
-.status-dot {
+.statusDot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   animation: pulse 2s infinite;
 }
 
-.status.connected {
+.connected {
   color: #10b981;
 }
 
-.status.connected .status-dot {
+.connected .statusDot {
   background: #10b981;
 }
 
-.status.disconnected {
+.disconnected {
   color: #ef4444;
 }
 
-.status.disconnected .status-dot {
+.disconnected .statusDot {
   background: #ef4444;
 }
 
@@ -87,7 +87,7 @@
 }
 
 /* ============ 알림 ============ */
-.alerts-container {
+.alertsContainer {
   position: fixed;
   top: 20px;
   right: 20px;
@@ -108,13 +108,13 @@
   backdrop-filter: blur(10px);
 }
 
-.alert-error {
+.alertError {
   background: rgba(239, 68, 68, 0.95);
   color: white;
   border-left: 4px solid #dc2626;
 }
 
-.alert-success {
+.alertSuccess {
   background: rgba(16, 185, 129, 0.95);
   color: white;
   border-left: 4px solid #059669;
@@ -141,21 +141,21 @@
   margin: 0 auto;
 }
 
-.summary-card {
+.summaryCard {
   grid-column: 1 / 2;
   grid-row: 1 / 2;
   display: flex;
   flex-direction: column;
 }
 
-.sensor-card {
+.sensorCard {
   grid-column: 2 / 3;
   grid-row: 1 / 3;
   display: flex;
   flex-direction: column;
 }
 
-.camera-card {
+.cameraCard {
   grid-column: 1 / 2;
   grid-row: 2 / 3;
   display: flex;
@@ -171,19 +171,19 @@
   overflow: hidden;
 }
 
-.card-header {
+.cardHeader {
   padding: 14px 16px 10px;
   border-bottom: 2px solid #f0f0f0;
 }
 
-.card-header h2 {
+.cardHeader h2 {
   color: #1a1a1a;
   margin: 0 0 2px 0;
   font-size: 18px;
   font-weight: 700;
 }
 
-.card-subtitle {
+.cardSubtitle {
   color: #888;
   font-size: 10px;
   font-weight: 500;
@@ -191,7 +191,7 @@
   letter-spacing: 0.3px;
 }
 
-.card-content {
+.cardContent {
   flex: 1;
   padding: 12px 16px;
   display: flex;
@@ -199,30 +199,30 @@
 }
 
 /* ============ 카드 테마 ============ */
-.summary-card .card-header {
+.summaryCardHeader {
   border-bottom-color: #667eea;
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
 }
 
-.sensor-card .card-header {
+.sensorCardHeader {
   border-bottom-color: #f59e0b;
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(220, 38, 38, 0.08) 100%);
 }
 
-.camera-card .card-header {
+.cameraCardHeader {
   border-bottom-color: #10b981;
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.08) 100%);
 }
 
 /* ============ 통계 그리드 ============ */
-.stat-grid {
+.statGrid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 6px;
   margin-top: 10px;
 }
 
-.stat-box {
+.statBox {
   background: #f9f9f9;
   padding: 8px;
   border-radius: 6px;
@@ -231,7 +231,7 @@
   transition: all 0.3s ease;
 }
 
-.stat-box label {
+.statBox label {
   display: block;
   color: #666;
   font-size: 9px;
@@ -241,40 +241,40 @@
   margin-bottom: 4px;
 }
 
-.stat-value {
+.statValue {
   font-size: 16px;
   font-weight: 700;
   color: #1a1a1a;
 }
 
-.stat-value.large {
+.large {
   font-size: 18px;
 }
 
-.stat-value.success {
+.success {
   color: #10b981;
 }
 
-.stat-value.error {
+.error {
   color: #ef4444;
 }
 
 /* ============ 통계 행 ============ */
-.stat-row {
+.statRow {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 8px;
   margin-bottom: 10px;
 }
 
-.stat-cell {
+.statCell {
   background: #f9f9f9;
   padding: 10px;
   border-radius: 8px;
   text-align: center;
 }
 
-.stat-cell label {
+.statCell label {
   display: block;
   color: #666;
   font-size: 10px;
@@ -284,13 +284,9 @@
   margin-bottom: 4px;
 }
 
-.stat-cell .value {
-  font-size: 18px;
-  font-weight: 700;
-}
 
 /* ============ 차트 컨테이너 ============ */
-.chart-container {
+.chartContainer {
   background: #f9f9f9;
   border-radius: 8px;
   padding: 10px;
@@ -299,7 +295,7 @@
   flex-shrink: 0;
 }
 
-.chart-container.small {
+.chartContainerSmall {
   margin-bottom: 10px;
   flex: 1;
   min-height: 200px;
@@ -324,14 +320,14 @@
   letter-spacing: 0.5px;
 }
 
-.section-header {
+.sectionHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.detail-btn {
+.detailBtn {
   padding: 6px 14px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -344,13 +340,13 @@
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
-.device-summary-list {
+.deviceSummaryList {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.device-summary-item {
+.deviceSummaryItem {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -361,33 +357,33 @@
   transition: all 0.2s;
 }
 
-.device-summary-item .device-color {
+.deviceColor {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.device-summary-item .device-name {
+.deviceName {
   flex: 1;
   font-weight: 600;
   color: #1a1a1a;
   font-size: 12px;
 }
 
-.device-summary-item .device-value {
+.deviceValue {
   font-weight: 700;
   color: #ef4444;
   font-size: 14px;
 }
 
 /* ============ 장치 목록 ============ */
-.device-list {
+.deviceList {
   display: grid;
   gap: 12px;
 }
 
-.device-item {
+.deviceItem {
   background: #f9f9f9;
   border: 2px solid #f0f0f0;
   border-radius: 10px;
@@ -395,7 +391,7 @@
   transition: all 0.3s ease;
 }
 
-.device-header {
+.deviceHeader {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -404,14 +400,14 @@
   border-bottom: 2px solid #f0f0f0;
 }
 
-.device-color {
+.deviceColor {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.device-name {
+.deviceName {
   font-weight: 700;
   color: #1a1a1a;
   font-size: 14px;
@@ -419,33 +415,20 @@
   letter-spacing: 0.5px;
 }
 
-.device-stats {
+.deviceStats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
 }
 
-.device-stat {
+.deviceStat {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.device-stat .label {
-  color: #666;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
 
-.device-stat .value {
-  color: #1a1a1a;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.no-data {
+.noData {
   text-align: center;
   color: #10b981;
   padding: 24px;
@@ -465,3 +448,4 @@
   color: #1a1a1a;
   font-weight: 700;
 }
+

@@ -1,19 +1,19 @@
 /* 전체 컨테이너 */
-.defect-log-container {
+.defectLogContainer {
   padding: 20px;
   border-radius: 8px;
   background: #f8fafc;
 }
 
 /* 제목 */
-.defect-log-title {
+.defectLogTitle {
   margin-bottom: 16px;
   font-size: 22px;
   color: #1f2937;
 }
 
 /* ===== 헤더 ===== */
-.log-header {
+.logHeader {
   display: grid;
   grid-template-columns: 120px 56px 1fr 220px;
   align-items: center;
@@ -25,21 +25,21 @@
   margin-bottom: 6px;
 }
 
-.log-header > div:nth-child(3) {
+.logHeader > div:nth-child(3) {
   text-align: center; /* 결과 헤더 가운데 */
 }
 
-.log-header > div:nth-child(4) {
+.logHeader > div:nth-child(4) {
   text-align: right; /* 날짜 헤더 오른쪽 */
 }
 
 /* ===== 리스트 ===== */
-.log-list {
+.logList {
   max-height: 600px;
   overflow-y: auto;
 }
 
-.log-row {
+.logRow {
   display: grid;
   grid-template-columns: 120px 56px 1fr 220px;
   align-items: center;
@@ -49,32 +49,36 @@
   cursor: pointer;
 }
 
-.log-row:hover {
+.logRow:hover {
   background: #f9fafb;
 }
 
+.logCol {
+  /* 기본 스타일 */
+}
+
 /* 차량번호 */
-.log-col.car {
+.logColCar {
   font-weight: 600;
   color: #111827;
 }
 
 /* 결과 */
-.log-col.result {
+.logColResult {
   text-align: center;
   font-weight: 700;
   color: #dc2626;
 }
 
 /* 날짜 */
-.log-col.time {
+.logColTime {
   text-align: right;
   font-size: 14px;
   color: #6b7280;
 }
 
 /* 이미지 미리보기 */
-.preview-img {
+.previewImg {
   width: 36px;
   height: 36px;
   object-fit: cover;
@@ -82,7 +86,7 @@
   border: 1px solid #e5e7eb;
 }
 
-.preview-placeholder {
+.previewPlaceholder {
   width: 36px;
   height: 36px;
   background: #e5e7eb;
@@ -95,7 +99,7 @@
 }
 
 /* ===== 모달 ===== */
-.image-modal {
+.imageModal {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.5);
@@ -105,7 +109,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.modalContent {
   background: #ffffff;
   padding: 20px;
   border-radius: 12px;
@@ -115,13 +119,13 @@
   box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
-.modal-image {
+.modalImage {
   width: 100%;
   border-radius: 8px;
   margin-bottom: 12px;
 }
 
-.modal-close {
+.modalClose {
   position: absolute;
   top: 10px;
   right: 12px;
@@ -135,14 +139,35 @@
   cursor: pointer;
 }
 
-.modal-close:hover {
+.modalClose:hover {
   background: #e5e7eb;
 }
 
-.modal-info p {
+.modalInfo {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #374151;
+}
+
+.modalInfo p {
   margin: 6px 0;
   color: #374151;
   font-size: 14px;
+}
+
+.noImage {
+  text-align: center;
+  color: #6b7280;
+  padding: 40px;
+}
+
+.noLogs {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+  font-size: 16px;
 }
 
 /* ===== 페이지네이션 ===== */
@@ -155,7 +180,7 @@
   flex-wrap: wrap;
 }
 
-.pagination button {
+.pageBtn {
   min-width: 36px;
   height: 36px;
   border-radius: 8px;
@@ -164,40 +189,44 @@
   color: #1e293b;
   font-weight: 700;
   font-size: 14px;
+  cursor: pointer;
 }
 
-.pagination .nav-btn {
-  font-size: 18px;
-  font-weight: 900;
-  background-color: #f1f5f9;
-}
-
-.pagination button:hover {
+.pageBtn:hover {
   background-color: #e0e7ff;
 }
 
-.pagination button.active {
+.pageBtn.active {
   background-color: #2563eb;
   color: #ffffff;
   border-color: #2563eb;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
 }
 
-.pagination button:disabled {
+.navBtn {
+  min-width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2px solid #c7d2fe;
+  background-color: #f1f5f9;
+  color: #1e293b;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.navBtn:hover {
+  background-color: #e0e7ff;
+}
+
+.navBtn:disabled {
   background-color: #e5e7eb;
   color: #9ca3af;
   border-color: #e5e7eb;
   cursor: not-allowed;
 }
 
-.modal-info {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px solid #e5e7eb;
-  font-size: 14px;
-  color: #374151;
-}
-
-.modal-info p {
+.modalInfo p {
   margin: 4px 0;
 }
+
