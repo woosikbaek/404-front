@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import SensorDetailModal from './SensorDetailModal';
+import Header from './Header';
 import styles from './Dashboard.module.css';
 
 // 원형 차트 색상
@@ -165,26 +166,9 @@ function Dashboard() {
     { name: '기타 불량 차량', value: stats.overall.defect_car_count - stats.camera.defect_car_count }
   ];
 
-  // 로그인한 유저 이름 가져오기
-  const userName = localStorage.getItem('name') || '---';
-
   return (
     <div className={styles.dashboardContainer}>
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <h1>자동차 검사 실시간 대시보드</h1>
-          <p className={styles.headerSubtitle}>센서 및 외관 검사 통계</p>
-        </div>
-        <div className="worker-info" style={{ color: '#222', fontWeight: 500, marginTop: 8, marginBottom: 4 }}>
-          근무자 : {userName}
-        </div>
-        <div className={styles.connectionStatus}>
-          <span className={`${styles.status} ${connected ? styles.connected : styles.disconnected}`}>
-            <span className={styles.statusDot}></span>
-            {connected ? '연결됨' : '연결 끊김'}
-          </span>
-        </div>
-      </header>
+      <Header connected={connected} />
 
       <div className={styles.alertsContainer}>
         {alerts.map(alert => (

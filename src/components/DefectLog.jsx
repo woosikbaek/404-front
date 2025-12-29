@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
+import Header from './Header';
 import styles from './DefectLog.module.css';
 
 const API_BASE = 'http://192.168.1.78:5000';
 const ITEMS_PER_PAGE = 8;
 const PAGES_PER_GROUP = 10;
-const userName = localStorage.getItem('name') || '---';
 
 function DefectLog() {
   const [logs, setLogs] = useState([]);
@@ -68,26 +68,11 @@ function DefectLog() {
 
   return (
     <div>
-      {/* ============ HEADER ============ */}
-      <header className="header">
-        <div className="header-content">
-          <h1>자동차 검사 실시간 대시보드</h1>
-          <p className="header-subtitle">센서 및 외관 검사 통계</p>
-        </div>
-        <div className="worker-info" style={{ color: '#222', fontWeight: 500, marginTop: 8, marginBottom: 4 }}>
-          근무자 : {userName}
-        </div>
-        <div className="connection-status">
-          <span className={`status ${connected ? 'connected' : 'disconnected'}`}>
-            <span className="status-dot"></span>
-            {connected ? '연결됨' : '연결 끊김'}
-          </span>
-        </div>
-      </header>
+      <Header connected={connected} />
       <div className={styles.defectLogContainer}>
         <h2 className={styles.defectLogTitle}>불량 로그</h2>
 
-        {/* ===== 헤더 ===== */}
+        {/* ===== logHeader ===== */}
         <div className={styles.logHeader}>
           <div className={`${styles.logCol} ${styles.logColCar}`}>차량번호</div>
           <div className={styles.logCol}>이미지</div>

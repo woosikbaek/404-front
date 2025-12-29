@@ -8,20 +8,20 @@
   gap: 0.5rem;
   padding: 0.5rem 0.5rem;
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
   backdrop-filter: blur(10px);
-  z-index: 999;
-  transition: all 0.3s ease;
+  z-index: var(--z-index-tooltip);
+  transition: all var(--transition-base) ease;
 }
 
 .powerStatus {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .statusLabel {
@@ -31,45 +31,45 @@
 
 .statusIndicator {
   padding: 0.2rem 0.6rem;
-  border-radius: 12px;
-  font-weight: 700;
+  border-radius: var(--radius-2xl);
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-size: 0.75rem;
 }
 
 .statusIndicatorOn {
-  background-color: #10b981;
-  color: white;
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  background-color: var(--color-success);
+  color: var(--color-text-white);
+  box-shadow: var(--shadow-success);
 }
 
 .statusIndicatorOff {
-  background-color: #ef4444;
-  color: white;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  background-color: var(--color-error);
+  color: var(--color-text-white);
+  box-shadow: var(--shadow-error);
 }
 
 .powerButton {
   padding: 0.6rem 1.2rem;
   border: none;
-  border-radius: 24px;
+  border-radius: var(--radius-4xl);
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base) ease;
   min-width: 120px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-sm);
 }
 
 .powerButtonOff {
-  background-color: #10b981;
-  color: white;
+  background-color: var(--color-success);
+  color: var(--color-text-white);
 }
 
 .powerButtonOn {
-  background-color: #ef4444;
-  color: white;
+  background-color: var(--color-error);
+  color: var(--color-text-white);
 }
 
 .powerButton:disabled {
@@ -100,4 +100,3 @@
     opacity: 0.7;
   }
 }
-

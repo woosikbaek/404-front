@@ -4,21 +4,21 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: var(--color-bg-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
-  animation: fadeIn 0.2s ease-in-out;
+  z-index: var(--z-index-modal);
+  animation: fadeIn var(--transition-fast) ease-in-out;
 }
 
 .sensorModalContent {
-  background: #ffffff;
+  background: var(--color-bg-primary);
   width: 50%;
-  border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-2xl);
   max-height: 90vh;
-  animation: slideUp 0.3s ease-out;
+  animation: slideUp var(--transition-base) ease-out;
   overflow: auto;
   scrollbar-width: none;
 }
@@ -27,198 +27,198 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 32px;
-  border-bottom: 2px solid #e5e7eb;
-  background: rgb(209, 209, 209);
-  color: black;
+  padding: var(--spacing-4xl) var(--spacing-5xl);
+  border-bottom: var(--border-width-medium) solid var(--color-border-medium);
+  background: var(--color-bg-gray-medium);
+  color: var(--color-text-black);
 }
 
 .sensorModalHeader h2 {
   margin: 0;
-  font-size: 24px;
-  font-weight: 700;
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-bold);
 }
 
 .sensorModalCloseBtn {
   background: rgba(73, 73, 73, 0.2);
   border: none;
-  font-size: 28px;
+  font-size: var(--font-size-6xl);
   cursor: pointer;
-  padding: 4px 12px;
-  border-radius: 8px;
-  color: white;
-  transition: all 0.2s;
+  padding: var(--spacing-xs) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  color: var(--color-text-white);
+  transition: all var(--transition-fast);
   line-height: 1;
 }
 
 .sensorModalBody {
-  padding: 32px;
+  padding: var(--spacing-5xl);
 }
 
 .chartSection {
-  margin-bottom: 32px;
-  background: #f9fafb;
-  padding: 24px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  margin-bottom: var(--spacing-5xl);
+  background: var(--color-bg-secondary);
+  padding: var(--spacing-4xl);
+  border-radius: var(--radius-2xl);
+  border: var(--border-width-thin) solid var(--color-border-medium);
 }
 
 .chartSection h3 {
-  margin: 0 0 20px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #374151;
+  margin: 0 0 var(--spacing-3xl) 0;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-800);
 }
 
 .deviceDetailSection {
-  margin-bottom: 32px;
+  margin-bottom: var(--spacing-5xl);
 }
 
 .deviceDetailSection h3 {
-  margin: 0 0 20px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #374151;
+  margin: 0 0 var(--spacing-3xl) 0;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-800);
 }
 
 .deviceDetailList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-2xl);
 }
 
 .deviceDetailItem {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 20px;
-  transition: all 0.2s;
+  background: var(--color-bg-secondary);
+  border: var(--border-width-thin) solid var(--color-border-medium);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-3xl);
+  transition: all var(--transition-fast);
 }
 
 .deviceDetailHeader {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .deviceColor {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
+  width: var(--spacing-3xl);
+  height: var(--spacing-3xl);
+  border-radius: var(--radius-sm);
 }
 
 .deviceName {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-800);
 }
 
 .deviceDetailStats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
+  gap: var(--spacing-xl);
 }
 
 .detailStatCard {
-  background: white;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  background: var(--color-bg-primary);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-md);
+  border: var(--border-width-thin) solid var(--color-border-medium);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--spacing-md);
 }
 
 .detailLabel {
   font-size: 13px;
-  color: #6b7280;
-  font-weight: 500;
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
 }
 
 .detailValue {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
 }
 
 .detailValueError {
-  color: #dc3545;
+  color: var(--color-error-dark);
 }
 
 .detailValueWarning {
-  color: #f59e0b;
+  color: var(--color-warning);
 }
 
 .summarySection {
-  background: rgb(209, 209, 209);
-  padding: 24px;
-  border-radius: 12px;
-  color: black;
+  background: var(--color-bg-gray-medium);
+  padding: var(--spacing-4xl);
+  border-radius: var(--radius-2xl);
+  color: var(--color-text-black);
 }
 
 .summarySection h3 {
-  margin: 0 0 20px 0;
-  font-size: 18px;
-  font-weight: 600;
+  margin: 0 0 var(--spacing-3xl) 0;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
 }
 
 .summaryGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  gap: var(--spacing-2xl);
 }
 
 .summaryCard {
   background: rgba(255, 255, 255, 0.15);
-  padding: 20px;
-  border-radius: 10px;
+  padding: var(--spacing-3xl);
+  border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--spacing-lg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: var(--border-width-thin) solid rgba(255, 255, 255, 0.2);
 }
 
 .summaryLabel {
-  font-size: 14px;
+  font-size: var(--font-size-xl);
   opacity: 0.9;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 .summaryValue {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: var(--font-size-6xl);
+  font-weight: var(--font-weight-bold);
 }
 
 .summaryValueError {
-  color: #dc3545;
+  color: var(--color-error-dark);
 }
 
 .sensorNoData {
   text-align: center;
-  padding: 40px;
-  color: #6b7280;
-  font-size: 16px;
+  padding: var(--spacing-6xl);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-2xl);
 }
 
 .sensorModalFooter {
-  padding: 20px 32px;
-  border-top: 1px solid #e5e7eb;
+  padding: var(--spacing-3xl) var(--spacing-5xl);
+  border-top: var(--border-width-thin) solid var(--color-border-medium);
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
+  gap: var(--spacing-xl);
 }
 
 .sensorModalBtnClose {
-  padding: 12px 32px;
-  background: #6b7280;
-  color: white;
+  padding: var(--spacing-xl) var(--spacing-5xl);
+  background: var(--color-gray-500);
+  color: var(--color-text-white);
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 @keyframes fadeIn {
@@ -240,4 +240,3 @@
     opacity: 1;
   }
 }
-

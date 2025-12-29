@@ -1,0 +1,118 @@
+:root {
+  /* ============ 색상 ============ */
+  /* Primary Colors */
+  --color-primary: #667eea;
+  --color-primary-dark: #764ba2;
+  --color-primary-light: rgba(102, 126, 234, 0.08);
+  
+  /* Secondary Colors */
+  --color-secondary: #f59e0b;
+  --color-secondary-light: rgba(245, 158, 11, 0.08);
+  
+  /* Success Colors */
+  --color-success: #10b981;
+  --color-success-dark: #059669;
+  --color-success-light: rgba(16, 185, 129, 0.95);
+  --color-success-bg: #f0fdf4;
+  
+  /* Error/Danger Colors */
+  --color-error: #ef4444;
+  --color-error-dark: #dc3545;
+  --color-error-darker: #dc2626;
+  --color-error-light: rgba(239, 68, 68, 0.95);
+  
+  /* Warning Colors */
+  --color-warning: #f59e0b;
+  
+  /* Text Colors - 기본 텍스트와 보조 텍스트만 사용 */
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #666;
+  --color-text-white: #ffffff;
+  --color-text-black: #000000;
+  
+  /* Background Colors - 기본 배경과 보조 배경만 사용 */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f9f9f9;
+  --color-bg-modal: rgba(15, 23, 42, 0.5);
+  --color-bg-overlay: rgba(0, 0, 0, 0.6);
+  --color-bg-gray-medium: rgb(209, 209, 209);
+  
+  /* Border Colors - 기본 보더만 사용 */
+  --color-border-light: #f0f0f0;
+  --color-border-medium: #e5e7eb;
+  
+  /* Blue Colors */
+  --color-blue: #2563eb;
+  --color-blue-light: #e0e7ff;
+  
+  /* Gray Colors - 가장 많이 사용되는 2개만 */
+  --color-gray-500: #6b7280;
+  --color-gray-800: #1f2937;
+  
+  /* ============ 간격 (Spacing) ============ */
+  --spacing-xs: 4px;
+  --spacing-sm: 6px;
+  --spacing-md: 8px;
+  --spacing-lg: 10px;
+  --spacing-xl: 12px;
+  --spacing-2xl: 16px;
+  --spacing-3xl: 20px;
+  --spacing-4xl: 24px;
+  --spacing-5xl: 32px;
+  --spacing-6xl: 40px;
+  
+  /* ============ 폰트 크기 ============ */
+  --font-size-xs: 9px;
+  --font-size-sm: 10px;
+  --font-size-md: 11px;
+  --font-size-base: 12px;
+  --font-size-lg: 13px;
+  --font-size-xl: 14px;
+  --font-size-2xl: 16px;
+  --font-size-3xl: 18px;
+  --font-size-4xl: 22px;
+  --font-size-5xl: 24px;
+  --font-size-6xl: 28px;
+  
+  /* ============ 폰트 굵기 ============ */
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 900;
+  
+  /* ============ 보더 반경 (Border Radius) ============ */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-2xl: 12px;
+  --radius-3xl: 20px;
+  --radius-4xl: 24px;
+  --radius-full: 50%;
+  
+  /* ============ 그림자 (Shadows) ============ */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+  --shadow-primary: 0 2px 8px rgba(102, 126, 234, 0.3);
+  --shadow-success: 0 0 10px rgba(16, 185, 129, 0.5);
+  --shadow-error: 0 0 10px rgba(239, 68, 68, 0.5);
+  --shadow-blue: 0 4px 12px rgba(37, 99, 235, 0.4);
+  
+  /* ============ 전환 효과 (Transitions) ============ */
+  --transition-fast: 0.2s;
+  --transition-base: 0.3s;
+  --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ============ Z-Index ============ */
+  --z-index-modal: 1000;
+  --z-index-tooltip: 999;
+  
+  /* ============ 기타 ============ */
+  --max-width-container: 1600px;
+  --max-width-modal: 620px;
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  --border-width-thick: 4px;
+}

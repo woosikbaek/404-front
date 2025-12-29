@@ -1,28 +1,28 @@
 /* 전체 컨테이너 */
 .defectLogContainer {
-  padding: 20px;
-  border-radius: 8px;
-  background: #f8fafc;
+  padding: var(--spacing-3xl);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-secondary);
 }
 
 /* 제목 */
 .defectLogTitle {
-  margin-bottom: 16px;
-  font-size: 22px;
-  color: #1f2937;
+  margin-bottom: var(--spacing-2xl);
+  font-size: var(--font-size-4xl);
+  color: var(--color-gray-800);
 }
 
-/* ===== 헤더 ===== */
+/* ===== logHeader ===== */
 .logHeader {
   display: grid;
   grid-template-columns: 120px 56px 1fr 220px;
   align-items: center;
-  padding: 10px 16px;
-  font-weight: 600;
-  color: #374151;
-  background: #f1f5f9;
-  border-radius: 8px;
-  margin-bottom: 6px;
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-800);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-sm);
 }
 
 .logHeader > div:nth-child(3) {
@@ -43,38 +43,34 @@
   display: grid;
   grid-template-columns: 120px 56px 1fr 220px;
   align-items: center;
-  padding: 10px 16px;
-  border-bottom: 1px solid #e5e7eb;
-  background: #ffffff;
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  border-bottom: var(--border-width-thin) solid var(--color-border-medium);
+  background: var(--color-bg-primary);
   cursor: pointer;
 }
 
 .logRow:hover {
-  background: #f9fafb;
-}
-
-.logCol {
-  /* 기본 스타일 */
+  background: var(--color-bg-secondary);
 }
 
 /* 차량번호 */
 .logColCar {
-  font-weight: 600;
-  color: #111827;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-800);
 }
 
 /* 결과 */
 .logColResult {
   text-align: center;
-  font-weight: 700;
-  color: #dc2626;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-error-darker);
 }
 
 /* 날짜 */
 .logColTime {
   text-align: right;
-  font-size: 14px;
-  color: #6b7280;
+  font-size: var(--font-size-xl);
+  color: var(--color-text-secondary);
 }
 
 /* 이미지 미리보기 */
@@ -82,92 +78,92 @@
   width: 36px;
   height: 36px;
   object-fit: cover;
-  border-radius: 4px;
-  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-sm);
+  border: var(--border-width-thin) solid var(--color-border-medium);
 }
 
 .previewPlaceholder {
   width: 36px;
   height: 36px;
-  background: #e5e7eb;
-  color: #6b7280;
+  background: var(--color-border-medium);
+  color: var(--color-text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  border-radius: 4px;
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-sm);
 }
 
 /* ===== 모달 ===== */
 .imageModal {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.5);
+  background: var(--color-bg-modal);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: var(--z-index-modal);
 }
 
 .modalContent {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  max-width: 620px;
+  background: var(--color-bg-primary);
+  padding: var(--spacing-3xl);
+  border-radius: var(--radius-2xl);
+  max-width: var(--max-width-modal);
   width: 100%;
   position: relative;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  box-shadow: var(--shadow-2xl);
 }
 
 .modalImage {
   width: 100%;
-  border-radius: 8px;
-  margin-bottom: 12px;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-xl);
 }
 
 .modalClose {
   position: absolute;
-  top: 10px;
-  right: 12px;
+  top: var(--spacing-lg);
+  right: var(--spacing-xl);
   border: none;
-  background: #f1f5f9;
-  color: #1f2937;
+  background: var(--color-bg-secondary);
+  color: var(--color-gray-800);
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  font-size: 18px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-3xl);
   cursor: pointer;
 }
 
 .modalClose:hover {
-  background: #e5e7eb;
+  background: var(--color-border-medium);
 }
 
 .modalInfo {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px solid #e5e7eb;
-  font-size: 14px;
-  color: #374151;
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-md);
+  border-top: var(--border-width-thin) solid var(--color-border-medium);
+  font-size: var(--font-size-xl);
+  color: var(--color-gray-800);
 }
 
 .modalInfo p {
-  margin: 6px 0;
-  color: #374151;
-  font-size: 14px;
+  margin: var(--spacing-sm) 0;
+  color: var(--color-gray-800);
+  font-size: var(--font-size-xl);
 }
 
 .noImage {
   text-align: center;
-  color: #6b7280;
-  padding: 40px;
+  color: var(--color-text-secondary);
+  padding: var(--spacing-6xl);
 }
 
 .noLogs {
   text-align: center;
-  padding: 40px;
-  color: #6b7280;
-  font-size: 16px;
+  padding: var(--spacing-6xl);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-2xl);
 }
 
 /* ===== 페이지네이션 ===== */
@@ -175,58 +171,53 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
-  margin-top: 24px;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-4xl);
   flex-wrap: wrap;
 }
 
 .pageBtn {
   min-width: 36px;
   height: 36px;
-  border-radius: 8px;
-  border: 2px solid #c7d2fe;
-  background-color: #ffffff;
-  color: #1e293b;
-  font-weight: 700;
-  font-size: 14px;
+  border-radius: var(--radius-md);
+  border: var(--border-width-medium) solid var(--color-border-medium);
+  background-color: var(--color-bg-primary);
+  color: var(--color-gray-800);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
   cursor: pointer;
 }
 
 .pageBtn:hover {
-  background-color: #e0e7ff;
+  background-color: var(--color-blue-light);
 }
 
 .pageBtn.active {
-  background-color: #2563eb;
-  color: #ffffff;
-  border-color: #2563eb;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  background-color: var(--color-blue);
+  color: var(--color-text-white);
+  border-color: var(--color-blue);
+  box-shadow: var(--shadow-blue);
 }
 
 .navBtn {
   min-width: 36px;
   height: 36px;
-  border-radius: 8px;
-  border: 2px solid #c7d2fe;
-  background-color: #f1f5f9;
-  color: #1e293b;
-  font-size: 18px;
-  font-weight: 900;
+  border-radius: var(--radius-md);
+  border: var(--border-width-medium) solid var(--color-border-medium);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-gray-800);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-extrabold);
   cursor: pointer;
 }
 
 .navBtn:hover {
-  background-color: #e0e7ff;
+  background-color: var(--color-blue-light);
 }
 
 .navBtn:disabled {
-  background-color: #e5e7eb;
-  color: #9ca3af;
-  border-color: #e5e7eb;
+  background-color: var(--color-border-medium);
+  color: var(--color-gray-500);
+  border-color: var(--color-border-medium);
   cursor: not-allowed;
 }
-
-.modalInfo p {
-  margin: 4px 0;
-}
-
