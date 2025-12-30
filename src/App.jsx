@@ -4,6 +4,7 @@ import Login from './Login'
 import PowerToggle from './components/PowerToggle'
 import Dashboard from './components/Dashboard'
 import DefectLog from './components/DefectLog'
+import Progress from './components/Progress'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -55,13 +56,19 @@ function App() {
             className={`tab-button ${activeTab === 'dashboard' ? 'active' : ''}`}
             onClick={() => setActiveTab('dashboard')}
           >
-            📊 대시보드
+             대시보드
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'progress' ? 'active' : ''}`}
+            onClick={() => setActiveTab('progress')}
+          >
+            진행도 현황
           </button>
           <button 
             className={`tab-button ${activeTab === 'defectlog' ? 'active' : ''}`}
             onClick={() => setActiveTab('defectlog')}
           >
-            📋 불량 로그
+            불량 로그
           </button>
         </div>
 
@@ -72,6 +79,9 @@ function App() {
           )}
           {activeTab === 'defectlog' && (
             <DefectLog isPowerOn={isPowerOn} />
+          )}
+          {activeTab === 'progress' && (
+            <Progress />
           )}
         </div>
       </main>

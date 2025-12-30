@@ -1,0 +1,84 @@
+.progressContainer {
+  padding: var(--spacing-4xl);
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+  margin: var(--spacing-2xl) auto;
+  max-width: 1200px;
+}
+
+.progressBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--spacing-4xl) 0;
+}
+
+.stepWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.stepCircle {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  border: var(--border-width-medium) solid var(--color-border-medium);
+  background: var(--color-bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+}
+
+.stepCircle.pending {
+  background: var(--color-bg-primary);
+  border-color: var(--color-border-medium);
+}
+
+.stepCircle.completed {
+  background: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.stepCircle.error {
+  background: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.stepLabel {
+  margin-top: var(--spacing-lg);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.stepBar {
+  height: 4px;
+  flex: 1;
+  min-width: 100px;
+  max-width: 200px;
+  background: var(--color-border-medium);
+  margin: 0 var(--spacing-2xl);
+  transition: all var(--transition-base);
+}
+
+.stepBar.pending {
+  background: var(--color-border-medium);
+}
+
+.stepBar.completed {
+  background: var(--color-success);
+}
+
+.stepBar.error {
+  background: var(--color-border-medium);
+}
+

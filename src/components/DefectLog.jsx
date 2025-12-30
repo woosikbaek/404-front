@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
 import Header from './Header';
 import styles from './DefectLog.module.css';
+import socket from '../utils/socket';
 
 const API_BASE = 'http://192.168.1.78:5000';
 const ITEMS_PER_PAGE = 8;
@@ -32,25 +32,38 @@ function DefectLog() {
      2. 실시간 로그 (Socket)
   ========================= */
   useEffect(() => {
-    const socket = io(API_BASE, { transports: ['websocket'] });
-
-    socket.on('connect', () => {
+    const handleConnect = () => {
       console.log('🔌 SOCKET CONNECTED');
       setConnected(true);
-    });
+    };
 
-    socket.on('camera_defect', data => {
+    const handleCameraDefect = (data) => {
       console.log('🚨 SOCKET DATA:', data);
       setLogs(prev => [data, ...prev]);
       setCurrentPage(1);
-    });
+    };
 
-    socket.on('disconnect', () => {
+    const handleDisconnect = () => {
       console.log('🔌 SOCKET DISCONNECTED');
       setConnected(false);
-    });
+    };
 
-    return () => socket.disconnect();
+    // 이미 연결되어 있으면 연결 상태 설정
+    if (socket.connected) {
+      setConnected(true);
+    }
+
+    // 이벤트 리스너 등록
+    socket.on('connect', handleConnect);
+    socket.on('camera_defect', handleCameraDefect);
+    socket.on('disconnect', handleDisconnect);
+
+    return () => {
+      // 이벤트 리스너 제거
+      socket.off('connect', handleConnect);
+      socket.off('camera_defect', handleCameraDefect);
+      socket.off('disconnect', handleDisconnect);
+    };
   }, []);
 
   /* =========================

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import io from 'socket.io-client';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import SensorDetailModal from './SensorDetailModal';
 import Header from './Header';
 import styles from './Dashboard.module.css';
+import socket from '../utils/socket';
 
 // 원형 차트 색상
 const COLORS = ['#28a745', '#dc3545'];
@@ -51,64 +51,79 @@ function Dashboard() {
 
     fetchInitialData();
 
-    // WebSocket 연결
-    const socket = io('http://192.168.1.78:5000', {
-      reconnection: true,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5
-    });
-
     // 연결 성공
-    socket.on('connect', () => {
+    const handleConnect = () => {
       console.log('서버 연결됨');
       setConnected(true);
-    });
+    };
 
     // 초기 통계 수신
-    socket.on('stats', (data) => {
+    const handleStats = (data) => {
       console.log('초기 통계 수신:', data);
       setStats(data);
-    });
+    };
 
     // 통계 업데이트
-    socket.on('stats_update', (data) => {
+    const handleStatsUpdate = (data) => {
       console.log('통계 업데이트:', data);
       setStats(data);
-    });
+    };
 
     // 센서 불량
-    socket.on('sensor_defect', (data) => {
+    const handleSensorDefect = (data) => {
       console.log('센서 불량:', data);
       addAlert(`⚠️ 센서 불량 감지: ${data.device}`, 'error');
-    });
+    };
 
     // 카메라 불량
-    socket.on('camera_defect', (data) => {
+    const handleCameraDefect = (data) => {
       console.log('카메라 불량:', data);
       addAlert('⚠️ 외관 불량 감지됨', 'error');
-    });
+    };
 
     // 차량 추가
-    socket.on('car_added', (data) => {
+    const handleCarAdded = (data) => {
       console.log('새 차량:', data);
       addAlert('🚗 새 차량 추가됨', 'success');
-    });
+    };
 
     // 연결 끊김
-    socket.on('disconnect', () => {
+    const handleDisconnect = () => {
       console.log('서버 연결 끊김');
       setConnected(false);
-    });
+    };
 
     // 에러
-    socket.on('error', (error) => {
+    const handleError = (error) => {
       console.error('Socket 에러:', error);
       addAlert('❌ 연결 오류', 'error');
-    });
+    };
+
+    // 이미 연결되어 있으면 연결 상태 설정
+    if (socket.connected) {
+      setConnected(true);
+    }
+
+    // 이벤트 리스너 등록
+    socket.on('connect', handleConnect);
+    socket.on('stats', handleStats);
+    socket.on('stats_update', handleStatsUpdate);
+    socket.on('sensor_defect', handleSensorDefect);
+    socket.on('camera_defect', handleCameraDefect);
+    socket.on('car_added', handleCarAdded);
+    socket.on('disconnect', handleDisconnect);
+    socket.on('error', handleError);
 
     return () => {
-      socket.disconnect();
+      // 이벤트 리스너 제거
+      socket.off('connect', handleConnect);
+      socket.off('stats', handleStats);
+      socket.off('stats_update', handleStatsUpdate);
+      socket.off('sensor_defect', handleSensorDefect);
+      socket.off('camera_defect', handleCameraDefect);
+      socket.off('car_added', handleCarAdded);
+      socket.off('disconnect', handleDisconnect);
+      socket.off('error', handleError);
     };
   }, []);
 
