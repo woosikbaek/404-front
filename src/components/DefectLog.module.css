@@ -1,49 +1,42 @@
-/* 전체 컨테이너 */
 .defectLogContainer {
   padding: var(--spacing-3xl);
   border-radius: var(--radius-md);
   background: var(--color-bg-secondary);
 }
 
-/* 제목 */
 .defectLogTitle {
   margin-bottom: var(--spacing-2xl);
   font-size: var(--font-size-4xl);
   color: var(--color-gray-800);
 }
 
-/* ===== logHeader ===== */
-.logHeader {
+.logHeader,
+.logRow {
   display: grid;
-  grid-template-columns: 120px 56px 1fr 220px;
+  grid-template-columns: 140px 100px 1fr 140px 1fr 100px 1fr 240px;
   align-items: center;
   padding: var(--spacing-lg) var(--spacing-2xl);
+}
+
+.logHeader {
   font-weight: var(--font-weight-semibold);
   color: var(--color-gray-800);
   background: var(--color-bg-secondary);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--spacing-sm);
+  border-bottom: var(--border-width-thin) solid var(--color-border-medium);
 }
 
-.logHeader > div:nth-child(3) {
-  text-align: center; /* 결과 헤더 가운데 */
-}
-
-.logHeader > div:nth-child(4) {
-  text-align: right; /* 날짜 헤더 오른쪽 */
-}
-
-/* ===== 리스트 ===== */
 .logList {
   max-height: 600px;
   overflow-y: auto;
 }
 
+.noLogs {
+  text-align: center;
+  padding: 50px;
+  color: var(--color-text-secondary);
+}
+
 .logRow {
-  display: grid;
-  grid-template-columns: 120px 56px 1fr 220px;
-  align-items: center;
-  padding: var(--spacing-lg) var(--spacing-2xl);
   border-bottom: var(--border-width-thin) solid var(--color-border-medium);
   background: var(--color-bg-primary);
   cursor: pointer;
@@ -53,48 +46,102 @@
   background: var(--color-bg-secondary);
 }
 
-/* 차량번호 */
 .logColCar {
+  grid-column: 1;
+  text-align: left;
   font-weight: var(--font-weight-semibold);
-  color: var(--color-gray-800);
+  color: #333;
 }
 
-/* 결과 */
-.logColResult {
+.logColImage {
+  grid-column: 2;
+  display: flex;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+/* 유형: 빨간색, 얇게 */
+.logColType {
+  grid-column: 4;
   text-align: center;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-error-darker);
+  font-weight: 400;
 }
 
-/* 날짜 */
+/* 결과: 빨간색, 적당한 굵기 (600으로 조정) */
+.logColResult {
+  grid-column: 6;
+  text-align: center;
+  font-weight: 600;
+}
+
 .logColTime {
+  grid-column: 8;
   text-align: right;
-  font-size: var(--font-size-xl);
   color: var(--color-text-secondary);
+  font-size: var(--font-size-xl);
 }
 
-/* 이미지 미리보기 */
-.previewImg {
-  width: 36px;
-  height: 36px;
-  object-fit: cover;
+.previewImg,
+.previewPlaceholder {
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-sm);
+  object-fit: cover;
   border: var(--border-width-thin) solid var(--color-border-medium);
 }
 
 .previewPlaceholder {
-  width: 36px;
-  height: 36px;
   background: var(--color-border-medium);
-  color: var(--color-text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: var(--font-weight-bold);
-  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
 }
 
-/* ===== 모달 ===== */
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-4xl);
+}
+
+.pageBtn,
+.navBtn {
+  min-width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  border: var(--border-width-medium) solid var(--color-border-medium);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navBtn {
+  font-size: var(--font-size-3xl);
+  color: #000000 !important; /* 화살표 검은색 */
+  background-color: #f0f0f0;
+}
+
+.navBtn:disabled {
+  color: #cccccc !important;
+}
+
+.pageBtn {
+  background-color: var(--color-bg-primary);
+  color: var(--color-gray-800);
+}
+
+.pageBtn.active {
+  background-color: #1a2a3a; /* 어두운 남색 */
+  color: #ffffff;
+  border-color: #1a2a3a;
+}
+
+/* 모달 디자인 (800x600 고정) */
 .imageModal {
   position: fixed;
   inset: 0;
@@ -109,115 +156,65 @@
   background: var(--color-bg-primary);
   padding: var(--spacing-3xl);
   border-radius: var(--radius-2xl);
-  max-width: var(--max-width-modal);
-  width: 100%;
+  width: 1000px;
+  height: 750px;
+  display: flex;
+  flex-direction: column;
   position: relative;
-  box-shadow: var(--shadow-2xl);
+}
+
+.modalImageContainer {
+  flex: 1;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  overflow: hidden;
 }
 
 .modalImage {
-  width: 100%;
+  width: auto;
+  height: 100%;
+  max-width: calc(50% - 10px); 
+  object-fit: contain;
   border-radius: var(--radius-md);
-  margin-bottom: var(--spacing-xl);
+  background: #f9f9f9;
+}
+
+.noImage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-2xl);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+  border: 1px dashed var(--color-border-medium);
 }
 
 .modalClose {
   position: absolute;
-  top: var(--spacing-lg);
-  right: var(--spacing-xl);
+  top: 15px;
+  right: 15px;
+  background: rgba(0,0,0,0.05);
   border: none;
-  background: var(--color-bg-secondary);
-  color: var(--color-gray-800);
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-3xl);
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   cursor: pointer;
-}
-
-.modalClose:hover {
-  background: var(--color-border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modalInfo {
-  margin-top: var(--spacing-xl);
-  padding-top: var(--spacing-md);
   border-top: var(--border-width-thin) solid var(--color-border-medium);
+  padding-top: var(--spacing-md);
+  height: 130px;
   font-size: var(--font-size-xl);
   color: var(--color-gray-800);
-}
-
-.modalInfo p {
-  margin: var(--spacing-sm) 0;
-  color: var(--color-gray-800);
-  font-size: var(--font-size-xl);
-}
-
-.noImage {
-  text-align: center;
-  color: var(--color-text-secondary);
-  padding: var(--spacing-6xl);
-}
-
-.noLogs {
-  text-align: center;
-  padding: var(--spacing-6xl);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-2xl);
-}
-
-/* ===== 페이지네이션 ===== */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-4xl);
-  flex-wrap: wrap;
-}
-
-.pageBtn {
-  min-width: 36px;
-  height: 36px;
-  border-radius: var(--radius-md);
-  border: var(--border-width-medium) solid var(--color-border-medium);
-  background-color: var(--color-bg-primary);
-  color: var(--color-gray-800);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-xl);
-  cursor: pointer;
-}
-
-.pageBtn:hover {
-  background-color: var(--color-blue-light);
-}
-
-.pageBtn.active {
-  background-color: var(--color-blue);
-  color: var(--color-text-white);
-  border-color: var(--color-blue);
-  box-shadow: var(--shadow-blue);
-}
-
-.navBtn {
-  min-width: 36px;
-  height: 36px;
-  border-radius: var(--radius-md);
-  border: var(--border-width-medium) solid var(--color-border-medium);
-  background-color: var(--color-bg-secondary);
-  color: var(--color-gray-800);
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-extrabold);
-  cursor: pointer;
-}
-
-.navBtn:hover {
-  background-color: var(--color-blue-light);
-}
-
-.navBtn:disabled {
-  background-color: var(--color-border-medium);
-  color: var(--color-gray-500);
-  border-color: var(--color-border-medium);
-  cursor: not-allowed;
 }

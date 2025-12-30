@@ -13,8 +13,14 @@ function DefectLog() {
   const [currentPage, setCurrentPage] = useState(1);
   const [connected, setConnected] = useState(false);
 
+  const getImageUrl = (path) => {
+    if (!path) return '';
+    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+    return `${API_BASE}/camera/${cleanPath}`;
+  };
+
   /* =========================
-     1. 초기 로그 (REST)
+     1. 초기 로그 (REST) HTTP 통신
   ========================= */
   useEffect(() => {
     fetch(`${API_BASE}/camera/defects`)
@@ -29,7 +35,7 @@ function DefectLog() {
   }, []);
 
   /* =========================
-     2. 실시간 로그 (Socket)
+     2. 실시간 로그 (Socket) 웹소켓 통신
   ========================= */
   useEffect(() => {
     const handleConnect = () => {
@@ -38,8 +44,26 @@ function DefectLog() {
     };
 
     const handleCameraDefect = (data) => {
-      console.log('🚨 SOCKET DATA:', data);
-      setLogs(prev => [data, ...prev]);
+      console.log('🚨 SOCKET DATA (camera_defect):', data);
+      setLogs(prev => [{
+        car_id: data.car_id,
+        type: '외관불량',
+        result: data.result,
+        images: data.images || [],
+        created_at: data.created_at,
+      }, ...prev]);
+      setCurrentPage(1);
+    };
+
+    const handleSensorDefect = (data) => {
+      console.log('🚨 SOCKET DATA (sensor_defect):', data);
+      setLogs(prev => [{
+        car_id: data.car_id,
+        type: `${data.device} 센서불량`,
+        result: data.result,
+        images: [],
+        created_at: data.created_at,
+      }, ...prev]);
       setCurrentPage(1);
     };
 
@@ -56,12 +80,14 @@ function DefectLog() {
     // 이벤트 리스너 등록
     socket.on('connect', handleConnect);
     socket.on('camera_defect', handleCameraDefect);
+    socket.on('sensor_defect', handleSensorDefect);
     socket.on('disconnect', handleDisconnect);
 
     return () => {
       // 이벤트 리스너 제거
       socket.off('connect', handleConnect);
       socket.off('camera_defect', handleCameraDefect);
+      socket.off('sensor_defect', handleSensorDefect);
       socket.off('disconnect', handleDisconnect);
     };
   }, []);
@@ -87,53 +113,62 @@ function DefectLog() {
 
         {/* ===== logHeader ===== */}
         <div className={styles.logHeader}>
-          <div className={`${styles.logCol} ${styles.logColCar}`}>차량번호</div>
-          <div className={styles.logCol}>이미지</div>
-          <div className={styles.logCol}>결과</div>
-          <div className={`${styles.logCol} ${styles.logColTime}`}>날짜</div>
+          <div className={styles.logColCar}>차량번호</div>
+          <div className={styles.logColImage}>이미지</div>
+          <div className={styles.logColType}>유형</div>
+          <div className={styles.logColResult}>결과</div>
+          <div className={styles.logColTime}>날짜</div>
         </div>
 
         {/* ===== 리스트 ===== */}
         <div className={styles.logList}>
-          {pagedLogs.length === 0 && <div className={styles.noLogs}>표시할 로그 없음</div>}
-
-          {pagedLogs.map((log, index) => {
-            const imageUrl = log.image
-              ? `${API_BASE}/camera${log.image}`
-              : null;
-
-            return (
+          {pagedLogs.length === 0 ? (
+            <div className={styles.noLogs}>표시할 로그 없음</div>
+          ) : (
+            pagedLogs.map((log, index) => (
               <div
                 key={index}
                 className={styles.logRow}
                 onClick={() => setSelectedLog(log)}
               >
-                <div className={`${styles.logCol} ${styles.logColCar}`}>{log.car_id}</div>
-                <div className={styles.logCol}>
-                  {imageUrl ? (
-                    <img
-                      className={styles.previewImg}
-                      src={imageUrl}
-                      alt="preview"
-                      onError={() => console.error('❌ IMAGE FAIL:', imageUrl)}
-                    />
+                <div className={styles.logColCar}>{log.car_id || '-'}</div>
+                
+                <div className={styles.logColImage}>
+                  {log.images && log.images.length > 0 ? (
+                    log.images.slice(0, 2).map((img, idx) => (
+                      <img
+                        key={idx}
+                        className={styles.previewImg}
+                        src={getImageUrl(img)}
+                        alt="preview"
+                        onError={() => console.error('❌ IMAGE FAIL:', getImageUrl(img))}
+                      />
+                    ))
                   ) : (
                     <div className={styles.previewPlaceholder}>-</div>
                   )}
                 </div>
-                <div className={`${styles.logCol} ${styles.logColResult}`}>{log.result ?? '-'}</div>
-                <div className={`${styles.logCol} ${styles.logColTime}`}>
+
+                <div className={styles.logColType} style={{ color: 'red' }}>
+                  {log.type || '외관불량'}
+                </div>
+                
+                <div className={styles.logColResult} style={{ color: 'red' }}>
+                  {log.result ?? '-'}
+                </div>
+                
+                <div className={styles.logColTime}>
                   {log.created_at
                     ? new Date(log.created_at).toLocaleString('ko-KR')
                     : '-'}
                 </div>
               </div>
-            );
-          })}
+            ))
+          )}
         </div>
 
         {/* ===== 페이지네이션 ===== */}
-        {totalPages > 1 && (
+        {totalPages > 0 && (
           <div className={styles.pagination}>
             <button
               className={styles.navBtn}
@@ -168,15 +203,26 @@ function DefectLog() {
           <div className={styles.imageModal} onClick={() => setSelectedLog(null)}>
             <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
               <button className={styles.modalClose} onClick={() => setSelectedLog(null)}>✕</button>
-              {selectedLog.image ? (
-                <img className={styles.modalImage} src={`${API_BASE}/camera${selectedLog.image}`} alt="detail" />
+              {selectedLog.images && selectedLog.images.length > 0 ? (
+                <div className={styles.modalImageContainer}>
+                  {selectedLog.images.slice(0, 2).map((img, idx) => (
+                    <img
+                      key={idx}
+                      className={styles.modalImage}
+                      src={getImageUrl(img)}
+                      alt="detail"
+                      onError={() => console.error('❌ IMAGE FAIL:', getImageUrl(img))}
+                    />
+                  ))}
+                </div>
               ) : (
                 <div className={styles.noImage}>이미지 없음</div>
               )}
               <div className={styles.modalInfo}>
                 <p><strong>차량번호:</strong> {selectedLog.car_id}</p>
+                <p><strong>유형:</strong> {selectedLog.type || '외관불량'}</p>
                 <p><strong>결과:</strong> {selectedLog.result ?? '-'}</p>
-                <p><strong>날짜:</strong> {new Date(selectedLog.created_at).toLocaleString('ko-KR')}</p>
+                <p><strong>날짜:</strong> {selectedLog.created_at ? new Date(selectedLog.created_at).toLocaleString('ko-KR') : '-'}</p>
               </div>
             </div>
           </div>
