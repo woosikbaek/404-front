@@ -237,8 +237,8 @@
 }
 
 .activeTab {
-  color: #007bff; /* 포인트 컬러 */
-  border-bottom: 3px solid #007bff;
+  color: #1a2a3a; /* 포인트 컬러 */
+  border-bottom: 3px solid #1a2a3a;
   margin-bottom: -2px; /* border-bottom 겹치기 */
 }
 
