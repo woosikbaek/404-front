@@ -22,6 +22,21 @@
   position: relative;
 }
 
+.carIdLabel {
+  position: absolute;
+  left: -120px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--font-size-22);
+  font-weight: var(--font-weight-600);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  background: var(--color-bg-secondary);
+  padding: var(--spacing-6) var(--spacing-10);
+  border-radius: var(--radius-6);
+  border: var(--border-width-medium) solid var(--color-border-medium);
+}
+
 .stepCircle {
   width: 60px;
   height: 60px;
