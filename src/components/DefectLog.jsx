@@ -1,6 +1,4 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setStepError, setEnd } from '../store/slices/processStatusSlice';
 import Header from './Header';
 import styles from './DefectLog.module.css';
 import socket from '../utils/socket';
@@ -10,9 +8,6 @@ const ITEMS_PER_PAGE = 8;
 const PAGES_PER_GROUP = 10;
 
 function DefectLog() {
-  const dispatch = useAppDispatch();
-  const currentCarId = useAppSelector((state) => state.processStatus.currentCarId);
-  
   const [logs, setLogs] = useState([]);
   const [selectedLog, setSelectedLog] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,7 +22,7 @@ function DefectLog() {
     return `${API_BASE}/camera/${cleanPath}`;
   };
 
-  // 1. 초기 데이터 로드
+  // 1. 초기 데이터 로드 (가져올 때 태생 구분값 부여)
   useEffect(() => {
     fetch(`${API_BASE}/camera/defects`)
       .then(res => res.json())
@@ -61,9 +56,9 @@ function DefectLog() {
         }
       })
       .catch(err => console.error('❌ FETCH ERROR:', err));
-  }, [currentCarId, dispatch]);
+  }, []);
 
-  // 2. 실시간 소켓 통신
+  // 2. 실시간 소켓 통신 (받을 때 태생 구분값 부여)
   useEffect(() => {
     const handleConnect = () => setConnected(true);
     const handleDisconnect = () => setConnected(false);
@@ -85,7 +80,7 @@ function DefectLog() {
         ...data,
         type: '외관불량',
         images: data.images || [],
-        isCamera: true 
+        isCamera: true // 카메라 태생임을 명시
       }, ...prev]);
       if (activeTab === 'CAMERA') setCurrentPage(1);
     };
@@ -127,16 +122,16 @@ function DefectLog() {
       socket.off('sensor_defect', handleSensorDefect);
       socket.off('disconnect', handleDisconnect);
     };
-  }, [activeTab, dispatch, currentCarId]);
+  }, [activeTab]);
 
-  // 3. 탭에 따른 데이터 필터링 (useMemo로 성능 최적화)
+  // 3. 탭 필터링 (가장 중요한 부분: 이미지 유무가 아닌 isCamera 도장 기준)
   const filteredLogs = useMemo(() => {
     if (activeTab === 'CAMERA') {
-      // 이미지 데이터가 있거나 타입이 외관불량인 경우
-      return logs.filter(log => log.images && log.images.length > 0);
+      // 외관 불량 탭: 이미지 유무 상관없이 카메라 태생만
+      return logs.filter(log => log.isCamera === true);
     } else {
-      // 이미지가 없거나 타입에 센서불량이 포함된 경우
-      return logs.filter(log => !log.images || log.images.length === 0);
+      // 센서 불량 탭: 외관 불량은 여기서 완전히 배제
+      return logs.filter(log => log.isCamera === false);
     }
   }, [logs, activeTab]);
 
@@ -162,7 +157,6 @@ function DefectLog() {
       <div className={styles.defectLogContainer}>
         <h2 className={styles.defectLogTitle}>불량 로그</h2>
 
-        {/* ===== 탭 메뉴 ===== */}
         <div className={styles.tabMenu}>
           <button 
             className={`${styles.tabBtn} ${activeTab === 'CAMERA' ? styles.activeTab : ''}`}
@@ -178,7 +172,6 @@ function DefectLog() {
           </button>
         </div>
 
-        {/* ===== 로그 헤더: 그리드 유지 ===== */}
         <div className={styles.logHeader}>
           <div className={styles.logColCar}>차량번호</div>
           <div className={styles.logColImage}>이미지</div>
@@ -187,7 +180,6 @@ function DefectLog() {
           <div className={styles.logColTime}>날짜</div>
         </div>
 
-        {/* ===== 리스트 ===== */}
         <div className={styles.logList}>
           {pagedLogs.length === 0 ? (
             <div className={styles.noLogs}>표시할 {activeTab === 'CAMERA' ? '외관' : '센서'} 불량 로그 없음</div>
@@ -231,38 +223,30 @@ function DefectLog() {
           )}
         </div>
 
-        {/* ===== 페이지네이션 ===== */}
         {totalPages > 0 && (
           <div className={styles.pagination}>
             <button
               className={styles.navBtn}
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
-            >
-              ‹
-            </button>
+            >‹</button>
 
             {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map(page => (
               <button
                 key={page}
                 className={`${styles.pageBtn} ${page === currentPage ? styles.active : ''}`}
                 onClick={() => setCurrentPage(page)}
-              >
-                {page}
-              </button>
+              >{page}</button>
             ))}
 
             <button
               className={styles.navBtn}
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
-            >
-              ›
-            </button>
+            >›</button>
           </div>
         )}
 
-        {/* ===== 상세 모달 ===== */}
         {selectedLog && (
           <div className={styles.imageModal} onClick={() => setSelectedLog(null)}>
             <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
@@ -270,19 +254,12 @@ function DefectLog() {
               
               {selectedLog.images && selectedLog.images.length > 0 ? (
                 <div className={styles.modalImageContainer}>
-                  {selectedLog.images.slice(0, 2).map((img, idx) => (
-                    <img
-                      key={idx}
-                      className={styles.modalImage}
-                      src={getImageUrl(img)}
-                      alt="detail"
-                    />
+                  {selectedLog.images.map((img, idx) => (
+                    <img key={idx} className={styles.modalImage} src={getImageUrl(img)} alt="detail" />
                   ))}
                 </div>
               ) : (
-                <div className={styles.noImage}>
-                  이미지 데이터가 없는 로그입니다.
-                </div>
+                <div className={styles.noImage}>이미지 데이터가 없는 로그입니다.</div>
               )}
 
               <div className={styles.modalInfo}>
