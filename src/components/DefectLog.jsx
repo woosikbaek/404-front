@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Header from './Header';
 import styles from './DefectLog.module.css';
 import socket from '../utils/socket';
@@ -12,6 +12,9 @@ function DefectLog() {
   const [selectedLog, setSelectedLog] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [connected, setConnected] = useState(false);
+  
+  // 탭 상태: 'CAMERA'(외관불량), 'SENSOR'(센서불량)
+  const [activeTab, setActiveTab] = useState('CAMERA');
 
   const getImageUrl = (path) => {
     if (!path) return '';
@@ -19,91 +22,82 @@ function DefectLog() {
     return `${API_BASE}/camera/${cleanPath}`;
   };
 
-  /* =========================
-     1. 초기 로그 (REST) HTTP 통신
-  ========================= */
+  // 1. 초기 데이터 로드
   useEffect(() => {
     fetch(`${API_BASE}/camera/defects`)
       .then(res => res.json())
       .then(data => {
-        console.log('📥 FETCH DATA:', data);
         setLogs(data);
       })
-      .catch(err => {
-        console.error('❌ FETCH ERROR:', err);
-      });
+      .catch(err => console.error('❌ FETCH ERROR:', err));
   }, []);
 
-  /* =========================
-     2. 실시간 로그 (Socket) 웹소켓 통신
-  ========================= */
+  // 2. 실시간 소켓 통신
   useEffect(() => {
-    const handleConnect = () => {
-      console.log('🔌 SOCKET CONNECTED');
-      setConnected(true);
-    };
+    const handleConnect = () => setConnected(true);
+    const handleDisconnect = () => setConnected(false);
 
     const handleCameraDefect = (data) => {
-      console.log('🚨 SOCKET DATA (camera_defect):', data);
       setLogs(prev => [{
-        car_id: data.car_id,
+        ...data,
         type: '외관불량',
-        result: data.result,
         images: data.images || [],
-        created_at: data.created_at,
+        isCamera: true 
       }, ...prev]);
-      setCurrentPage(1);
+      if (activeTab === 'CAMERA') setCurrentPage(1);
     };
 
     const handleSensorDefect = (data) => {
-      console.log('🚨 SOCKET DATA (sensor_defect):', data);
       setLogs(prev => [{
-        car_id: data.car_id,
+        ...data,
         type: `${data.device} 센서불량`,
-        result: data.result,
         images: [],
-        created_at: data.created_at,
+        isCamera: false
       }, ...prev]);
-      setCurrentPage(1);
+      if (activeTab === 'SENSOR') setCurrentPage(1);
     };
 
-    const handleDisconnect = () => {
-      console.log('🔌 SOCKET DISCONNECTED');
-      setConnected(false);
-    };
+    if (socket.connected) setConnected(true);
 
-    // 이미 연결되어 있으면 연결 상태 설정
-    if (socket.connected) {
-      setConnected(true);
-    }
-
-    // 이벤트 리스너 등록
     socket.on('connect', handleConnect);
     socket.on('camera_defect', handleCameraDefect);
     socket.on('sensor_defect', handleSensorDefect);
     socket.on('disconnect', handleDisconnect);
 
     return () => {
-      // 이벤트 리스너 제거
       socket.off('connect', handleConnect);
       socket.off('camera_defect', handleCameraDefect);
       socket.off('sensor_defect', handleSensorDefect);
       socket.off('disconnect', handleDisconnect);
     };
-  }, []);
+  }, [activeTab]);
 
-  /* =========================
-     3. 페이지네이션 계산
-  ========================= */
-  const totalPages = Math.ceil(logs.length / ITEMS_PER_PAGE);
+  // 3. 탭에 따른 데이터 필터링 (useMemo로 성능 최적화)
+  const filteredLogs = useMemo(() => {
+    if (activeTab === 'CAMERA') {
+      // 이미지 데이터가 있거나 타입이 외관불량인 경우
+      return logs.filter(log => log.images && log.images.length > 0);
+    } else {
+      // 이미지가 없거나 타입에 센서불량이 포함된 경우
+      return logs.filter(log => !log.images || log.images.length === 0);
+    }
+  }, [logs, activeTab]);
+
+  // 4. 페이지네이션 계산
+  const totalPages = Math.ceil(filteredLogs.length / ITEMS_PER_PAGE);
   const currentGroup = Math.floor((currentPage - 1) / PAGES_PER_GROUP);
   const startPage = currentGroup * PAGES_PER_GROUP + 1;
   const endPage = Math.min(startPage + PAGES_PER_GROUP - 1, totalPages);
 
-  const pagedLogs = logs.slice(
+  const pagedLogs = filteredLogs.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
 
   return (
     <div>
@@ -111,7 +105,23 @@ function DefectLog() {
       <div className={styles.defectLogContainer}>
         <h2 className={styles.defectLogTitle}>불량 로그</h2>
 
-        {/* ===== logHeader ===== */}
+        {/* ===== 탭 메뉴 ===== */}
+        <div className={styles.tabMenu}>
+          <button 
+            className={`${styles.tabBtn} ${activeTab === 'CAMERA' ? styles.activeTab : ''}`}
+            onClick={() => handleTabChange('CAMERA')}
+          >
+            외관 불량
+          </button>
+          <button 
+            className={`${styles.tabBtn} ${activeTab === 'SENSOR' ? styles.activeTab : ''}`}
+            onClick={() => handleTabChange('SENSOR')}
+          >
+            센서 불량
+          </button>
+        </div>
+
+        {/* ===== 로그 헤더: 그리드 유지 ===== */}
         <div className={styles.logHeader}>
           <div className={styles.logColCar}>차량번호</div>
           <div className={styles.logColImage}>이미지</div>
@@ -123,7 +133,7 @@ function DefectLog() {
         {/* ===== 리스트 ===== */}
         <div className={styles.logList}>
           {pagedLogs.length === 0 ? (
-            <div className={styles.noLogs}>표시할 로그 없음</div>
+            <div className={styles.noLogs}>표시할 {activeTab === 'CAMERA' ? '외관' : '센서'} 불량 로그 없음</div>
           ) : (
             pagedLogs.map((log, index) => (
               <div
@@ -141,7 +151,6 @@ function DefectLog() {
                         className={styles.previewImg}
                         src={getImageUrl(img)}
                         alt="preview"
-                        onError={() => console.error('❌ IMAGE FAIL:', getImageUrl(img))}
                       />
                     ))
                   ) : (
@@ -150,7 +159,7 @@ function DefectLog() {
                 </div>
 
                 <div className={styles.logColType} style={{ color: 'red' }}>
-                  {log.type || '외관불량'}
+                  {log.type || '불량'}
                 </div>
                 
                 <div className={styles.logColResult} style={{ color: 'red' }}>
@@ -158,9 +167,7 @@ function DefectLog() {
                 </div>
                 
                 <div className={styles.logColTime}>
-                  {log.created_at
-                    ? new Date(log.created_at).toLocaleString('ko-KR')
-                    : '-'}
+                  {log.created_at ? new Date(log.created_at).toLocaleString('ko-KR') : '-'}
                 </div>
               </div>
             ))
@@ -198,11 +205,12 @@ function DefectLog() {
           </div>
         )}
 
-        {/* ===== 이미지 모달 ===== */}
+        {/* ===== 상세 모달 ===== */}
         {selectedLog && (
           <div className={styles.imageModal} onClick={() => setSelectedLog(null)}>
             <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
               <button className={styles.modalClose} onClick={() => setSelectedLog(null)}>✕</button>
+              
               {selectedLog.images && selectedLog.images.length > 0 ? (
                 <div className={styles.modalImageContainer}>
                   {selectedLog.images.slice(0, 2).map((img, idx) => (
@@ -211,16 +219,18 @@ function DefectLog() {
                       className={styles.modalImage}
                       src={getImageUrl(img)}
                       alt="detail"
-                      onError={() => console.error('❌ IMAGE FAIL:', getImageUrl(img))}
                     />
                   ))}
                 </div>
               ) : (
-                <div className={styles.noImage}>이미지 없음</div>
+                <div className={styles.noImage}>
+                  이미지 데이터가 없는 로그입니다.
+                </div>
               )}
+
               <div className={styles.modalInfo}>
                 <p><strong>차량번호:</strong> {selectedLog.car_id}</p>
-                <p><strong>유형:</strong> {selectedLog.type || '외관불량'}</p>
+                <p><strong>유형:</strong> {selectedLog.type}</p>
                 <p><strong>결과:</strong> {selectedLog.result ?? '-'}</p>
                 <p><strong>날짜:</strong> {selectedLog.created_at ? new Date(selectedLog.created_at).toLocaleString('ko-KR') : '-'}</p>
               </div>
