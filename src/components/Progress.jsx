@@ -72,6 +72,26 @@ function Progress() {
       }
     };
 
+    // 외관 불량 이벤트 처리
+    const handleCameraDefect = (data) => {
+      console.log('⚠️ Camera Defect Event:', data);
+      if (data && data.car_id && currentCarId === data.car_id) {
+        // 외관 불량은 이미지가 있거나 result가 DEFECT인 경우
+        const isDefect = (data.images && data.images.length > 0) || data.result === 'DEFECT';
+        if (isDefect) {
+          // 기존 end 타이머가 있으면 클리어
+          if (endTimerRef.current) {
+            clearTimeout(endTimerRef.current);
+            endTimerRef.current = null;
+          }
+          
+          // case 단계를 'error'로 설정하고, end도 즉시 'error'로 설정
+          dispatch(setStepError({ stepId: 'case' }));
+          dispatch(setEnd({ status: 'error' }));
+        }
+      }
+    };
+
     // 센서 불량 이벤트 처리
     const handleSensorDefect = (data) => {
       console.log('⚠️ Sensor Defect Event:', data);
@@ -125,6 +145,7 @@ function Progress() {
     // 이벤트 리스너 등록
     socket.on('connect', handleConnect);
     socket.on('progress', handleProgress);
+    socket.on('camera_defect', handleCameraDefect);
     socket.on('sensor_defect', handleSensorDefect);
     socket.on('disconnect', handleDisconnect);
 
@@ -132,6 +153,7 @@ function Progress() {
       // 이벤트 리스너 제거
       socket.off('connect', handleConnect);
       socket.off('progress', handleProgress);
+      socket.off('camera_defect', handleCameraDefect);
       socket.off('sensor_defect', handleSensorDefect);
       socket.off('disconnect', handleDisconnect);
       

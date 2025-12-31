@@ -40,14 +40,16 @@ function DefectLog() {
             log.car_id === currentCarId && log.result === 'DEFECT'
           );
           
+          // Redux 상태를 먼저 업데이트
           currentCarDefects.forEach(log => {
-            // 외관 불량인 경우
-            if (log.images && log.images.length > 0) {
+            // 외관 불량인 경우 (이미지가 있거나 result가 DEFECT)
+            const isCameraDefect = (log.images && log.images.length > 0) || log.result === 'DEFECT';
+            if (isCameraDefect) {
               dispatch(setStepError({ stepId: 'case' }));
               dispatch(setEnd({ status: 'error' }));
             }
             // 센서 불량인 경우 (LED, BUZZER, ULTRASONIC)
-            else {
+            else if (log.result === 'DEFECT') {
               const device = (log.device || '').toUpperCase();
               const sensorDevices = ['LED', 'BUZZER', 'ULTRASONIC'];
               if (sensorDevices.includes(device)) {
@@ -67,6 +69,18 @@ function DefectLog() {
     const handleDisconnect = () => setConnected(false);
 
     const handleCameraDefect = (data) => {
+      // 외관 불량이 현재 진행 중인 차량이면 즉시 case 단계를 error로 설정
+      // Redux 상태를 먼저 업데이트하여 시각적 피드백을 빠르게 제공
+      if (data.car_id && currentCarId === data.car_id) {
+        // 외관 불량은 이미지가 있거나 result가 DEFECT인 경우
+        const isDefect = (data.images && data.images.length > 0) || data.result === 'DEFECT';
+        if (isDefect) {
+          dispatch(setStepError({ stepId: 'case' }));
+          dispatch(setEnd({ status: 'error' }));
+        }
+      }
+      
+      // 로그 추가는 Redux 상태 업데이트 후에 처리
       setLogs(prev => [{
         ...data,
         type: '외관불량',
@@ -74,24 +88,11 @@ function DefectLog() {
         isCamera: true 
       }, ...prev]);
       if (activeTab === 'CAMERA') setCurrentPage(1);
-      
-      // 외관 불량이 현재 진행 중인 차량이면 case 단계를 error로 설정
-      if (data.car_id && currentCarId === data.car_id && data.result === 'DEFECT') {
-        dispatch(setStepError({ stepId: 'case' }));
-        dispatch(setEnd({ status: 'error' }));
-      }
     };
 
     const handleSensorDefect = (data) => {
-      setLogs(prev => [{
-        ...data,
-        type: `${data.device} 센서불량`,
-        images: [],
-        isCamera: false
-      }, ...prev]);
-      if (activeTab === 'SENSOR') setCurrentPage(1);
-      
-      // 센서 불량이 현재 진행 중인 차량이면 sensor 단계를 error로 설정
+      // 센서 불량이 현재 진행 중인 차량이면 즉시 sensor 단계를 error로 설정
+      // Redux 상태를 먼저 업데이트하여 시각적 피드백을 빠르게 제공
       if (data.car_id && currentCarId === data.car_id && data.result === 'DEFECT') {
         const device = (data.device || '').toUpperCase();
         const sensorDevices = ['LED', 'BUZZER', 'ULTRASONIC'];
@@ -102,6 +103,15 @@ function DefectLog() {
           dispatch(setEnd({ status: 'error' }));
         }
       }
+      
+      // 로그 추가는 Redux 상태 업데이트 후에 처리
+      setLogs(prev => [{
+        ...data,
+        type: `${data.device} 센서불량`,
+        images: [],
+        isCamera: false
+      }, ...prev]);
+      if (activeTab === 'SENSOR') setCurrentPage(1);
     };
 
     if (socket.connected) setConnected(true);
