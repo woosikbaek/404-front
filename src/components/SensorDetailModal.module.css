@@ -15,7 +15,7 @@
 .sensorModalContent {
   background: var(--color-bg-primary);
   width: 50%;
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-12);
   box-shadow: var(--shadow-2xl);
   max-height: 90vh;
   animation: slideUp var(--transition-base) ease-out;
@@ -27,7 +27,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-4xl) var(--spacing-5xl);
+  padding: var(--spacing-24) var(--spacing-32);
   border-bottom: var(--border-width-medium) solid var(--color-border-medium);
   background: var(--color-bg-gray-medium);
   color: var(--color-text-black);
@@ -35,110 +35,110 @@
 
 .sensorModalHeader h2 {
   margin: 0;
-  font-size: var(--font-size-5xl);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-24);
+  font-weight: var(--font-weight-700);
 }
 
 .sensorModalCloseBtn {
   background: rgba(73, 73, 73, 0.2);
   border: none;
-  font-size: var(--font-size-6xl);
+  font-size: var(--font-size-28);
   cursor: pointer;
-  padding: var(--spacing-xs) var(--spacing-xl);
-  border-radius: var(--radius-md);
+  padding: var(--spacing-4) var(--spacing-12);
+  border-radius: var(--radius-6);
   color: var(--color-text-white);
   transition: all var(--transition-fast);
   line-height: 1;
 }
 
 .sensorModalBody {
-  padding: var(--spacing-5xl);
+  padding: var(--spacing-32);
 }
 
 .chartSection {
-  margin-bottom: var(--spacing-5xl);
+  margin-bottom: var(--spacing-32);
   background: var(--color-bg-secondary);
-  padding: var(--spacing-4xl);
-  border-radius: var(--radius-2xl);
+  padding: var(--spacing-24);
+  border-radius: var(--radius-12);
   border: var(--border-width-thin) solid var(--color-border-medium);
 }
 
 .chartSection h3 {
-  margin: 0 0 var(--spacing-3xl) 0;
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--spacing-20) 0;
+  font-size: var(--font-size-18);
+  font-weight: var(--font-weight-600);
   color: var(--color-gray-800);
 }
 
 .deviceDetailSection {
-  margin-bottom: var(--spacing-5xl);
+  margin-bottom: var(--spacing-32);
 }
 
 .deviceDetailSection h3 {
-  margin: 0 0 var(--spacing-3xl) 0;
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--spacing-20) 0;
+  font-size: var(--font-size-18);
+  font-weight: var(--font-weight-600);
   color: var(--color-gray-800);
 }
 
 .deviceDetailList {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2xl);
+  gap: var(--spacing-16);
 }
 
 .deviceDetailItem {
   background: var(--color-bg-secondary);
   border: var(--border-width-thin) solid var(--color-border-medium);
-  border-radius: var(--radius-2xl);
-  padding: var(--spacing-3xl);
+  border-radius: var(--radius-12);
+  padding: var(--spacing-20);
   transition: all var(--transition-fast);
 }
 
 .deviceDetailHeader {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-2xl);
+  gap: var(--spacing-12);
+  margin-bottom: var(--spacing-16);
 }
 
 .deviceColor {
-  width: var(--spacing-3xl);
-  height: var(--spacing-3xl);
-  border-radius: var(--radius-sm);
+  width: var(--spacing-20);
+  height: var(--spacing-20);
+  border-radius: var(--radius-4);
 }
 
 .deviceName {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-18);
+  font-weight: var(--font-weight-600);
   color: var(--color-gray-800);
 }
 
 .deviceDetailStats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--spacing-xl);
+  gap: var(--spacing-12);
 }
 
 .detailStatCard {
   background: var(--color-bg-primary);
-  padding: var(--spacing-2xl);
-  border-radius: var(--radius-md);
+  padding: var(--spacing-16);
+  border-radius: var(--radius-6);
   border: var(--border-width-thin) solid var(--color-border-medium);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-8);
 }
 
 .detailLabel {
   font-size: 13px;
   color: var(--color-text-secondary);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-500);
 }
 
 .detailValue {
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-22);
+  font-weight: var(--font-weight-700);
 }
 
 .detailValueError {
@@ -151,43 +151,43 @@
 
 .summarySection {
   background: var(--color-bg-gray-medium);
-  padding: var(--spacing-4xl);
-  border-radius: var(--radius-2xl);
+  padding: var(--spacing-24);
+  border-radius: var(--radius-12);
   color: var(--color-text-black);
 }
 
 .summarySection h3 {
-  margin: 0 0 var(--spacing-3xl) 0;
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--spacing-20) 0;
+  font-size: var(--font-size-18);
+  font-weight: var(--font-weight-600);
 }
 
 .summaryGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--spacing-2xl);
+  gap: var(--spacing-16);
 }
 
 .summaryCard {
   background: rgba(255, 255, 255, 0.15);
-  padding: var(--spacing-3xl);
-  border-radius: var(--radius-lg);
+  padding: var(--spacing-20);
+  border-radius: var(--radius-8);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-10);
   backdrop-filter: blur(10px);
   border: var(--border-width-thin) solid rgba(255, 255, 255, 0.2);
 }
 
 .summaryLabel {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-14);
   opacity: 0.9;
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-500);
 }
 
 .summaryValue {
-  font-size: var(--font-size-6xl);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-28);
+  font-weight: var(--font-weight-700);
 }
 
 .summaryValueError {
@@ -196,27 +196,27 @@
 
 .sensorNoData {
   text-align: center;
-  padding: var(--spacing-6xl);
+  padding: var(--spacing-40);
   color: var(--color-text-secondary);
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-16);
 }
 
 .sensorModalFooter {
-  padding: var(--spacing-3xl) var(--spacing-5xl);
+  padding: var(--spacing-20) var(--spacing-32);
   border-top: var(--border-width-thin) solid var(--color-border-medium);
   display: flex;
   justify-content: flex-end;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-12);
 }
 
 .sensorModalBtnClose {
-  padding: var(--spacing-xl) var(--spacing-5xl);
+  padding: var(--spacing-12) var(--spacing-32);
   background: var(--color-gray-500);
   color: var(--color-text-white);
   border: none;
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-6);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-600);
   cursor: pointer;
   transition: all var(--transition-fast);
 }

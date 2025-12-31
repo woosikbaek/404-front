@@ -50,43 +50,43 @@
   --color-gray-800: #1f2937;
   
   /* ============ 간격 (Spacing) ============ */
-  --spacing-xs: 4px;
-  --spacing-sm: 6px;
-  --spacing-md: 8px;
-  --spacing-lg: 10px;
-  --spacing-xl: 12px;
-  --spacing-2xl: 16px;
-  --spacing-3xl: 20px;
-  --spacing-4xl: 24px;
-  --spacing-5xl: 32px;
-  --spacing-6xl: 40px;
+  --spacing-4: 4px;
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
   
   /* ============ 폰트 크기 ============ */
-  --font-size-xs: 9px;
-  --font-size-sm: 10px;
-  --font-size-md: 11px;
-  --font-size-base: 12px;
-  --font-size-lg: 13px;
-  --font-size-xl: 14px;
-  --font-size-2xl: 16px;
-  --font-size-3xl: 18px;
-  --font-size-4xl: 22px;
-  --font-size-5xl: 24px;
-  --font-size-6xl: 28px;
+  --font-size-9: 9px;
+  --font-size-10: 10px;
+  --font-size-11: 11px;
+  --font-size-12: 12px;
+  --font-size-13: 13px;
+  --font-size-14: 14px;
+  --font-size-16: 16px;
+  --font-size-18: 18px;
+  --font-size-22: 22px;
+  --font-size-24: 24px;
+  --font-size-28: 28px;
   
   /* ============ 폰트 굵기 ============ */
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-  --font-weight-extrabold: 900;
+  --font-weight-500: 500;
+  --font-weight-600: 600;
+  --font-weight-700: 700;
+  --font-weight-900: 900;
   
   /* ============ 보더 반경 (Border Radius) ============ */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-2xl: 12px;
-  --radius-3xl: 20px;
-  --radius-4xl: 24px;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-20: 20px;
+  --radius-24: 24px;
   --radius-full: 50%;
   
   /* ============ 그림자 (Shadows) ============ */

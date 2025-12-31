@@ -1,9 +1,9 @@
 .progressContainer {
-  padding: var(--spacing-4xl);
+  padding: var(--spacing-24);
   background: var(--color-bg-primary);
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-12);
   box-shadow: var(--shadow-lg);
-  margin: var(--spacing-2xl) auto;
+  margin: var(--spacing-16) auto;
   max-width: 1200px;
 }
 
@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: var(--spacing-4xl) 0;
+  padding: var(--spacing-24) 0;
 }
 
 .stepWrapper {
@@ -52,9 +52,9 @@
 }
 
 .stepLabel {
-  margin-top: var(--spacing-lg);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
+  margin-top: var(--spacing-10);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-500);
   color: var(--color-text-primary);
   text-align: center;
   white-space: nowrap;
@@ -66,7 +66,7 @@
   min-width: 100px;
   max-width: 200px;
   background: var(--color-border-medium);
-  margin: 0 var(--spacing-2xl);
+  margin: 0 var(--spacing-16);
   transition: all var(--transition-base);
 }
 
