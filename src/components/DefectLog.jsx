@@ -1,4 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setStepError, setEnd } from '../store/slices/processStatusSlice';
 import Header from './Header';
 import styles from './DefectLog.module.css';
 import socket from '../utils/socket';
@@ -8,6 +10,9 @@ const ITEMS_PER_PAGE = 8;
 const PAGES_PER_GROUP = 10;
 
 function DefectLog() {
+  const dispatch = useAppDispatch();
+  const currentCarId = useAppSelector((state) => state.processStatus.currentCarId);
+  
   const [logs, setLogs] = useState([]);
   const [selectedLog, setSelectedLog] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,9 +33,33 @@ function DefectLog() {
       .then(res => res.json())
       .then(data => {
         setLogs(data);
+        
+        // 초기 로드 시에도 현재 진행 중인 차량의 불량 로그 확인
+        if (currentCarId) {
+          const currentCarDefects = data.filter(log => 
+            log.car_id === currentCarId && log.result === 'DEFECT'
+          );
+          
+          currentCarDefects.forEach(log => {
+            // 외관 불량인 경우
+            if (log.images && log.images.length > 0) {
+              dispatch(setStepError({ stepId: 'case' }));
+              dispatch(setEnd({ status: 'error' }));
+            }
+            // 센서 불량인 경우 (LED, BUZZER, ULTRASONIC)
+            else {
+              const device = (log.device || '').toUpperCase();
+              const sensorDevices = ['LED', 'BUZZER', 'ULTRASONIC'];
+              if (sensorDevices.includes(device)) {
+                dispatch(setStepError({ stepId: 'sensor' }));
+                dispatch(setEnd({ status: 'error' }));
+              }
+            }
+          });
+        }
       })
       .catch(err => console.error('❌ FETCH ERROR:', err));
-  }, []);
+  }, [currentCarId, dispatch]);
 
   // 2. 실시간 소켓 통신
   useEffect(() => {
@@ -45,6 +74,12 @@ function DefectLog() {
         isCamera: true 
       }, ...prev]);
       if (activeTab === 'CAMERA') setCurrentPage(1);
+      
+      // 외관 불량이 현재 진행 중인 차량이면 case 단계를 error로 설정
+      if (data.car_id && currentCarId === data.car_id && data.result === 'DEFECT') {
+        dispatch(setStepError({ stepId: 'case' }));
+        dispatch(setEnd({ status: 'error' }));
+      }
     };
 
     const handleSensorDefect = (data) => {
@@ -55,6 +90,18 @@ function DefectLog() {
         isCamera: false
       }, ...prev]);
       if (activeTab === 'SENSOR') setCurrentPage(1);
+      
+      // 센서 불량이 현재 진행 중인 차량이면 sensor 단계를 error로 설정
+      if (data.car_id && currentCarId === data.car_id && data.result === 'DEFECT') {
+        const device = (data.device || '').toUpperCase();
+        const sensorDevices = ['LED', 'BUZZER', 'ULTRASONIC'];
+        
+        // LED, BUZZER, ULTRASONIC 중 하나라도 DEFECT면 sensor 단계를 error로 설정
+        if (sensorDevices.includes(device)) {
+          dispatch(setStepError({ stepId: 'sensor' }));
+          dispatch(setEnd({ status: 'error' }));
+        }
+      }
     };
 
     if (socket.connected) setConnected(true);
@@ -70,7 +117,7 @@ function DefectLog() {
       socket.off('sensor_defect', handleSensorDefect);
       socket.off('disconnect', handleDisconnect);
     };
-  }, [activeTab]);
+  }, [activeTab, dispatch, currentCarId]);
 
   // 3. 탭에 따른 데이터 필터링 (useMemo로 성능 최적화)
   const filteredLogs = useMemo(() => {
