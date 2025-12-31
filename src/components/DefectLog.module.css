@@ -65,6 +65,7 @@
   grid-column: 4;
   text-align: center;
   font-weight: 400;
+  text-align: left;
 }
 
 /* 결과: 빨간색, 적당한 굵기 (600으로 조정) */
