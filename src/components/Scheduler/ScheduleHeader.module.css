@@ -1,0 +1,82 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-16) var(--spacing-20);
+  border-bottom: var(--border-width-medium) solid var(--color-border-light);
+  margin-bottom: var(--spacing-16);
+}
+
+.col {
+  display: flex;
+  align-items: center;
+}
+
+.colStart {
+  flex: 1;
+}
+
+.colEnd {
+  display: flex;
+  gap: var(--spacing-12);
+  align-items: center;
+  color: black;
+}
+
+.text {
+  font-size: var(--font-size-22);
+  font-weight: var(--font-weight-700);
+  color: var(--color-text-primary);
+}
+
+.month {
+  margin-right: var(--spacing-8);
+}
+
+.adminControls {
+  margin-left: var(--spacing-20);
+  display: inline-flex;
+  gap: var(--spacing-12);
+  align-items: center;
+}
+
+.aditScheduleBtn {
+  padding: var(--spacing-8) var(--spacing-16);
+  background: var(--color-success);
+  color: var(--color-text-white);
+  border: none;
+  border-radius: var(--radius-6);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-primary);
+}
+
+.aditScheduleBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.selectUserBtn {
+  padding: var(--spacing-8) var(--spacing-12);
+  border: var(--border-width-medium) solid var(--color-border-medium);
+  border-radius: var(--radius-6);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-500);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.selectUserBtn:hover {
+  border-color: var(--color-primary);
+}
+
+.selectUserBtn:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+

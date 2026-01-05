@@ -5,6 +5,7 @@ import PowerToggle from './components/PowerToggle'
 import Dashboard from './components/Dashboard'
 import DefectLog from './components/DefectLog'
 import Progress from './components/Progress'
+import Schedule from './components/Scheduler/Schedule'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -70,6 +71,12 @@ function App() {
           >
             불량 로그
           </button>
+          <button 
+            className={`tab-button ${activeTab === 'schedule' ? 'active' : ''}`}
+            onClick={() => setActiveTab('schedule')}
+          >
+            스케쥴 확인
+          </button>
         </div>
 
         {/* 탭 컨텐츠 */}
@@ -83,12 +90,15 @@ function App() {
           {activeTab === 'progress' && (
             <Progress />
           )}
+          {activeTab === 'schedule' && (
+            <Schedule />
+          )}
         </div>
       </main>
 
-      <footer className="app-footer">
+      {/* <footer className="app-footer">
         <p>© 2025 공정 시스템 관리 | Powered by React</p>
-      </footer>
+      </footer> */}
     </div>
   )
 }

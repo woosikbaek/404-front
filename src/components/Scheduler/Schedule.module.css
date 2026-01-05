@@ -1,0 +1,10 @@
+.calendar {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-12);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-24);
+}
+

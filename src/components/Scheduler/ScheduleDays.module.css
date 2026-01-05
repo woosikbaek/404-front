@@ -1,0 +1,18 @@
+.days {
+  display: flex;
+  width: 100%;
+  border-bottom: var(--border-width-medium) solid var(--color-border-light);
+  padding-bottom: var(--spacing-12);
+  margin-bottom: var(--spacing-12);
+}
+
+.col {
+  flex: 1;
+  text-align: center;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-600);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: var(--spacing-8) 0;
+}
