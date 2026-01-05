@@ -1,6 +1,6 @@
 .progressContainer {
   padding: var(--spacing-24);
-  background: var(--color-bg-primary);
+  background: var(--color-bg-white);
   border-radius: var(--radius-12);
   box-shadow: var(--shadow-lg);
   margin: var(--spacing-16) auto;
@@ -29,7 +29,7 @@
   transform: translateY(-50%);
   font-size: var(--font-size-22);
   font-weight: var(--font-weight-600);
-  color: var(--color-text-primary);
+  color: var(--color-text-black);
   white-space: nowrap;
   background: var(--color-bg-secondary);
   padding: var(--spacing-6) var(--spacing-10);
@@ -42,7 +42,7 @@
   height: 60px;
   border-radius: var(--radius-full);
   border: var(--border-width-medium) solid var(--color-border-medium);
-  background: var(--color-bg-primary);
+  background: var(--color-bg-white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,7 +52,7 @@
 }
 
 .stepCircle.pending {
-  background: var(--color-bg-primary);
+  background: var(--color-bg-white);
   border-color: var(--color-border-medium);
 }
 
@@ -70,7 +70,7 @@
   margin-top: var(--spacing-10);
   font-size: var(--font-size-12);
   font-weight: var(--font-weight-500);
-  color: var(--color-text-primary);
+  color: var(--color-text-black);
   text-align: center;
   white-space: nowrap;
 }

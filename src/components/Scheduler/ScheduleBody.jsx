@@ -33,7 +33,7 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin }) => {
                 ? styles.selected
                 : styles.valid
             }`}
-          key={day.toString()} // 문자열 키 권장
+          key={day.toString()} 
           onClick={() => handleDateClick(cloneDay)}
         >
           <span className={!isCurrentMonth ? `${styles.text} ${styles.notValid}` : styles.text}>

@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--color-bg-primary);
+  background: var(--color-bg-white);
   padding: var(--spacing-16) var(--spacing-24);
   border-radius: var(--radius-12);
   box-shadow: var(--shadow-lg);
@@ -15,7 +15,7 @@
 }
 
 .header h1 {
-  color: var(--color-text-primary);
+  color: var(--color-text-black);
   font-size: var(--font-size-22);
   font-weight: var(--font-weight-700);
   margin-bottom: var(--spacing-4);
