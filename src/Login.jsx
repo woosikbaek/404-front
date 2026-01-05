@@ -40,7 +40,7 @@ const Login = ({ onLoginSuccess }) => {
       // 로그인 성공 콜백
       onLoginSuccess();
     } catch (err) {
-      setError(err.message || '사원번호 또는 비밀번호가 올바르지 않습니다.');
+      setError('서버 응답 없음' || '사원번호 또는 비밀번호가 올바르지 않습니다.');
       console.error('Login error:', err);
     } finally {
       setIsLoading(false);
