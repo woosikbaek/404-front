@@ -26,7 +26,7 @@
 .text {
   font-size: var(--font-size-22);
   font-weight: var(--font-weight-700);
-  color: var(--color-text-primary);
+  color: var(--color-text-black);
 }
 
 .month {
@@ -64,19 +64,19 @@
   border-radius: var(--radius-6);
   font-size: var(--font-size-12);
   font-weight: var(--font-weight-500);
-  background: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background: var(--color-bg-white);
+  color: var(--color-text-black);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .selectUserBtn:hover {
-  border-color: var(--color-primary);
+  border-color: var(--color-blue);
 }
 
 .selectUserBtn:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 3px var(--color-blue-light);
 }
 

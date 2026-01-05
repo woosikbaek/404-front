@@ -1,18 +1,7 @@
-html, body {
-  width: 100%;
-  min-height: 100vh;
-  background: #d7dbdf;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-#root {
-  min-height: 100vh;
-  background: #d7dbdf;
 }
 
 .app-container {
@@ -20,21 +9,6 @@ html, body {
   background: #d7dbdf;
   display: flex;
   flex-direction: column;
-}
-
-.app-header {
-  background: rgb(168, 168, 168);
-  color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.app-header h1 {
-  font-size: 24px;
-  font-weight: 600;
 }
 
 .logout-button {
@@ -119,7 +93,7 @@ html, body {
   }
 }
 
-.app-footer {
+/* .app-footer {
   background-color: #1f2937;
   color: white;
   text-align: center;
@@ -130,22 +104,4 @@ html, body {
 .app-footer p {
   font-size: 0.8rem;
   opacity: 0.9;
-}
-
-@media (max-width: 768px) {
-  .app-header {
-    padding: 1.5rem;
-  }
-
-  .app-title {
-    font-size: 1.8rem;
-  }
-
-  .app-subtitle {
-    font-size: 1rem;
-  }
-
-  .app-main {
-    padding: 1rem;
-  }
-}
+} */

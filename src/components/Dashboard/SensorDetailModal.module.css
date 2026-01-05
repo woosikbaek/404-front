@@ -13,7 +13,7 @@
 }
 
 .sensorModalContent {
-  background: var(--color-bg-primary);
+  background: var(--color-bg-white);
   width: 50%;
   border-radius: var(--radius-12);
   box-shadow: var(--shadow-2xl);
@@ -121,7 +121,7 @@
 }
 
 .detailStatCard {
-  background: var(--color-bg-primary);
+  background: var(--color-bg-white);
   padding: var(--spacing-16);
   border-radius: var(--radius-6);
   border: var(--border-width-thin) solid var(--color-border-medium);

@@ -1,15 +1,15 @@
 :root {
   /* ============ 색상 ============ */
-  /* Primary Colors */
-  --color-primary: #667eea;
-  --color-primary-dark: #764ba2;
-  --color-primary-light: rgba(102, 126, 234, 0.08);
   
-  /* Secondary Colors */
-  --color-secondary: #f59e0b;
-  --color-secondary-light: rgba(245, 158, 11, 0.08);
+  /* Blue Colors */
+  --color-blue: #2563eb;
+  --color-blue-light: #e0e7ff;
+
+  /* Orange Colors */
+  --color-orange: #f59e0b;
+  --color-orange-light: rgba(245, 158, 11, 0.08);
   
-  /* Success Colors */
+  /* Green Colors */
   --color-success: #10b981;
   --color-success-dark: #059669;
   --color-success-light: rgba(16, 185, 129, 0.95);
@@ -25,12 +25,12 @@
   --color-warning: #f59e0b;
   
   /* Text Colors - 기본 텍스트와 보조 텍스트만 사용 */
-  --color-text-primary: #1a1a1a;
+  --color-text-black: #1a1a1a;
   --color-text-secondary: #666;
   --color-text-white: #ffffff;
   
   /* Background Colors - 기본 배경과 보조 배경만 사용 */
-  --color-bg-primary: #ffffff;
+  --color-bg-white: #ffffff;
   --color-bg-secondary: #f9f9f9;
   --color-bg-modal: rgba(15, 23, 42, 0.5);
   --color-bg-overlay: rgba(0, 0, 0, 0.6);
@@ -39,10 +39,6 @@
   /* Border Colors - 기본 보더만 사용 */
   --color-border-light: #f0f0f0;
   --color-border-medium: #e5e7eb;
-  
-  /* Blue Colors */
-  --color-blue: #2563eb;
-  --color-blue-light: #e0e7ff;
   
   /* Gray Colors - 가장 많이 사용되는 2개만 */
   --color-gray-500: #6b7280;
