@@ -17,9 +17,11 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin }) => {
           <div className={styles.adminControls}>
             <button className={styles.aditScheduleBtn}>전체 스케줄 수정</button>
             <select className={styles.selectUserBtn}>
-              <option>사용자 선택</option>
-              <option>직원 A</option>
-              <option>직원 B</option>
+              <option>사원 선택</option>
+              <option>우시크</option>
+              <option>수환공주</option>
+              <option>연재</option>
+              <option>승택</option>
             </select>
           </div>
         )}
