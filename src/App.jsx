@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard/Dashboard'
 import DefectLog from './components/DefectLog'
 import Progress from './components/Progress'
 import Schedule from './components/Scheduler/Schedule'
+import Chat from './components/Chat'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -93,6 +94,10 @@ function App() {
           {activeTab === 'schedule' && (
             <Schedule />
           )}
+        </div>
+        
+        <div>
+          <Chat />
         </div>
       </main>
 
