@@ -1,4 +1,4 @@
-/* ============ 헤더 ============ */
+/* ============ 헤더 기본 설정 ============ */
 .header {
   display: flex;
   justify-content: space-between;
@@ -30,11 +30,60 @@
   text-transform: uppercase;
 }
 
+/* ============ 출퇴근 버튼 섹션 ============ */
+.commuteSection {
+  margin-right: var(--spacing-24);
+}
+
+.commuteBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-10) var(--spacing-24);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-600);
+  border: none;
+  border-radius: var(--radius-8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btnDot {
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-full);
+}
+
+/* 출근 버튼 (성공 색상 활용) */
+.work {
+  background-color: var(--color-success);
+}
+.work:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+
+/* 퇴근 버튼 (에러 색상 활용) */
+.leave {
+  background-color: var(--color-error);
+}
+.leave:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+
+.commuteBtn:active {
+  transform: translateY(0);
+}
+
+/* ============ 근무자 및 상태 ============ */
 .workerInfo {
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-500);
-  margin-top: var(--spacing-8);
-  margin-bottom: var(--spacing-4);
+  /* 기존 margin 제거하고 flex 정렬 유지 */
 }
 
 .connectionStatus {
@@ -80,10 +129,6 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
