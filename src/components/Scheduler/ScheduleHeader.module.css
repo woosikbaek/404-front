@@ -9,7 +9,6 @@
 
 .col {
   display: flex;
-  margin: 0 var(--spacing-8) 0 var(--spacing-8);
   align-items: center;
 }
 
@@ -21,7 +20,7 @@
   display: flex;
   gap: var(--spacing-12);
   align-items: center;
-  color: rgb(124, 124, 124);
+  color: black;
 }
 
 .text {
@@ -30,7 +29,7 @@
   color: var(--color-text-black);
 }
 
-.year {
+.month {
   margin-right: var(--spacing-8);
 }
 

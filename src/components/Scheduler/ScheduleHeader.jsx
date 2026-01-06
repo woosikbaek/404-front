@@ -4,23 +4,13 @@ import styles from './ScheduleHeader.module.css';
 const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedEmp, setSelectedEmp }) => {
   return (
     <div className={styles.header}>
-
-      <div className={`${styles.col} ${styles.colEnd}`}>
-        <i className="fa-solid fa-angle-left" onClick={prevMonth}></i>
-      </div>
       <div className={`${styles.col} ${styles.colStart}`}>
-
         <span className={styles.text}>
-          <span className={styles.year}>
-
-            {format(currentMonth, 'yyyy')}
+          <span className={styles.month}>
+            {format(currentMonth, 'M')}월
           </span>
-          {format(currentMonth, 'M')}월
+          {format(currentMonth, 'yyyy')}
         </span>
-
-        <div className={`${styles.col} ${styles.colEnd}`}>
-          <i className="fa-solid fa-angle-right" onClick={nextMonth}></i>
-        </div>
 
         {/* 관리자일 때만 보여주는 영역 */}
         {isAdmin && (
@@ -36,7 +26,11 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
           </div>
         )}
       </div>
-
+        
+      <div className={`${styles.col} ${styles.colEnd}`}>
+        <i className="fa-solid fa-arrow-left"  onClick={prevMonth}></i>
+        <i className="fa-solid fa-arrow-right" onClick={nextMonth}></i>
+      </div>
     </div>
   );
 };
