@@ -36,7 +36,7 @@
 
 .header {
   padding: 15px;
-  background-color: #ed0086;
+  background-color: #ffcdc5;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -52,7 +52,7 @@
 .opacitySlider {
   width: 60px;
   cursor: pointer;
-  accent-color: #ed0086;
+  accent-color: #ffcdc5;
 }
 
 .actionBtn, .closeBtn {
@@ -86,7 +86,7 @@
 .senderName {
   display: block;
   font-size: 11px;
-  color: #ed0086;
+  color: #ffcdc5;
   margin-bottom: 4px;
 }
 
@@ -117,7 +117,7 @@
 .sendBtn {
   margin-left: 8px;
   padding: 0 15px;
-  background-color: #ed0086;
+  background-color: #ffcdc5;
   color: white;
   border: none;
   border-radius: 6px;
@@ -132,7 +132,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #ed0086;
+  background-color: #ffcdc5;
   color: white;
   border: none;
   font-size: 24px;
