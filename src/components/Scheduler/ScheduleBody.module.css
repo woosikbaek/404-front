@@ -65,6 +65,21 @@
   margin-left: var(--spacing-4);
 }
 
+.sunday {
+  color: red;
+}
+
+.holidayLabel {
+  position: absolute; 
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: var(--font-size-14);
+  color: red;
+  white-space: nowrap; 
+  font-weight: var(--font-weight-500);
+}
+
 .notValid {
   color: var(--color-text-secondary);
   opacity: 0.5;
