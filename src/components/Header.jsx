@@ -1,6 +1,6 @@
 import styles from './Header.module.css';
 
-function Header({ connected = false }) {
+function Header({ connected = false, }) {
   const userName = localStorage.getItem('name') || '---';
 
   return (
