@@ -1,0 +1,125 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-index-modal);
+  backdrop-filter: blur(2px);
+}
+
+.modalContent {
+  background-color: var(--color-bg-white);
+  padding: var(--spacing-32);
+  border-radius: var(--radius-20);
+  width: 100%;
+  max-width: 420px; /* 변수보다 조금 컴팩트하게 설정 */
+  box-shadow: var(--shadow-2xl);
+  animation: modalFadeIn var(--transition-fast) var(--transition-ease);
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.title {
+  font-size: var(--font-size-22);
+  font-weight: var(--font-weight-700);
+  color: var(--color-text-black);
+  margin-bottom: var(--spacing-8);
+}
+
+.info {
+  font-size: var(--font-size-14);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-24);
+}
+
+.info strong {
+  color: var(--color-blue);
+  font-weight: var(--font-weight-600);
+}
+
+.section {
+  margin-bottom: var(--spacing-24);
+}
+
+.label {
+  display: block;
+  font-size: var(--font-size-13);
+  font-weight: var(--font-weight-600);
+  color: var(--color-gray-500);
+  margin-bottom: var(--spacing-12);
+}
+
+/* 8개 버튼을 위한 2열 그리드 */
+.buttonGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-10);
+}
+
+.optBtn {
+  padding: var(--spacing-12);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-500);
+  background-color: var(--color-bg-secondary);
+  border: var(--border-width-thin) solid var(--color-border-medium);
+  border-radius: var(--radius-12);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--color-text-black);
+}
+
+.optBtn:hover {
+  border-color: #ffcdc5;
+  background-color: #ffcdc571;
+}
+
+.optBtn.active {
+  background-color: #ffcdc5;
+  color: var(--color-text-black);
+  border-color: #ffcdc5;
+  box-shadow: 0 0 10px rgba(255, 205, 197, 0.5);
+}
+
+.footer {
+  display: flex;
+  gap: var(--spacing-12);
+  margin-top: var(--spacing-32);
+}
+
+.saveBtn {
+  flex: 2;
+  padding: var(--spacing-16);
+  background-color: var(--color-success);
+  color: var(--color-text-white);
+  border: none;
+  border-radius: var(--radius-12);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-700);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.saveBtn:hover {
+  background-color: var(--color-success-dark);
+  box-shadow: var(--shadow-success);
+}
+
+.closeBtn {
+  flex: 1;
+  padding: var(--spacing-16);
+  background-color: var(--color-bg-gray-medium);
+  color: var(--color-text-black);
+  border: none;
+  border-radius: var(--radius-12);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-600);
+  cursor: pointer;
+}
