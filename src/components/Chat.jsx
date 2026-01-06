@@ -17,14 +17,15 @@ const Chat = () => {
   const scrollRef = useRef(null);
   const isSubscribed = useRef(false);
 
-  // 스크롤 하단 이동 함수
-  const scrollToBottom = () => {
+  const scrollToBottom = (smooth = false) => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: smooth ? 'smooth' : 'auto',
+      });
     }
   };
 
-  // 소켓 연결 및 구독
   useEffect(() => {
     if (stompClientRef.current?.connected && isSubscribed.current) return;
 
@@ -37,14 +38,15 @@ const Chat = () => {
       if (!isSubscribed.current) {
         client.subscribe('/topic/public', (payload) => {
           const newMessage = JSON.parse(payload.body);
+          // 시간 정보 추가
+          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
           setMessages(prev => {
-            if (prev.length > 0) {
-              const lastMsg = prev[prev.length - 1];
-              if (lastMsg.content === newMessage.content && lastMsg.sender === newMessage.sender && lastMsg.type === newMessage.type) {
-                return prev;
-              }
-            }
-            return [...prev, newMessage];
+            const isDuplicate = prev.length > 0 &&
+              prev[prev.length - 1].content === newMessage.content &&
+              prev[prev.length - 1].sender === newMessage.sender;
+
+            return isDuplicate ? prev : [...prev, { ...newMessage, time }];
           });
         });
 
@@ -57,7 +59,6 @@ const Chat = () => {
         }));
       }
     }, (err) => {
-      console.error("STOMP 연결 실패:", err);
       setUserData(prev => ({ ...prev, connected: false }));
       isSubscribed.current = false;
     });
@@ -70,11 +71,11 @@ const Chat = () => {
     };
   }, []);
 
-  // [디테일 1] 새 메시지가 오거나, '채팅창을 열 때' 스크롤을 맨 아래로
+  // 메시지 수신 시 부드러운 스크롤, 창 열 때는 즉시 스크롤
   useEffect(() => {
     if (isOpen) {
-      // 메시지가 로드될 시간을 짧게 주기 위해 setTimeout 사용
-      setTimeout(scrollToBottom, 10);
+      const isNewMessage = messages.length > 0;
+      setTimeout(() => scrollToBottom(isNewMessage), 50);
     }
   }, [messages, isOpen]);
 
@@ -82,9 +83,11 @@ const Chat = () => {
     if (stompClientRef.current?.connected) {
       const chatMessage = {
         sender: userData.username,
-        content: content || userData.message,
+        content: (content || userData.message).trim(),
         type: type
       };
+      if (!chatMessage.content && type === 'CHAT') return;
+
       const destination = type === 'JOIN' ? "/app/chat.addUser" : "/app/chat.sendMessage";
       stompClientRef.current.send(destination, {}, JSON.stringify(chatMessage));
       if (type === 'CHAT') setUserData(prev => ({ ...prev, message: '' }));
@@ -105,14 +108,10 @@ const Chat = () => {
               <div className={styles.sliderWrapper}>
                 <span className={styles.sliderIcon}>🌓</span>
                 <input
-                  type="range"
-                  min="0.3"
-                  max="1"
-                  step="0.1"
+                  type="range" min="0.3" max="1" step="0.1"
                   value={opacity}
                   onChange={(e) => setOpacity(e.target.value)}
                   className={styles.opacitySlider}
-                  title="투명도 설정"
                 />
               </div>
               <button onClick={() => setIsMaximized(!isMaximized)} className={styles.actionBtn}>
@@ -125,10 +124,18 @@ const Chat = () => {
           <div ref={scrollRef} className={styles.messageArea}>
             {messages.map((msg, index) => {
               const isJoin = msg.type === 'JOIN';
+              const isMine = msg.sender === userData.username;
+
               return (
-                <div key={index} className={isJoin ? styles.joinText : styles.msgBubble}>
-                  {!isJoin && <b className={styles.senderName}>{msg.sender}</b>}
-                  <span className={styles.messageContent}>{msg.content || msg.message}</span>
+                <div key={index} className={isJoin ? styles.joinText : (isMine ? styles.myMsgWrapper : styles.otherMsgWrapper)}>
+                  {!isJoin && !isMine && <b className={styles.senderName}>{msg.sender}</b>}
+                  <div className={isMine ? styles.myMsgRow : styles.otherMsgRow}>
+                    <div className={isJoin ? styles.joinText : (isMine ? styles.myMsgBubble : styles.msgBubble)}>
+                      <span className={styles.messageContent}>{msg.content || msg.message}</span>
+                    </div>
+                    {/* 시간 표시 추가 */}
+                    {!isJoin && <span className={styles.chatTime}>{msg.time}</span>}
+                  </div>
                 </div>
               );
             })}

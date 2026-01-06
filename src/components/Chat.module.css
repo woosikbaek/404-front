@@ -248,3 +248,59 @@
   background-color: #ffcdc5; /* 배경이 파란색이어야 화이트 글씨가 잘 보입니다 */
   color: white; /* 입력하는 글자도 화이트 */
 }
+
+.myMsgWrapper {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  max-width: 80%;
+}
+
+.otherMsgWrapper {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 80%;
+}
+
+.myMsgRow, .otherMsgRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.myMsgRow { flex-direction: row-reverse; } /* 내 메시지는 시간이 왼쪽에 표시 */
+
+.myMsgBubble {
+  padding: 10px 14px;
+  background-color: #ffcdc5;
+  color: white;
+  border-radius: 15px 15px 0 15px; /* 꼬리 모양 디테일 */
+  box-shadow: 0 2px 5px rgba(255, 205, 197, 0.4);
+}
+
+.msgBubble {
+  padding: 10px 14px;
+  background-color: white;
+  border-radius: 15px 15px 15px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid #ffeae7;
+}
+
+.chatTime {
+  font-size: 9px;
+  color: #aaa;
+  margin-bottom: 2px;
+}
+
+/* 슬라이더 래퍼 추가 */
+.sliderWrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
