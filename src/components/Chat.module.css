@@ -7,6 +7,11 @@
   font-family: sans-serif;
 }
 
+.messageContent {
+  font-size: 14px;
+  color: #333;
+}
+
 .chatBox {
   width: 320px;
   height: 450px;
