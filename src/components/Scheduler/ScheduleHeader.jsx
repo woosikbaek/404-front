@@ -25,7 +25,6 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
         {/* 관리자일 때만 보여주는 영역 */}
         {isAdmin && (
           <div className={styles.adminControls}>
-            <button className={styles.editScheduleBtn}>전체 스케줄 수정</button>
             <select className={styles.selectUserBtn} value={selectedEmp} onChange={(e) => setSelectedEmp(e.target.value)}>
               <option value="전체">근무자 선택</option>
               <option value="우시크">우시크</option>

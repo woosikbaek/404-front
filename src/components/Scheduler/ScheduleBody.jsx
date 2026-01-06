@@ -1,7 +1,8 @@
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addDays } from 'date-fns';
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addDays, getDay } from 'date-fns';
 import Manager from './manager';
 import { useState } from 'react';
 import styles from './ScheduleBody.module.css';
+import { HOLIDAYS } from './holidays';
 
 const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, selectedEmp, events, saveSchedule }) => {
 
@@ -34,6 +35,13 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
       const formattedDate = format(day, 'd');
       const dateStr = format(day, 'yyyy-MM-dd');
       const isCurrentMonth = isSameMonth(day, monthStart);
+
+      const isSunday = getDay(day) === 0;
+
+
+      const Holiday = HOLIDAYS.find(h => h.date === dateStr);
+      const isHoliday = !!Holiday;
+
       const dayEvents = events.filter(event => {
         const isSameDate = event.date === dateStr;
         const isSelectedPerson = (!selectedEmp || selectedEmp === '근무자 선택') ? true : event.name === selectedEmp;
@@ -50,9 +58,17 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
           key={day.toString()}
           onClick={() => handleDateClick(cloneDay)}
         >
-          <span className={!isCurrentMonth ? `${styles.text} ${styles.notValid}` : styles.text}>
+          <span className={` 
+            ${!isCurrentMonth ? `${styles.text} ${styles.notValid}` : styles.text}
+            ${isCurrentMonth && (isSunday || isHoliday) ? styles.sunday : ''} `}
+          >
             {formattedDate}
           </span>
+
+          {isCurrentMonth && isHoliday && Holiday &&
+            <div className={styles.holidayLabel}>
+              {Holiday.label}
+            </div>}
 
           <div className={styles.eventList}>
             {isCurrentMonth && dayEvents.map((event, idx) => {
@@ -100,7 +116,7 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
         onClose={() => setIsManagerOpen(false)}
         onSave={(data) => {
           saveSchedule(data)
-          setIsManagerOpen = (false);
+          setIsManagerOpen(false);
         }}
       />}
   </div>;
