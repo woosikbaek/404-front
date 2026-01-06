@@ -40,7 +40,7 @@
   align-items: center;
 }
 
-.aditScheduleBtn {
+.editScheduleBtn {
   padding: var(--spacing-8) var(--spacing-16);
   background: var(--color-success);
   color: var(--color-text-white);
@@ -53,7 +53,7 @@
   box-shadow: var(--shadow-primary);
 }
 
-.aditScheduleBtn:hover {
+.editScheduleBtn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
