@@ -49,12 +49,6 @@
   gap: 10px;
 }
 
-.opacitySlider {
-  width: 60px;
-  cursor: pointer;
-  accent-color: #ffcdc5;
-}
-
 .actionBtn, .closeBtn {
   background: none;
   border: none;
@@ -111,6 +105,7 @@
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
+  background-color: #303031;
   outline: none;
 }
 
@@ -138,4 +133,118 @@
   font-size: 24px;
   cursor: pointer;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* 슬라이더 전체 감싸는 영역 */
+.sliderWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2); /* 헤더 안에서 살짝 구분되게 */
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.sliderIcon {
+  font-size: 12px;
+  color: white;
+  user-select: none;
+}
+
+/* 슬라이더 본체 커스텀 */
+.opacitySlider {
+  -webkit-appearance: none; /* 기본 스타일 제거 */
+  width: 60px;
+  height: 4px; /* 선 굵기 */
+  background: rgba(255, 255, 255, 0.5); /* 선 색상 */
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* 슬라이더 손잡이 (Chrome, Safari, Edge) */
+.opacitySlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: white; /* 손잡이는 화이트로 포인트 */
+  border-radius: 50%;
+  border: 2px solid #ffcdc5; /* 테두리는 컨셉컬러 */
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
+}
+
+.opacitySlider::-webkit-slider-thumb:hover {
+  transform: scale(1.2); /* 마우스 올리면 살짝 커짐 */
+  background: #fff9f8;
+}
+
+/* 슬라이더 손잡이 (Firefox) */
+.opacitySlider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  border: 2px solid #ffcdc5;
+  cursor: pointer;
+}
+
+/* 내 메시지(우측 정렬) 추가 제안 */
+.myMsgBubble {
+  align-self: flex-end;
+  background-color: #ffcdc5;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 12px 12px 0 12px; /* 오른쪽 아래만 각지게 */
+  box-shadow: 0 2px 5px rgba(255, 205, 197, 0.4);
+  max-width: 80%;
+}
+
+/* scrollvar section */
+.messageArea {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 스크롤바 전체 너비 */
+.messageArea::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* 스크롤바 트랙(배경) */
+.messageArea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* [요청] 스크롤바 바(막대) 색상 수정 */
+.messageArea::-webkit-scrollbar-thumb {
+  background: #ffcdc5;
+  border-radius: 10px;
+}
+
+.messageArea::-webkit-scrollbar-thumb:hover {
+  background: #ffb5a7; /* 호버 시 약간 진하게 */
+}
+
+/* [디테일 3] Input Placeholder 색상 화이트로 변경 */
+.input::placeholder {
+  color: white;
+  opacity: 0.8; /* 배경이 밝으면 안 보일 수 있어 투명도 살짝 조절 */
+}
+
+/* 만약 배경색도 placeholder가 잘 보이게 바꾸고 싶다면 아래 참고 */
+.input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  background-color: #ffcdc5; /* 배경이 파란색이어야 화이트 글씨가 잘 보입니다 */
+  color: white; /* 입력하는 글자도 화이트 */
 }

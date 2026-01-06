@@ -15,11 +15,17 @@ const Chat = () => {
 
   const stompClientRef = useRef(null);
   const scrollRef = useRef(null);
-  // 구독 중복 방지를 위한 플래그
   const isSubscribed = useRef(false);
 
+  // 스크롤 하단 이동 함수
+  const scrollToBottom = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  };
+
+  // 소켓 연결 및 구독
   useEffect(() => {
-    // 이미 연결되어 있거나 구독 중이면 중단
     if (stompClientRef.current?.connected && isSubscribed.current) return;
 
     const client = getStompClient();
@@ -28,14 +34,10 @@ const Chat = () => {
     client.connect({}, () => {
       setUserData(prev => ({ ...prev, connected: true }));
 
-      // 중복 구독 방지 체크
       if (!isSubscribed.current) {
         client.subscribe('/topic/public', (payload) => {
           const newMessage = JSON.parse(payload.body);
-
-          // 클라이언트 측 중복 검사 (ID가 있다면 더 정확하지만, 내용과 시간으로 간단히 체크 가능)
           setMessages(prev => {
-            // 마지막 메시지와 동일한지 확인 (간단한 중복 방지)
             if (prev.length > 0) {
               const lastMsg = prev[prev.length - 1];
               if (lastMsg.content === newMessage.content && lastMsg.sender === newMessage.sender && lastMsg.type === newMessage.type) {
@@ -46,7 +48,7 @@ const Chat = () => {
           });
         });
 
-        isSubscribed.current = true; // 구독 성공 표시
+        isSubscribed.current = true;
 
         client.send("/app/chat.addUser", {}, JSON.stringify({
           sender: userData.username,
@@ -66,13 +68,15 @@ const Chat = () => {
         isSubscribed.current = false;
       }
     };
-  }, []); // 의존성 배열을 비워 처음에 한 번만 실행되게 함
+  }, []);
 
+  // [디테일 1] 새 메시지가 오거나, '채팅창을 열 때' 스크롤을 맨 아래로
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    if (isOpen) {
+      // 메시지가 로드될 시간을 짧게 주기 위해 setTimeout 사용
+      setTimeout(scrollToBottom, 10);
     }
-  }, [messages]);
+  }, [messages, isOpen]);
 
   const sendValue = (type, content) => {
     if (stompClientRef.current?.connected) {
@@ -95,15 +99,22 @@ const Chat = () => {
         <div className={chatBoxClass}>
           <div className={styles.header}>
             <div className={styles.headerLeft}>
-              <span>실시간 채팅 ({userData.connected ? "온라인" : "연결안됨"})</span>
+              <span>사내채팅 ♥</span>
             </div>
             <div className={styles.headerRight}>
-              <input
-                type="range" min="0.3" max="1" step="0.1"
-                value={opacity}
-                onChange={(e) => setOpacity(e.target.value)}
-                className={styles.opacitySlider}
-              />
+              <div className={styles.sliderWrapper}>
+                <span className={styles.sliderIcon}>🌓</span>
+                <input
+                  type="range"
+                  min="0.3"
+                  max="1"
+                  step="0.1"
+                  value={opacity}
+                  onChange={(e) => setOpacity(e.target.value)}
+                  className={styles.opacitySlider}
+                  title="투명도 설정"
+                />
+              </div>
               <button onClick={() => setIsMaximized(!isMaximized)} className={styles.actionBtn}>
                 {isMaximized ? '🗗' : '🗖'}
               </button>
