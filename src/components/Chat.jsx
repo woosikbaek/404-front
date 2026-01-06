@@ -4,8 +4,8 @@ import styles from './Chat.module.css';
 
 const Chat = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMaximized, setIsMaximized] = useState(false); // 전체화면 상태
-  const [opacity, setOpacity] = useState(1); // 투명도 상태
+  const [isMaximized, setIsMaximized] = useState(false);
+  const [opacity, setOpacity] = useState(1);
   const [messages, setMessages] = useState([]);
   const [userData, setUserData] = useState({
     username: localStorage.getItem('name') || '익명',
@@ -15,34 +15,58 @@ const Chat = () => {
 
   const stompClientRef = useRef(null);
   const scrollRef = useRef(null);
+  // 구독 중복 방지를 위한 플래그
+  const isSubscribed = useRef(false);
 
   useEffect(() => {
+    // 이미 연결되어 있거나 구독 중이면 중단
+    if (stompClientRef.current?.connected && isSubscribed.current) return;
+
     const client = getStompClient();
     stompClientRef.current = client;
 
     client.connect({}, () => {
       setUserData(prev => ({ ...prev, connected: true }));
-      client.subscribe('/topic/public', (payload) => {
-        const newMessage = JSON.parse(payload.body);
-        setMessages(prev => [...prev, newMessage]);
-      });
 
-      client.send("/app/chat.addUser", {}, JSON.stringify({
-        sender: userData.username,
-        type: 'JOIN',
-        content: `${userData.username}님이 입장하셨습니다.`
-      }));
+      // 중복 구독 방지 체크
+      if (!isSubscribed.current) {
+        client.subscribe('/topic/public', (payload) => {
+          const newMessage = JSON.parse(payload.body);
+
+          // 클라이언트 측 중복 검사 (ID가 있다면 더 정확하지만, 내용과 시간으로 간단히 체크 가능)
+          setMessages(prev => {
+            // 마지막 메시지와 동일한지 확인 (간단한 중복 방지)
+            if (prev.length > 0) {
+              const lastMsg = prev[prev.length - 1];
+              if (lastMsg.content === newMessage.content && lastMsg.sender === newMessage.sender && lastMsg.type === newMessage.type) {
+                return prev;
+              }
+            }
+            return [...prev, newMessage];
+          });
+        });
+
+        isSubscribed.current = true; // 구독 성공 표시
+
+        client.send("/app/chat.addUser", {}, JSON.stringify({
+          sender: userData.username,
+          type: 'JOIN',
+          content: `${userData.username}님이 입장하셨습니다.`
+        }));
+      }
     }, (err) => {
       console.error("STOMP 연결 실패:", err);
       setUserData(prev => ({ ...prev, connected: false }));
+      isSubscribed.current = false;
     });
 
     return () => {
       if (stompClientRef.current?.connected) {
         stompClientRef.current.disconnect();
+        isSubscribed.current = false;
       }
     };
-  }, []);
+  }, []); // 의존성 배열을 비워 처음에 한 번만 실행되게 함
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -63,7 +87,6 @@ const Chat = () => {
     }
   };
 
-  // 전체화면 클래스 동적 결정
   const chatBoxClass = `${styles.chatBox} ${isMaximized ? styles.maximized : ''}`;
 
   return (
@@ -80,7 +103,6 @@ const Chat = () => {
                 value={opacity}
                 onChange={(e) => setOpacity(e.target.value)}
                 className={styles.opacitySlider}
-                title="투명도 조절"
               />
               <button onClick={() => setIsMaximized(!isMaximized)} className={styles.actionBtn}>
                 {isMaximized ? '🗗' : '🗖'}
@@ -94,7 +116,7 @@ const Chat = () => {
               const isJoin = msg.type === 'JOIN';
               return (
                 <div key={index} className={isJoin ? styles.joinText : styles.msgBubble}>
-                  {!isJoin && <b className={styles.senderName}>{msg.sender || "알 수 없음"}</b>}
+                  {!isJoin && <b className={styles.senderName}>{msg.sender}</b>}
                   <span className={styles.messageContent}>{msg.content || msg.message}</span>
                 </div>
               );

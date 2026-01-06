@@ -36,6 +36,7 @@ const Login = ({ onLoginSuccess }) => {
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('refresh_token', refresh_token);
       localStorage.setItem('name', data.employee.name);
+      localStorage.setItem('employeeId', data.employee.id);
 
       // 로그인 성공 콜백
       onLoginSuccess();
