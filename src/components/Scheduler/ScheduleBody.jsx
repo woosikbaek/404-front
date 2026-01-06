@@ -55,14 +55,30 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
           </span>
 
           <div className={styles.eventList}>
-            {isCurrentMonth && dayEvents.map((event, idx) => (
-              <div key={idx} className={`${styles.eventItem} ${styles[event.status]}`}>
-                <span className={styles.empName}>{event.name}</span>
-                <span className={styles.empStatus}>
-                  {event.type === '출근' ? `${event.time}출` : event.type}
-                </span>
-              </div>
-            ))}
+            {isCurrentMonth && dayEvents.map((event, idx) => {
+
+              const showTime = ['출근', '퇴근', '지각'].includes(event.type);
+
+              let displayType = event.type;
+              if (event.type === '출근' && event.time) {
+                if (event.time > '09:00:00') {
+                  displayType = '지각';
+                }
+              }
+
+              return (
+                <div key={idx} className={`${styles.eventItem} ${styles[event.status]}`}>
+                  <span className={styles.empName}>{event.name}</span>
+                  <span className={styles.empStatus}>
+                    {/* 시간 표시 대상이면 시간(HH:mm)과 함께 노출, 아니면 타입만 노출 */}
+                    {showTime && event.time
+                      ? `${event.time.substring(0, 5)} ${displayType}`
+                      : displayType
+                    }
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>,
       );
@@ -77,15 +93,16 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
   }
   return <div>
     {rows}
-    {isManagerOpen && 
-    <Manager date={selectedDate} 
-    selectedEmp={selectedEmp}
-    onClose={() => setIsManagerOpen(false)} 
-    onSave={(data) => {
-      saveSchedule(data)
-      setIsManagerOpen=(false);
-    }}
-    />}
+    {isManagerOpen &&
+      <Manager
+        date={clickedDate}
+        selectedEmp={selectedEmp}
+        onClose={() => setIsManagerOpen(false)}
+        onSave={(data) => {
+          saveSchedule(data)
+          setIsManagerOpen = (false);
+        }}
+      />}
   </div>;
 };
 
