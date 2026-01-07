@@ -70,8 +70,6 @@ const Salarys = ({ isOpen, onClose }) => {
                   <th>연차</th>
                   <th>병가</th>
                   <th>전화번호</th>
-                  <th>총 급여 (원)</th>
-                  <th>기본 급여 (원)</th>
                 </tr>
               </thead>
               <tbody>
@@ -84,12 +82,6 @@ const Salarys = ({ isOpen, onClose }) => {
                     <td>{emp.annual_leave || 0}</td>
                     <td>{emp.sick_leave || 0}</td>
                     <td>{emp.phone || '미지정'}</td>
-                    <td className={styles.salaryAmount}>
-                      {emp.totalSalary?.toLocaleString()}
-                    </td>
-                    <td className={styles.salaryAmount}>
-                      {emp.monthly_salary?.toLocaleString()}
-                    </td>
                   </tr>
                 ))}
               </tbody>
