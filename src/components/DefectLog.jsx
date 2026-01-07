@@ -12,8 +12,6 @@ function DefectLog() {
   const [selectedLog, setSelectedLog] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [connected, setConnected] = useState(false);
-
-  // 탭 상태
   const [activeTab, setActiveTab] = useState('CAMERA');
 
   const getImageUrl = (path) => {
@@ -24,18 +22,23 @@ function DefectLog() {
 
   /* ===============================
      1. 초기 불량 로그 로드
+     기준: 이미지 있으면 외관 / 없으면 센서
      =============================== */
   useEffect(() => {
     fetch(`${API_BASE}/camera/defects`)
       .then(res => res.json())
       .then(data => {
-        // 서버에서 받은 데이터를 카메라 태생으로 도장
-        const normalized = data.map(log => ({
-          ...log,
-          type: '외관불량',
-          images: log.images || [],
-          isCamera: true
-        }));
+        const normalized = data.map(log => {
+          const isCamera = log.images && log.images.length > 0;
+
+          return {
+            ...log,
+            isCamera,
+            type: isCamera ? '외관불량' : log.type ?? '센서불량',
+            images: log.images || []
+          };
+        });
+
         setLogs(normalized);
       })
       .catch(err => console.error('❌ FETCH ERROR:', err));
@@ -51,9 +54,9 @@ function DefectLog() {
     const handleCameraDefect = (data) => {
       setLogs(prev => [{
         ...data,
+        isCamera: true,
         type: '외관불량',
-        images: data.images || [],
-        isCamera: true
+        images: data.images || []
       }, ...prev]);
 
       if (activeTab === 'CAMERA') setCurrentPage(1);
@@ -62,9 +65,9 @@ function DefectLog() {
     const handleSensorDefect = (data) => {
       setLogs(prev => [{
         ...data,
-        type: `${data.device} 센서불량`,
-        images: [],
-        isCamera: false
+        isCamera: false,
+        type: `${(data.device || '센서').toUpperCase()} 센서불량`,
+        images: []
       }, ...prev]);
 
       if (activeTab === 'SENSOR') setCurrentPage(1);
@@ -86,12 +89,12 @@ function DefectLog() {
   }, [activeTab]);
 
   /* ===============================
-     3. 탭별 필터링
+     3. 탭 필터링
      =============================== */
   const filteredLogs = useMemo(() => {
     return activeTab === 'CAMERA'
-      ? logs.filter(log => log.isCamera === true)
-      : logs.filter(log => log.isCamera === false);
+      ? logs.filter(log => log.isCamera)
+      : logs.filter(log => !log.isCamera);
   }, [logs, activeTab]);
 
   /* ===============================
@@ -175,44 +178,48 @@ function DefectLog() {
                 </div>
 
                 <div className={styles.logColResult} style={{ color: 'red' }}>
-                  {log.result}
+                  {log.result ?? '-'}
                 </div>
 
                 <div className={styles.logColTime}>
-                  {new Date(log.created_at).toLocaleString('ko-KR')}
+                  {log.created_at ? new Date(log.created_at).toLocaleString('ko-KR') : '-'}
                 </div>
               </div>
             ))
           )}
         </div>
 
-        {selectedLog && (
-          <div className={styles.imageModal} onClick={() => setSelectedLog(null)}>
-            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-              <button
-                className={styles.modalClose}
-                onClick={() => setSelectedLog(null)}
-              >
-                ✕
-              </button>
+        {totalPages > 0 && (
+          <div className={styles.pagination}>
+            <button
+              className={styles.navBtn}
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+            >
+              ‹
+            </button>
 
-              {selectedLog.images.length > 0 ? (
-                <div className={styles.modalImageContainer}>
-                  {selectedLog.images.map((img, idx) => (
-                    <img
-                      key={idx}
-                      className={styles.modalImage}
-                      src={getImageUrl(img)}
-                      alt="detail"
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className={styles.noImage}>
-                  이미지 데이터가 없는 로그입니다.
-                </div>
-              )}
-            </div>
+            {Array.from(
+              { length: endPage - startPage + 1 },
+              (_, i) => startPage + i
+            ).map(page => (
+              <button
+                key={page}
+                className={`${styles.pageBtn} ${page === currentPage ? styles.active : ''
+                  }`}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              className={styles.navBtn}
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+            >
+              ›
+            </button>
           </div>
         )}
       </div>
