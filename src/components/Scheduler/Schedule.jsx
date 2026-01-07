@@ -13,7 +13,8 @@ const Schedule = () => {
   const [events, setEvents] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedEmp, setSelectedEmp] = useState("근무자 선택");
+  const [empList, setEmpList] = useState([]);
+  const [selectedEmp, setSelectedEmp] = useState(null);
 
   const [isAdmin, setIsAdmin] = useState(true);
 
@@ -32,6 +33,14 @@ const Schedule = () => {
       .then(response => response.json())
       .then(data => setEvents(data))
       .catch(error => console.error('초기 데이터 로드 실패', error));
+
+    fetch('http://192.168.1.78:5000/auth/info/all')
+      .then(res => res.json())
+      .then(data => {
+        setEmpList(data)
+        setSelectedEmp(data[0]);
+      })
+      .catch(err => console.error("사원 정보 로드 실패", err));
 
     // 2. STOMP 클라이언트 생성 및 연결
     const client = getSchedulerClient();
@@ -78,6 +87,7 @@ const Schedule = () => {
         prevMonth={prevMonth}
         nextMonth={nextMonth}
         isAdmin={isAdmin}
+        empList={empList}
         selectedEmp={selectedEmp}
         setSelectedEmp={setSelectedEmp}
       />
