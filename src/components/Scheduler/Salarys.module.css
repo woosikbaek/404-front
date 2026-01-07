@@ -1,0 +1,119 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* 조금 더 투명한 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  width: 800px;
+  max-height: 80vh;
+  background: white;
+  border-radius: 20px; /* 더 둥글둥글하게 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 15px 35px rgba(255, 205, 197, 0.4); /* 핑크빛 그림자 */
+  border: 3px solid #ffcdc5; /* 테두리 추가 */
+}
+
+.header {
+  padding: 20px 25px;
+  background-color: #ffcdc5; /* 메인 핑크 */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.closeX {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.closeX:hover {
+  transform: scale(1.2); /* 마우스 올리면 커지는 효과 */
+}
+
+.tableArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+  background-color: #fff9f8; /* 아주 연한 핑크 배경 */
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px; /* 행 사이 간격 */
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  background: #fff9f8;
+  padding: 12px;
+  color: #d68a7f;
+  font-size: 0.95rem;
+  border-bottom: 2px solid #ffcdc5;
+}
+
+.table td {
+  padding: 15px;
+  background-color: white; /* 행마다 흰색 배경 */
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* 행 양끝 라운드 처리 */
+.table td:first-child { border-radius: 10px 0 0 10px; }
+.table td:last-child { border-radius: 0 10px 10px 0; }
+
+.empName {
+  font-weight: 800;
+  color: #ff8a8a; /* 이름 강조색 */
+}
+
+.salaryAmount {
+  text-align: right !important;
+  font-weight: bold;
+  color: #d63384; /* 진한 핑크/체리색 */
+  padding-right: 30px !important;
+}
+
+.loader {
+  text-align: center;
+  padding: 50px;
+  color: #ffcdc5;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* 스크롤바 커스텀 - 핑크 테마 */
+.tableArea::-webkit-scrollbar { width: 8px; }
+.tableArea::-webkit-scrollbar-track { background: #fff9f8; }
+.tableArea::-webkit-scrollbar-thumb {
+  background: #ffcdc5;
+  border-radius: 10px;
+}
+.tableArea::-webkit-scrollbar-thumb:hover {
+  background: #ffb6ad;
+}
