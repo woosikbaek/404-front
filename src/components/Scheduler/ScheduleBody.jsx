@@ -37,6 +37,7 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
       const isCurrentMonth = isSameMonth(day, monthStart);
 
       const isSunday = getDay(day) === 0;
+      const isSaturday = getDay(day) === 6;
 
 
       const Holiday = HOLIDAYS.find(h => h.date === dateStr);
@@ -58,13 +59,17 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
           key={day.toString()}
           onClick={() => handleDateClick(cloneDay)}
         >
+          {/* 일요일 표시 */}
           <span className={` 
             ${!isCurrentMonth ? `${styles.text} ${styles.notValid}` : styles.text}
-            ${isCurrentMonth && (isSunday || isHoliday) ? styles.sunday : ''} `}
+            ${isCurrentMonth && (isSunday || isHoliday) ? styles.sunday : ''} 
+            ${isCurrentMonth && isSaturday && !isHoliday ? styles.saturday : ''}`}
           >
             {formattedDate}
           </span>
 
+
+            {/* 공휴일 표시 */}
           {isCurrentMonth && isHoliday && Holiday &&
             <div className={styles.holidayLabel}>
               {Holiday.label}
