@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { addMonths, subMonths } from 'date-fns';
-import socket from '../../utils/socket';
+import { getSchedulerClient } from '../../utils/socket';
 import ScheduleHeader from './ScheduleHeader';
 import ScheduleDays from './ScheduleDays';
 import ScheduleBody from './ScheduleBody';
 import styles from './Schedule.module.css';
 
 const Schedule = () => {
+
+  const stompClientRef = useRef(null);
 
   const [events, setEvents] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -31,15 +33,38 @@ const Schedule = () => {
       .then(data => setEvents(data))
       .catch(error => console.error('초기 데이터 로드 실패', error));
 
-      const handleUpdateEvent = (updatedEvents) => {
-        console.log('이벤트 업데이트', updatedEvents);
-        setEvents(updatedEvents);
-      };
-      socket.on('schedule_update', handleUpdateEvent);
-      
-      return () => {
-        socket.off('schedule_update', handleUpdateEvent);
+    // 2. STOMP 클라이언트 생성 및 연결
+    const client = getSchedulerClient();
+
+    client.connect({}, (frame) => {
+      console.log('STOMP Connected:', frame);
+      stompClientRef.current = client;
+
+      // 스케줄 관련 토픽 구독
+      client.subscribe('/topic/attendance', (msg) => {
+        const newData = JSON.parse(msg.body);
+        setEvents((prev) => {
+          const isHaving = prev.find(event => event.id === newData.id);
+
+          if (isHaving) {
+            return prev.map(event => event.id === newData.id ? newData : event);
+          } else {
+            return [...prev, newData];
+          }
+        });
+      });
+    }, (error) => {
+      console.error('STOMP 연결 에러:', error);
+    });
+
+    // 3. 클린업 함수 (언마운트 시 연결 해제)
+    return () => {
+      if (stompClientRef.current && stompClientRef.current.connected) {
+        stompClientRef.current.disconnect(() => {
+          console.log("STOMP Disconnected");
+        });
       }
+    };
   }, []);
 
   const saveSchedule = (newSchedule) => {
@@ -58,7 +83,7 @@ const Schedule = () => {
       />
 
       <ScheduleDays />
-      
+
       <ScheduleBody
         currentMonth={currentMonth}
         selectedDate={selectedDate}

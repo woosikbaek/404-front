@@ -69,6 +69,10 @@
   color: red;
 }
 
+.saturday {
+  color: blue;
+}
+
 .holidayLabel {
   position: absolute; 
   top: 22px;
