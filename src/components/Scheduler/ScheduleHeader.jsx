@@ -42,7 +42,6 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
           </div>
         )}
 
-        <div>--</div>
 
         <div>
           <button 

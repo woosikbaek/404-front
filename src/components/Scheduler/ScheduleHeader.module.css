@@ -84,6 +84,7 @@
 /* 직원 리스트 버튼 영역 */
 .employeeListBtn {
   padding: var(--spacing-8) var(--spacing-12);
+  margin-left: var(--spacing-12);
   border: var(--border-width-medium) solid var(--color-border-medium);
   border-radius: var(--radius-6);
   font-size: var(--font-size-12);
