@@ -1,14 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Header.module.css';
 import { id } from 'date-fns/locale';
 
 function Header({ connected = false }) {
   const userName = localStorage.getItem('name') || '---';
   
-  // 1. 출근 상태 관리 (초기값)
-  const [isCommuted, setIsCommuted] = useState(false);
+  // 1. 출근 상태 관리 (localStorage에서 초기값 로드)
+  const [isCommuted, setIsCommuted] = useState(() => {
+    const saved = localStorage.getItem('isCommuted');
+    return saved ? JSON.parse(saved) : false;
+  });
 
-  // 2. 출/퇴근 핸들러
+  // 2. 상태 변경 시 localStorage에 저장
+  useEffect(() => {
+    localStorage.setItem('isCommuted', JSON.stringify(isCommuted));
+  }, [isCommuted]);
+
+  // 3. 매일 자정 5분에 출근 상태 초기화
+  useEffect(() => {
+    // 다음 자정 5분까지의 시간 계산
+    const calculateTimeToReset = () => {
+      const now = new Date();
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 5, 0, 0); // 다음날 00:05:00
+      
+      return tomorrow.getTime() - now.getTime();
+    };
+
+    // 초기 타이머 설정
+    const timeToReset = calculateTimeToReset();
+    const timer = setTimeout(() => {
+      setIsCommuted(false); // 00:05분에 초기화
+      localStorage.removeItem('isCommuted'); // localStorage도 초기화
+      console.log('자정 5분: 출근 상태 초기화됨');
+    }, timeToReset);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 4. 출/퇴근 핸들러
   const commuteHandler = async () => {
     const isCheckingIn = !isCommuted; // 현재 상태가 false면 출근 시도
     const type = isCheckingIn ? '출근' : '퇴근';
@@ -44,7 +75,7 @@ function Header({ connected = false }) {
 
       if (response.ok) {
         alert(`${type} 처리되었습니다.`);
-        setIsCommuted(!isCommuted); // 성공 시에만 버튼 토글
+        setIsCommuted(!isCommuted); // 성공 시에만 버튼 토글 (useEffect에서 localStorage 자동 저장)
       } else {
         const errorData = await response.json().catch(() => ({}));
         alert(`${type} 처리에 실패했습니다. (사유: ${errorData.message || '서버 오류'})`);
