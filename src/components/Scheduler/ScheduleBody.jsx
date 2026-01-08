@@ -92,7 +92,7 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
                 statusText = STATUS_COLORS['출근'];
               } else if (status.includes('미퇴근')) {
                 statusText = STATUS_COLORS['결근'];
-              } else if (status.includes('지각' && '퇴근')) {
+              } else if (status.includes('지각/퇴근')) {
                 statusText = STATUS_COLORS['지각'];
               } else {
                 statusText = STATUS_COLORS[status] || '';
