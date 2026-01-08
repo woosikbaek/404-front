@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import styles from './ScheduleHeader.module.css';
 import Salarys from './Salarys';
 
-const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedEmp, setSelectedEmp, empLIst }) => {
+const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedEmp, setSelectedEmp, empList }) => {
   // [수정 포인트 1] 모달 열림 상태 관리
   const [isSalaryModalOpen, setIsSalaryModalOpen] = useState(false);
 

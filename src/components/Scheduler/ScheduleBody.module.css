@@ -117,34 +117,34 @@
 }
 
 .work {
-  background-color: #2ecc71;
+  background-color: #2ecc709d;
 }
 
 .leave {
-  background-color: #3498db;
+  background-color: #3498db9d;
 }
 
 .late {
-  background-color: #e74c3c;
+  background-color: #f346339d;
   font-weight: bold;
 }
 
 .vacation {
-  background-color: #9b59b6;
+  background-color: #ba6bda9d;
 }
 
 .half {
-  background-color: #f1c40f;
+  background-color: #f1c40f9d;
 }
 
 .absent {
-  background-color: #dabac1;
+  background-color: #dabac19d;
 }
 
 .annual {
-  background-color: #16a085;
+  background-color: #16a0859d;
 }
 
 .sick {
-  background-color: #e67e22;
+  background-color: #e67e229d;
 }

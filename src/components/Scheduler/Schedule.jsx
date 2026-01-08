@@ -58,10 +58,10 @@ const Schedule = () => {
 
     // 모드 판별 (전체 사원 vs 개별 사원)
     if (selectedEmp.id === 'all') {
-      fetchUrl = `http://192.168.1.78:8080/api/admin/attendance/monthly/all?year=${year}&month=${month}`;
+      fetchUrl = `/api/admin/attendance/monthly/all?year=${year}&month=${month}`;
       topicUrl = '/topic/attendance/admin';
     } else {
-      fetchUrl = `http://192.168.1.78:8080/api/admin/attendance/monthly/${selectedEmp.id}?year=${year}&month=${month}`;
+      fetchUrl = `/api/admin/attendance/monthly/${selectedEmp.id}?year=${year}&month=${month}`;
       topicUrl = `/topic/attendance/${selectedEmp.id}`;
     }
     // [API 요청]
@@ -126,8 +126,8 @@ const Schedule = () => {
   const saveSchedule = (payload) => {
     const isDelete = payload.status === '';
     const targetUrl = isDelete
-    ? 'http://192.168.1.78:8080/api/admin/attendance/delete'
-    : 'http://192.168.1.78:8080/api/admin/attendance/update';
+    ? '/api/admin/attendance/delete'
+    : '/api/admin/attendance/update';
     
     fetch(targetUrl, {
       method: isDelete ? 'DELETE' : 'POST',
