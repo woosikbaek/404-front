@@ -2,9 +2,8 @@ import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, 
 import Manager from './manager';
 import { useState } from 'react';
 import styles from './ScheduleBody.module.css';
-import { HOLIDAYS } from './holidays';
 
-const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, selectedEmp, events, saveSchedule }) => {
+const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, selectedEmp, events, saveSchedule, holidays = [] }) => {
 
   const STATUS_COLORS = {
     '출근': styles.work,
@@ -48,8 +47,8 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
       const isSaturday = getDay(day) === 6;
 
 
-      const Holiday = HOLIDAYS.find(h => h.date === dateStr);
-      const isHoliday = !!Holiday;
+      const holiday = holidays.find(h => h.date === dateStr);
+      const isHoliday = !!holiday;
 
       const dayEvents = events.filter(event => event.workDate === dateStr);
       
@@ -64,7 +63,7 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
           key={day.toString()}
           onClick={() => handleDateClick(cloneDay)}
         >
-          {/* 일요일 표시 */}
+          {/* 빨간 날 표시 */}
           <span className={` 
             ${!isCurrentMonth ? `${styles.text} ${styles.notValid}` : styles.text}
             ${isCurrentMonth && (isSunday || isHoliday) ? styles.sunday : ''} 
@@ -75,9 +74,9 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
 
 
             {/* 공휴일 표시 */}
-          {isCurrentMonth && isHoliday && Holiday &&
+          {isCurrentMonth && isHoliday && holiday &&
             <div className={styles.holidayLabel}>
-              {Holiday.label}
+              {holiday.label}
             </div>}
 
           <div className={styles.eventList}>
@@ -91,12 +90,14 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
                 statusText = STATUS_COLORS['결근'];
               } else if (status.includes('정상근무')) {
                 statusText = STATUS_COLORS['출근'];
+              } else if (status.includes('미퇴근')) {
+                statusText = STATUS_COLORS['결근'];
               } else {
                 statusText = STATUS_COLORS[status] || '';
               }
 
               return (
-                <div key={idx} className={`${styles.eventItem} ${statusText}`}>
+                <div key={`${event.employeeId}-${idx}`} className={`${styles.eventItem} ${statusText}`}>
                   <span className={styles.empName}>{event.name}</span>
                   <span className={styles.empStatus}>
                     {status}

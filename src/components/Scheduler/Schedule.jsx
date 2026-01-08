@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { addMonths, subMonths, format } from 'date-fns';
 import { getSchedulerClient } from '../../utils/socket';
+import { HOLIDAYS } from './holidays';
 import ScheduleHeader from './ScheduleHeader';
 import ScheduleDays from './ScheduleDays';
 import ScheduleBody from './ScheduleBody';
@@ -10,8 +11,9 @@ const Schedule = () => {
 
   const stompClientRef = useRef(null);
   const subscriptionRef = useRef(null);
-
+  
   const [events, setEvents] = useState([]);
+  const [holidays, setHolidays] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [empList, setEmpList] = useState([]);
@@ -28,6 +30,16 @@ const Schedule = () => {
   const onDateClick = (day) => {
     setSelectedDate(day);
   };
+  // 공휴일 데이터 로드
+  useEffect(() => {
+    const year = format(currentMonth, 'yyyy');
+    
+    // API로부터 공휴일 데이터 가져오기
+    HOLIDAYS(year).then(data => {
+      setHolidays(data);
+    });
+  }, [currentMonth.getFullYear()]); // 연도가 바뀔 때만 호출
+
   // 1, 초기 데이터 로드
   useEffect(() => {
     fetch('http://192.168.1.78:5000/auth/info/all')
@@ -80,8 +92,8 @@ const Schedule = () => {
           );
           setEvents(flattened);
         } else {
-          const rawLogs = Array.isArray(data) ? data : (data.monthlyLogs || []);
-          const withName = rawLogs.map(log => ({
+          const rowLogs = Array.isArray(data) ? data : (data.monthlyLogs || []);
+          const withName = rowLogs.map(log => ({
             ...log, 
             name: selectedEmp.name,
             employeeId: selectedEmp.id,
@@ -169,6 +181,7 @@ const Schedule = () => {
         selectedEmp={selectedEmp}
         events={events}
         saveSchedule={saveSchedule}
+        holidays={holidays}
       />
     </div>
 
