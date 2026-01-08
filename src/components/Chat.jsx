@@ -102,7 +102,7 @@ const Chat = () => {
         <div className={chatBoxClass}>
           <div className={styles.header}>
             <div className={styles.headerLeft}>
-              <span>사내채팅 ♥</span>
+              <span>사내채팅</span>
             </div>
             <div className={styles.headerRight}>
               <div className={styles.sliderWrapper}>

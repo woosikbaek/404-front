@@ -1,0 +1,29 @@
+.footer {
+  padding: 20px 35px;
+  background: #fffcfc;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #fff0ef;
+}
+
+.completeBtn {
+  background: #ff8a8a;
+  color: white;
+  border: none;
+  padding: 15px 45px;
+  border-radius: 50px;
+  font-weight: 900;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255, 138, 138, 0.3);
+  transition: all 0.3s;
+}
+
+.completeBtn:hover {
+  background: #ff7676;
+  transform: scale(1.03);
+}
+
+.completeBtn:active {
+  transform: scale(0.98);
+}

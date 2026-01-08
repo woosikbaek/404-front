@@ -7,14 +7,15 @@ import DefectLog from './components/DefectLog'
 import Progress from './components/Progress'
 import Schedule from './components/Scheduler/Schedule'
 import Chat from './components/Chat'
+import Computation from './components/computation/Computation'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isPowerOn, setIsPowerOn] = useState(false)
   const [statsData, setStatsData] = useState(null)
   const [activeTab, setActiveTab] = useState('dashboard')
+  const [isAuth, setIsAuth] = useState(false) // 전산 시스템 인증 state
 
-  // 컴포넌트 마운트 시 로그인 상태 확인
   useEffect(() => {
     const token = localStorage.getItem('access_token')
     if (token) {
@@ -26,13 +27,26 @@ function App() {
     setIsLoggedIn(true)
   }
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem('access_token')
-  //   localStorage.removeItem('refresh_token')
-  //   setIsLoggedIn(false)
-  // }
+  const handleTabChange = (tab) => {
+    if (tab === 'computation') {
+      if (isAuth) {
+        setActiveTab(tab);
+        return;
+      }
 
-  // 로그인하지 않은 경우 Login 컴포넌트만 표시
+      const password = prompt('관리자 비밀번호를 입력하세요.');
+      if (password === '1234') {
+        setIsAuth(true); // 인증 성공 저장
+        setActiveTab(tab);
+      } else if (password !== null) {
+        alert('비밀번호가 틀렸습니다.');
+      }
+      return; 
+    }
+    
+    setActiveTab(tab);
+  }
+
   if (!isLoggedIn) {
     return <Login onLoginSuccess={handleLoginSuccess} />
   }
@@ -45,42 +59,44 @@ function App() {
     setStatsData(data)
   }
 
-  // 로그인된 경우 메인 앱 표시
   return (
     <div className="app-container">
-      
       <main className="app-main">
         <PowerToggle onPowerChange={handlePowerChange} />
         
-        {/* 탭 메뉴 */}
         <div className="tab-container">
           <button 
             className={`tab-button ${activeTab === 'dashboard' ? 'active' : ''}`}
-            onClick={() => setActiveTab('dashboard')}
+            onClick={() => handleTabChange('dashboard')}
           >
              대시보드
           </button>
           <button 
             className={`tab-button ${activeTab === 'progress' ? 'active' : ''}`}
-            onClick={() => setActiveTab('progress')}
+            onClick={() => handleTabChange('progress')}
           >
             진행도 현황
           </button>
           <button 
             className={`tab-button ${activeTab === 'defectlog' ? 'active' : ''}`}
-            onClick={() => setActiveTab('defectlog')}
+            onClick={() => handleTabChange('defectlog')}
           >
             불량 로그
           </button>
           <button 
             className={`tab-button ${activeTab === 'schedule' ? 'active' : ''}`}
-            onClick={() => setActiveTab('schedule')}
+            onClick={() => handleTabChange('schedule')}
           >
             스케쥴 확인
           </button>
+          <button
+           className={`tab-button ${activeTab === 'computation' ? 'active' : ''}`}
+            onClick={() => handleTabChange('computation')}
+          >
+            전산 시스템
+          </button>
         </div>
 
-        {/* 탭 컨텐츠 */}
         <div className="tab-content">
           {activeTab === 'dashboard' && (
             <Dashboard isPowerOn={isPowerOn} onStatsUpdate={handleStatsUpdate} />
@@ -94,16 +110,16 @@ function App() {
           {activeTab === 'schedule' && (
             <Schedule />
           )}
+          {/* 전산 시스템: 인증된 경우에만 렌더링 (이중 보안) */}
+          {activeTab === 'computation' && isAuth && (
+            <Computation />
+          )}
         </div>
         
         <div>
           <Chat />
         </div>
       </main>
-
-      {/* <footer className="app-footer">
-        <p>© 2025 공정 시스템 관리 | Powered by React</p>
-      </footer> */}
     </div>
   )
 }

@@ -1,0 +1,26 @@
+.container {
+  padding: 40px;
+  background-color: #fff9f8;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.dashboardCard {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border-radius: 25px;
+  box-shadow: 0 15px 35px rgba(175, 173, 172, 0.4);
+  border: 3px solid #ffcdc5;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tableArea {
+  padding: 25px;
+  max-height: 65vh;
+  overflow-y: auto;
+}
