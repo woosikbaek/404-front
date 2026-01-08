@@ -9,6 +9,8 @@ const ComputationTable = ({ employeeList, isLoading, onLeaveClick }) => {
     );
   }
 
+
+  console.log(employeeList);
   return (
     <table className={styles.table}>
       <thead>
@@ -35,7 +37,7 @@ const ComputationTable = ({ employeeList, isLoading, onLeaveClick }) => {
                 {emp.monthly_salary?.toLocaleString()}원
               </td>
               <td className={styles.accumSalary}>
-                {emp.hourly_rate?.toLocaleString()}원
+                {emp.totalSalary?.toLocaleString()}원
               </td>
               <td className={styles.deductionSalary}>
                 {deduction.toLocaleString()}원
