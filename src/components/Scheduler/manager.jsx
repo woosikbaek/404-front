@@ -10,6 +10,7 @@ const Manager = ({ date, selectedEmp, onClose, onSave }) => {
     { label: '반차', value: '반차' },
     { label: '연차', value: '연차' },
     { label: '병가', value: '병가' },
+    { label: '퇴근', value: '퇴근' },
     { label: '삭제', value: ''},
   ];
 
