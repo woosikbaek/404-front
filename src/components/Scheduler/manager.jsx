@@ -11,12 +11,18 @@ const Manager = ({ date, selectedEmp, onClose, onSave }) => {
     { label: '반차', value: '반차' },
     { label: '결근', value: '결근' },
     { label: '퇴근', value: '퇴근' },
-    { label: '지각', value: '지각'},
+    { label: '지각', value: '지각' },
     { label: '연차', value: '연차' },
-    { label: '병가', value: '병가'},
+    { label: '병가', value: '병가' },
+    { label: '삭제', value: ''},
   ];
 
   const handleSave = () => {
+    if (!selectedEmp || selectedEmp.id === 'all') {
+      alert('사원을 선택 해 주세요.');
+      return;
+    }
+
     const selectedOption = typeOptions.find(opt => opt.value === type);
     
     const payload = {

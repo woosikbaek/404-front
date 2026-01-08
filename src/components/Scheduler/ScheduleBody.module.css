@@ -103,11 +103,13 @@
 
 .eventItem {
   display: flex;
+  margin-left: var(--spacing-4);
   justify-content: space-between;
   padding: 1px 4px;
   border-radius: 3px;
   font-size: 10px;
   background-color: #f1f3f5;
+  color: var(--color-text-black);
 }
 
 .empName {
@@ -115,34 +117,34 @@
 }
 
 .work {
-  color: #2ecc71;
+  background-color: #2ecc71;
 }
 
 .leave {
-  color: #3498db;
+  background-color: #3498db;
 }
 
 .late {
-  color: #e74c3c;
+  background-color: #e74c3c;
   font-weight: bold;
 }
 
 .vacation {
-  color: #9b59b6;
+  background-color: #9b59b6;
 }
 
 .half {
-  color: #f1c40f;
+  background-color: #f1c40f;
 }
 
 .absent {
-  color: #95a5a6;
+  background-color: #dabac1;
 }
 
 .annual {
-  color: #16a085;
+  background-color: #16a085;
 }
 
 .sick {
-  color: #e67e22;
+  background-color: #e67e22;
 }

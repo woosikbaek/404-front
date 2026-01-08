@@ -16,7 +16,11 @@ export default defineConfig({
       '/sensor': {
         target: 'http://192.168.1.78:5000',
         changeOrigin: true,
-      }
+      },
+      // '/api': {
+      //   target: 'http://192.168.1.78:8080',
+      //   changeOrigin: true,
+      // }
     }
   }
 })

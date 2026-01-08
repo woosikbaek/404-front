@@ -6,6 +6,16 @@ import { HOLIDAYS } from './holidays';
 
 const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, selectedEmp, events, saveSchedule }) => {
 
+  const STATUS_COLORS = {
+    '출근': styles.work,
+    '퇴근': styles.leave,
+    '지각': styles.late,
+    '휴가': styles.vacation,
+    '반차': styles.half,
+    '결근': styles.absent,
+    '연차': styles.annual,
+    '병가': styles.sick,
+  };
   const [isManagerOpen, setIsManagerOpen] = useState(false);
   const [clickedDate, setClickedDate] = useState(null);
 
@@ -20,8 +30,6 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
 
   const handleDateClick = (cloneDay) => {
     if (isAdmin) {
-      console.log("관리자 모드: 스케줄 수정 창을 엽니다.", format(cloneDay, 'yyyy-MM-dd'));
-      // 여기서 관리자용 수정 모달을 띄우는 로직을 추가할 수 있습니다.
       setClickedDate(cloneDay);
       setIsManagerOpen(true);
     }
@@ -43,11 +51,8 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
       const Holiday = HOLIDAYS.find(h => h.date === dateStr);
       const isHoliday = !!Holiday;
 
-      const dayEvents = events.filter(event => {
-        const isSameDate = event.date === dateStr;
-        const isSelectedPerson = (!selectedEmp || selectedEmp === '근무자 선택') ? true : event.name === selectedEmp;
-        return isSameDate && isSelectedPerson;
-      });
+      const dayEvents = events.filter(event => event.workDate === dateStr);
+      
       days.push(
         <div
           className={`${styles.col} ${!isCurrentMonth
@@ -77,25 +82,24 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
 
           <div className={styles.eventList}>
             {isCurrentMonth && dayEvents.map((event, idx) => {
+              const status = event.status || '결근';
+              let statusText = '';
 
-              const showTime = ['출근', '퇴근', '지각'].includes(event.type);
-
-              let displayType = event.type;
-              if (event.type === '출근' && event.time) {
-                if (event.time > '09:00:00') {
-                  displayType = '지각';
-                }
+              if (status.includes('병가')) {
+                statusText = STATUS_COLORS['병가'];
+              } else if (status.includes('결근')) {
+                statusText = STATUS_COLORS['결근'];
+              } else if (status.includes('정상근무')) {
+                statusText = STATUS_COLORS['출근'];
+              } else {
+                statusText = STATUS_COLORS[status] || '';
               }
 
               return (
-                <div key={idx} className={`${styles.eventItem} ${styles[event.status]}`}>
+                <div key={idx} className={`${styles.eventItem} ${statusText}`}>
                   <span className={styles.empName}>{event.name}</span>
                   <span className={styles.empStatus}>
-                    {/* 시간 표시 대상이면 시간(HH:mm)과 함께 노출, 아니면 타입만 노출 */}
-                    {showTime && event.time
-                      ? `${event.time.substring(0, 5)} ${displayType}`
-                      : displayType
-                    }
+                    {status}
                   </span>
                 </div>
               );
