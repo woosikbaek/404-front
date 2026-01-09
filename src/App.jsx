@@ -10,18 +10,11 @@ import Chat from './components/Chat'
 import Computation from './components/computation/Computation'
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('access_token'))
   const [isPowerOn, setIsPowerOn] = useState(false)
   const [statsData, setStatsData] = useState(null)
   const [activeTab, setActiveTab] = useState('dashboard')
   const [isAuth, setIsAuth] = useState(false) // 전산 시스템 인증 state
-
-  useEffect(() => {
-    const token = localStorage.getItem('access_token')
-    if (token) {
-      setIsLoggedIn(true)
-    }
-  }, [])
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true)
