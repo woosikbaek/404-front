@@ -111,6 +111,17 @@
   box-shadow: 0 0 0 3px var(--color-blue-light);
 }
 
+.rangePicker {
+  display: flex;
+  margin-left: var(--spacing-12);
+  gap: var(--spacing-8);
+  align-items: center;
+}
+
+.rangePicker span {
+  color: var(--color-text-black);
+}
+
 /* 직원 리스트 버튼 영역 */
 .employeeListBtn {
   padding: var(--spacing-8) var(--spacing-12);

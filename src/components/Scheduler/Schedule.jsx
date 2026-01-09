@@ -18,6 +18,7 @@ const Schedule = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [empList, setEmpList] = useState([]);
   const [selectedEmp, setSelectedEmp] = useState(null);
+  const [selectedRange, setSelectedRange] = useState({ start: '', end: ''});
   const [selectedBranch, setSelectedBranch] = useState('전체 지점');
 
   const [isAdmin, setIsAdmin] = useState(true);
@@ -142,20 +143,25 @@ const Schedule = () => {
     }
   }, [selectedEmp, currentMonth, empList, selectedBranch]);
   
+  // 수정, 삭제 요청 처리 함수
   const saveSchedule = (payload) => {
     const isDelete = payload.status === '';
     const targetUrl = isDelete
     ? '/api/admin/attendance/delete'
     : '/api/admin/attendance/update';
-    
+
+    const requestBody = {
+      employeeId: payload.employeeId === 'all' ? 'all' : Number(payload.employeeId),
+      date: payload.date,
+      status: payload.status
+    };
+    if (payload.endDate) {
+      requestBody.endDate = payload.endDate;
+    } 
     fetch(targetUrl, {
       method: isDelete ? 'DELETE' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        employeeId: Number(payload.employeeId),
-        date: payload.date,
-        status: payload.status
-      }),
+      body: JSON.stringify(requestBody),
     })
       .then(async (res) => {
         if (!res.ok) {
@@ -176,6 +182,9 @@ const Schedule = () => {
         empList={empList}
         selectedEmp={selectedEmp}
         setSelectedEmp={setSelectedEmp}
+        onSaveRange={saveSchedule}
+        selectedRange={selectedRange}
+        setSelectedRange={setSelectedRange}
         selectedBranch={selectedBranch}
         setSelectedBranch={setSelectedBranch}
       />
@@ -191,6 +200,8 @@ const Schedule = () => {
         events={events}
         saveSchedule={saveSchedule}
         holidays={holidays}
+        selectedRange={selectedRange}
+        setSelectedRange={setSelectedRange}
       />
     </div>
 
