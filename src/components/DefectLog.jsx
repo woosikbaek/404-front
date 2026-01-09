@@ -3,7 +3,7 @@ import Header from './Header';
 import styles from './DefectLog.module.css';
 import socket from '../utils/socket';
 
-const API_BASE = 'http://192.168.1.78:5000';
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const ITEMS_PER_PAGE = 8;
 const PAGES_PER_GROUP = 10;
 

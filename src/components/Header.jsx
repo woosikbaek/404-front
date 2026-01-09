@@ -44,10 +44,11 @@ function Header({ connected = false }) {
     const isCheckingIn = !isCommuted; // 현재 상태가 false면 출근 시도
     const type = isCheckingIn ? '출근' : '퇴근';
     
+    const apiSecondary = import.meta.env.VITE_API_SECONDARY_URL;
     // URL 설정
     const API_URL = isCheckingIn 
-      ? 'http://192.168.1.78:8080/api/attendance/check-in' 
-      : 'http://192.168.1.78:8080/api/attendance/check-out';
+      ? `${apiSecondary}/api/attendance/check-in` 
+      : `${apiSecondary}/api/attendance/check-out`;
 
     // 사용자 확인
     if (!window.confirm(`${type} 처리하시겠습니까?`)) return;
@@ -81,7 +82,7 @@ function Header({ connected = false }) {
         alert(`${type} 처리에 실패했습니다. (사유: ${errorData.message || '서버 오류'})`);
       }
     } catch (error) {
-      console.error('근태 관리 통신 에러:', error);
+      console.error('스케줄 관리 통신 에러:', error);
       alert('서버와 연결할 수 없습니다. IP 주소와 네트워크를 확인해주세요.');
     }
   };

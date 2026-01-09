@@ -2,9 +2,9 @@ import { io } from 'socket.io-client';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 
-const API_BASE = 'http://192.168.1.78:5000';
-const API_CHAT = 'http://192.168.1.78:8080/ws-chat';
-const API_SCHEDULER = 'http://192.168.1.78:8080/ws-attendance';
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+const API_CHAT = import.meta.env.VITE_WS_CHAT_URL;
+const API_SCHEDULER = import.meta.env.VITE_WS_SCHEDULER_URL;
 
 // 1. Socket.io 인스턴스 (5000번 서버용)
 export const socket = io(API_BASE, {

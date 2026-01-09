@@ -20,6 +20,8 @@
 - **Redux Toolkit 2.11.2** - 전역 상태 관리
 - **React-Redux 9.2.0** - React-Redux 연동
 - **Socket.io-client 4.8.1** - WebSocket 실시간 통신
+- **Stompjs & Sockjs-client** - 스케줄 데이터 실시간 통신 (STOMP)
+- **Date-fns 4.1.0** - 날짜 계산 및 포맷팅 라이브러리
 - **Recharts 3.6.0** - 데이터 시각화 (차트)
 - **Vite** - 빌드 도구 및 개발 서버
 
@@ -80,6 +82,18 @@
 - 전원 상태 시각적 표시
 - 백엔드 API 연동
 
+### 6. 스케줄러
+- **실시간 스케줄 모니터링**
+  - WebSocket(STOMP) 기반의 실시간 스케줄 상태 수신
+  - 사원별/지점별 필터링을 통한 맞춤형 스케줄 조회
+- **스마트 캘린더**
+  - 공공데이터포털 API 연동을 통한 공휴일 자동 표시 및 라벨링
+  - 주말 및 공휴일 시각적 구분 (일요일/공휴일 빨간색, 토요일 파란색)
+- **관리자 전용 스케줄 수정**
+  - 단일 수정: 특정 날짜 클릭 시 해당 사원의 스케줄 상태 수정/삭제
+  - 기간 수정 (Range): 시작일과 종료일을 선택하여 일괄 스케줄 설정
+  - 자동 검증: 종료일이 시작일보다 빠를 수 없도록 입력 제한 및 알림
+
 ## 📁 프로젝트 구조
 
 ```
@@ -87,44 +101,64 @@
 ├── public/
 │   └── favicon.ico
 ├── src/
-│   ├── components/          # React 컴포넌트
-│   │   ├── Dashboard.jsx    # 대시보드 메인 컴포넌트
-│   │   ├── DefectLog.jsx    # 불량 로그 컴포넌트
-│   │   ├── Progress.jsx     # 진행도 현황 컴포넌트
-│   │   ├── Header.jsx       # 헤더 컴포넌트
-│   │   ├── PowerToggle.jsx  # 전원 제어 컴포넌트
-│   │   ├── SensorDetailModal.jsx  # 센서 상세 분석 모달
-│   │   └── *.module.css     # 컴포넌트별 스타일
-│   ├── store/               # Redux 상태 관리
-│   │   ├── store.js         # Redux store 설정
-│   │   ├── hooks.js         # Redux hooks
+│   ├── components/            # React 컴포넌트
+│   │   ├── computation/       # 연산/계산 관련 컴포넌트
+│   │   │   ├── ComputationHeader.jsx
+│   │   │   ├── ComputationTable.jsx
+│   │   │   ├── LeaveConfirmModal.jsx
+│   │   │   └── useComputationData.js
+│   │   ├── Dashboard/         # 대시보드 메인 컴포넌트 그룹
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── SensorDetailModal.jsx
+│   │   │   └── *.jsx (Cards)
+│   │   ├── Scheduler/         # 스케줄 관리 스케줄러 컴포넌트
+│   │   │   ├── Schedule.jsx
+│   │   │   ├── ScheduleHeader.jsx
+│   │   │   ├── ScheduleBody.jsx
+│   │   │   ├── Manager.jsx
+│   │   │   ├── Salarys.jsx
+│   │   │   └── holidays.js
+│   │   ├── Chat.jsx           # 실시간 채팅 컴포넌트
+│   │   ├── DefectLog.jsx      # 불량 로그 컴포넌트
+│   │   ├── Progress.jsx       # 진행도 현황 컴포넌트
+│   │   ├── Header.jsx         # 헤더 컴포넌트
+│   │   └── *.module.css       # 컴포넌트별 스타일
+│   ├── store/                 # Redux 상태 관리
+│   │   ├── store.js           # Redux store 설정
+│   │   ├── hooks.js           # Redux hooks
 │   │   └── slices/
 │   │       └── processStatusSlice.js  # 공정 상태 slice
 │   ├── utils/
-│   │   └── socket.js         # Socket.io 클라이언트 설정
-│   ├── App.jsx              # 메인 앱 컴포넌트
-│   ├── Login.jsx            # 로그인 컴포넌트
-│   ├── main.jsx             # 앱 진입점
-│   ├── variables.css        # 전역 CSS 변수
-│   ├── index.css            # 전역 스타일
-│   └── App.css              # 앱 스타일
+│   │   └── socket.js          # Socket.io 및 STOMP 클라이언트 설정
+│   ├── App.jsx                # 메인 앱 컴포넌트
+│   ├── Login.jsx              # 로그인 컴포넌트
+│   ├── main.jsx               # 앱 진입점
+│   ├── variables.css          # 전역 CSS 변수
+│   ├── index.css              # 전역 스타일
+│   └── App.css                # 앱 스타일
 ├── package.json
 ├── vite.config.js
 └── README.md
 ```
 
-### 빌드
-
+### 설치
 ```bash
-# 프로덕션 빌드
+npm install
+npm run dev
 npm run build
+npm run preview
+npm run lint
 ```
 
-### 미리보기
+## ⚙️ 환경 설정
 
-```bash
-# 빌드된 파일 미리보기
-npm run preview
+```env
+# API 서버 주소
+VITE_API_BASE_URL=[http://192.168.1.78:5000](http://192.168.1.78:5000)
+
+# WebSocket 주소
+VITE_WS_CHAT_URL=[http://192.168.1.78:8080/ws-chat](http://192.168.1.78:8080/ws-chat)
+VITE_WS_SCHEDULER_URL=[http://192.168.1.78:8080/ws-attendance](http://192.168.1.78:8080/ws-attendance)
 ```
 
 ## 🧩 주요 컴포넌트
@@ -165,6 +199,68 @@ npm run preview
 - 전원 상태 시각적 표시
 - 백엔드 API 연동
 
+### Schedule
+스케줄 관리의 메인 컴포넌트로 데이터 페칭 및 실시간 구독을 총괄합니다.
+
+**주요 기능:**
+- 초기 사원 목록 및 월별 스케줄 데이터 로드
+- STOMP 웹소켓 구독 및 실시간 이벤트 처리
+- 공휴일 API 통신 및 상태 저장
+
+### ScheduleHeader
+달력 컨트롤러와 관리자용 필터 도구를 포함합니다.
+
+**주요 기능:**
+- 월 이동 및 연도/월 표시
+- 지점 선택 및 해당 지점 사원 목록 동적 바인딩
+- 기간(Range) 선택기 및 입력값 검증(Validation)
+
+### ScheduleBody
+7열 그리드 형식의 실제 달력을 렌더링합니다.
+
+**주요 기능:**
+- date-fns 기반의 날짜 계산 및 그리드 생성
+- 선택된 기간(Range)에 대한 시각적 하이라이트 처리
+- 스케줄 상태별 컬러 코드 매핑 (휴가, 지각, 결근 등)
+
+### Manager
+관리자가 스케줄 상태를 변경하거나 기록을 삭제하는 팝업입니다.
+
+**주요 기능:**
+- 선택된 날짜/기간 및 사원 정보 표시
+- 스케줄 상태 옵션 제공 (휴가, 반차, 연차, 병가, 퇴근 등)
+- 서버 API 연동을 통한 데이터 업데이트/삭제 요청
+
+## 전산(Computation) 모듈
+- 위치: 상단 탭 `전산 시스템` (관리자 비밀번호 입력 후 접근)
+- **주요 기능:**
+  - 사원 기본 정보 및 누적 급여 조회 (`GET /auth/info/all`, `GET /api/admin/attendance/salary/all-summary`)
+  - 연차/병가 차감 (`POST /api/admin/attendance/update`), 차감 전 확인 모달 표시
+  - STOMP `/topic/attendance/admin` 구독으로 급여/연차 실시간 반영
+- **화면 구성:**
+  - 헤더: 새로고침 버튼 (`ComputationHeader`)
+  - 테이블: 사번/성명/부서/기본급/누적월급/차감금액, 연차·병가 차감 버튼 (`ComputationTable`)
+  - 모달: 차감 확인 (`LeaveConfirmModal`)
+  - 푸터: 검산 완료 버튼 (`ComputationFooter`)
+- **동작 흐름:**
+  1) 진입 시 사원·급여 데이터 병합 로드
+  2) 연차/병가 버튼 클릭 → 확인 모달 → `POST /api/admin/attendance/update`
+  3) 백엔드가 발행한 STOMP 메시지로 급여/연차 실시간 갱신
+
+## Chat
+- 프로토콜: STOMP over SockJS (`getStompClient`)
+- 구독/발행:
+  - Subscribe: `/topic/public`
+  - Send: `/app/chat.addUser` (입장), `/app/chat.sendMessage` (채팅)
+- UX:
+  - 플로팅 버튼(💬)으로 창 열기/닫기
+  - 전체화면 토글, 투명도 슬라이더(0.3~1)
+  - 마지막 메시지와 동일한 내용·보낸이 중복 필터
+  - 연결 안 됐을 때 입력/전송 비활성화
+- UI 스타일 하이라이트:
+  - 반투명 카드, 커스텀 스크롤바, 내/타인 말풍선 색상 구분
+  - 시간 표시, JOIN 배지 스타일
+
 ## 🔄 상태 관리
 
 ### Redux Store 구조
@@ -180,6 +276,19 @@ npm run preview
       'end': 'pending' | 'ok' | 'error'
     },
     currentCarId: number | null
+  }, 
+
+  attendance: {
+    events: [],           
+    holidays: [],        
+    selectedEmp: {        
+      id: number | 'all',
+      name: string 
+    },
+    selectedRange: {     
+      start: 'YYYY-MM-DD',
+      end: 'YYYY-MM-DD'
+    }
   }
 }
 ```
@@ -193,10 +302,15 @@ npm run preview
 - `setEnd({ status })`: END 단계 상태 설정
 - `setStepError({ stepId })`: 특정 단계를 error로 설정
 - `resetProcessStatus()`: 전체 상태 초기화
+- `setEvents(data):` 월별 스케줄 로그 저장 및 실시간 업데이트 반영
+- `setSelectedEmp(emp)` : 특정 사원 또는 전체 사원 설정
+- `setSelecetedRange({ start, end })` : 날짜 기간 설정
 
 ### 상태 보호 로직
 
-error 상태는 'ok' 신호로 덮어쓰이지 않도록 보호됩니다. 이는 불량 발생 후 정상 신호가 와도 불량 상태를 유지하기 위함입니다.
+- error 상태는 'ok' 신호로 덮어쓰이지 않도록 보호됩니다. 이는 불량 발생 후 정상 신호가 와도 불량 상태를 유지하기 위함입니다.
+- 특정 사원을 선택한 상태에서 웹소켓 수신 시, 해당 사원의 ID와 일치하는 데이터만 필터링하여 업데이트 합니다.
+- '전체 지점'에서 '강동' 등 특정 지점 선택 시 events 초기화 및 해당 지점 데이터 재요청 합니다.
 
 ## 📡 WebSocket 이벤트
 
@@ -261,6 +375,22 @@ error 상태는 'ok' 신호로 덮어쓰이지 않도록 보호됩니다. 이는
 ```javascript
 {
   car_id: 185
+}
+```
+
+#### `attendance_update`
+실시간 스케줄 기록 업데이트
+
+```javascript
+{
+  "employeeId": "all" | number,
+  "monthlyLogs": [
+    { 
+      "workDate": "2026-01-09", 
+      "status": "휴가" 
+    },
+    ...
+  ]
 }
 ```
 

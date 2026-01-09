@@ -58,7 +58,7 @@ export const useComputationData = () => {
     };
   }, []);
 
-  // 근태 차감
+  // 스케줄 차감
   const updateLeave = async (emp, type) => {
     try {
       const response = await fetch('/api/admin/attendance/update', {
@@ -83,7 +83,7 @@ export const useComputationData = () => {
       }
       return false;
     } catch (error) {
-      console.error("근태 업데이트 실패:", error);
+      console.error("스케줄 업데이트 실패:", error);
       return false;
     }
   };

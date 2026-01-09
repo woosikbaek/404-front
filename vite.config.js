@@ -7,19 +7,19 @@ export default defineConfig({
   server: {
     proxy: {
       '/auth': {
-        target: 'http://192.168.1.78:5000',
+        target: import.meta.env.VITE_API_BASE_URL,
         changeOrigin: true,
       },
       '/dashboard': {
-        target: 'http://192.168.1.78:5000',
+        target: import.meta.env.VITE_API_BASE_URL,
         changeOrigin: true,
       },
       '/sensor': {
-        target: 'http://192.168.1.78:5000',
+        target: import.meta.env.VITE_API_BASE_URL,
         changeOrigin: true,
       },
       '/api': {
-        target: 'http://192.168.1.78:8080',
+        target: import.meta.env.VITE_API_SECONDARY_URL,
         changeOrigin: true,
       }
     }

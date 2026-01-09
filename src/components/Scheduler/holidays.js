@@ -1,5 +1,5 @@
 // utils/holidayApi.js
-const SERVICE_KEY = 'e50e0fdbdc92fe637abb2e12b817a9d372d5aef43d5abd1c9c32a3705259bb84'; 
+const SERVICE_KEY = import.meta.env.VITE_HOLIDAY_API_KEY; 
 
 export const HOLIDAYS = async (year) => {
   try {

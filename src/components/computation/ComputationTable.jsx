@@ -21,7 +21,7 @@ const ComputationTable = ({ employeeList, isLoading, onLeaveClick }) => {
           <th>기본급</th>
           <th>누적월급</th>
           <th>차감금액</th>
-          <th>근태 관리</th>
+          <th>스케줄 관리</th>
         </tr>
       </thead>
       <tbody>

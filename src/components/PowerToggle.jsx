@@ -10,9 +10,11 @@ function PowerToggle({ onPowerChange }) {
     const newPowerState = !isPowerOn;
     
     // 현재 상태에 따라 엔드포인트 결정
+    const apiBase = import.meta.env.VITE_API_BASE_URL;
+    // 현재 상태에 따라 엔드포인트 결정
     const endpoint = isPowerOn 
-      ? 'http://192.168.1.78:5000/front/power/off' 
-      : 'http://192.168.1.78:5000/front/power/on';
+      ? `${apiBase}/front/power/off` 
+      : `${apiBase}/front/power/on`;
     
     try {
       // 백엔드 API 호출

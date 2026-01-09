@@ -30,7 +30,8 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const response = await fetch('http://192.168.1.78:5000/dashboard/summary');
+        const apiBase = import.meta.env.VITE_API_BASE_URL;
+        const response = await fetch(`${apiBase}/dashboard/summary`);
         const data = await response.json();
         setStats(data);
       } catch (error) {

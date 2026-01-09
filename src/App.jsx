@@ -35,7 +35,8 @@ function App() {
       }
 
       const password = prompt('관리자 비밀번호를 입력하세요.');
-      if (password === '1234') {
+      const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD || '1234';
+      if (password === adminPassword) {
         setIsAuth(true); // 인증 성공 저장
         setActiveTab(tab);
       } else if (password !== null) {

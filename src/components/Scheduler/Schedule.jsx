@@ -44,7 +44,8 @@ const Schedule = () => {
 
   // 1, 초기 데이터 로드
   useEffect(() => {
-    fetch('http://192.168.1.78:5000/auth/info/all')
+    const apiBase = import.meta.env.VITE_API_BASE_URL;
+    fetch(`${apiBase}/auth/info/all`)
       .then(res => res.json())
       .then(data => {
         const AllEmpList = [{ id: 'all', name: '전체' }, ...data];

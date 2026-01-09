@@ -21,7 +21,7 @@ const Computation = () => {
     if (success) {
       setModalData(null);
     } else {
-      alert("근태 반영 중 오류가 발생했습니다.");
+      alert("스케줄 반영 중 오류가 발생했습니다.");
     }
   };
 

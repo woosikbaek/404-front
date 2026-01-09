@@ -6,7 +6,7 @@ const LeaveConfirmModal = ({ modalData, onConfirm, onCancel }) => {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <h3>근태 적용 확인</h3>
+        <h3>스케줄 적용 확인</h3>
         <p className={styles.modalMessage}>
           <strong>{modalData.emp.name}</strong> 님의 <br />
           <span className={styles.highlight}>{modalData.type}</span>를 1회 차감하시겠습니까?
