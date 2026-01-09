@@ -122,7 +122,7 @@ function DefectLog() {
               <input 
                 type="text" 
                 className={styles.slimInput}
-                placeholder="차량번호 정확히 입력" 
+                placeholder="차량번호 검색"
                 value={searchCarId}
                 onChange={(e) => { setSearchCarId(e.target.value); setCurrentPage(1); }}
               />
