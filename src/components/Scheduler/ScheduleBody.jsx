@@ -3,7 +3,7 @@ import Manager from './manager';
 import { useState } from 'react';
 import styles from './ScheduleBody.module.css';
 
-const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, selectedEmp, events, saveSchedule, holidays = [], selectedRange, setSelectedRange }) => {
+const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, selectedEmp, events, saveSchedule, holidays = [], selectedRange, setSelectedRange, selectedBranch }) => {
 
   const STATUS_COLORS = {
     '출근': styles.work,
@@ -56,7 +56,7 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
           className={`${styles.col} 
           ${!isCurrentMonth ? styles.disabled : styles.valid}
           ${isSameDay(day, selectedDate) ? styles.selected : ''}
-          ${isRange ? styles.isRange : ''} 
+          ${isRange ? styles.isRange : ''}
           ${isRangeStart ? styles.isRangeStart : ''}
           ${isRangeEnd ? styles.isRangeEnd : ''}
           `}
@@ -66,7 +66,7 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
           {/* 빨간 날 표시 */}
           <span className={` 
             ${!isCurrentMonth ? `${styles.text} ${styles.notValid}` : styles.text}
-            ${isCurrentMonth && (isSunday || isHoliday) ? styles.sunday : ''} 
+            ${isCurrentMonth && (isSunday || isHoliday) ? styles.sunday : ''}
             ${isCurrentMonth && isSaturday && !isHoliday ? styles.saturday : ''}`}
           >
             {formattedDate}
@@ -120,8 +120,16 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
     days = [];
   }
   return <div>
+    {selectedBranch === '전체 지점' && isManagerOpen && (
+      <div className={styles.alertOverlay}>
+        <div className={styles.alertBox}>
+          <p>지역을 선택해주세요</p>
+          <button onClick={() => setIsManagerOpen(false)}>확인</button>
+        </div>
+      </div>
+    )}
     {rows}
-    {isManagerOpen &&
+    {isManagerOpen && selectedBranch !== '전체 지점' &&
       <Manager
         date={clickedDate}
         range={selectedRange.start && selectedRange.end ? selectedRange : null}

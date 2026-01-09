@@ -203,6 +203,7 @@ const Schedule = () => {
         holidays={holidays}
         selectedRange={selectedRange}
         setSelectedRange={setSelectedRange}
+        selectedBranch={selectedBranch}
       />
     </div>
 
