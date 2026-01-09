@@ -12,7 +12,7 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
       <div className={`${styles.col} ${styles.colEnd}`}>
         <i className="fa-solid fa-angle-left" onClick={prevMonth}></i>
       </div>
-      
+
       <div className={`${styles.col} ${styles.colStart}`}>
         <span className={styles.text}>
           <span className={styles.year}>
@@ -43,29 +43,28 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
                     const fullEmp = empList.find(emp => String(emp.id) === String(selectId));
                     setSelectedEmp(fullEmp);
                   }}>
-                  
+
                   {empList.map(emp => (
                     <option key={emp.id} value={emp.id}>{emp.name}</option>
                   ))}
                 </select>
+                <div>
+                  <button
+                    className={styles.employeeListBtn}
+                    onClick={() => setIsSalaryModalOpen(true)}
+                  >
+                    직원 목록
+                  </button>
+                </div>
               </div>
             )}
           </>
         )}
-
-        <div>
-          <button 
-            className={styles.employeeListBtn} 
-            onClick={() => setIsSalaryModalOpen(true)}
-          >
-            직원 목록
-          </button>
-        </div>
       </div>
 
-      <Salarys 
-        isOpen={isSalaryModalOpen} 
-        onClose={() => setIsSalaryModalOpen(false)} 
+      <Salarys
+        isOpen={isSalaryModalOpen}
+        onClose={() => setIsSalaryModalOpen(false)}
       />
     </div>
   );
