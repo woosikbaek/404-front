@@ -3,8 +3,7 @@ import { format } from 'date-fns';
 import styles from './ScheduleHeader.module.css';
 import Salarys from './Salarys';
 
-const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedEmp, setSelectedEmp, empList, selectedBranch, setSelectedBranch, onSaveRange, selectedRange, setSelectedRange }) => {
-  // [수정 포인트 1] 모달 열림 상태 관리
+const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedEmp, setSelectedEmp, empList, selectedBranch, setSelectedBranch, selectedRange, setSelectedRange }) => {
   const [isSalaryModalOpen, setIsSalaryModalOpen] = useState(false);
 
   return (
@@ -28,21 +27,6 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
         {/* 관리자일 때만 보여주는 영역 */}
         {isAdmin && (
           <>
-          <div className={styles.adminControls}>
-            <select className={styles.selectUserBtn} value={selectedEmp?.id}
-              onChange={(e) => {
-                const selectId = e.target.value;
-                const fullEmp = empList.find(emp => String(emp.id) === String(selectId));
-                setSelectedEmp(fullEmp);
-              }}>
-              
-              {empList.length === 0 && <option value="">로딩중...</option>}
-              {empList.map(emp => (
-                <option key={emp.id} value={emp.id}>{emp.name}</option>
-              ))}
-            </select>
-          </div>
-
           <div className={styles.rangePicker}>
             <input type="date" value={selectedRange.start} onChange={e => {
               setSelectedRange({...selectedRange, start: e.target.value})
@@ -69,7 +53,7 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
                     const fullEmp = empList.find(emp => String(emp.id) === String(selectId));
                     setSelectedEmp(fullEmp);
                   }}>
-
+                  {empList.length === 0 && <option value="">로딩중...</option>}
                   {empList.map(emp => (
                     <option key={emp.id} value={emp.id}>{emp.name}</option>
                   ))}
@@ -84,8 +68,6 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
                 </div>
               </div>
             )}
-          </>
-        )}
       </div>
 
       <Salarys
