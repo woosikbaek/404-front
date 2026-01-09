@@ -28,11 +28,11 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
         {isAdmin && (
           <>
           <div className={styles.rangePicker}>
-            <input type="date" value={selectedRange.start} max={selectedRange.end} onChange={e => {
+            <input className={styles.rangeInput} type="date" value={selectedRange.start} max={selectedRange.end} onChange={e => {
               setSelectedRange({...selectedRange, start: e.target.value})
             }} />
             <span>~</span>
-            <input type="date" value={selectedRange.end} min={selectedRange.start} onChange={e => {
+            <input className={styles.rangeInput} type="date" value={selectedRange.end} min={selectedRange.start} onChange={e => {
               setSelectedRange({...selectedRange, end: e.target.value})
             }} />
           </div>
