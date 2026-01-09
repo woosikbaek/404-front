@@ -26,6 +26,32 @@
   box-shadow: var(--shadow-sm);
 }
 
+.col.isRange {
+  background-color: #e7f5ff !important; /* 연한 파란색 배경 */
+}
+
+/* 시작일 강조 */
+.col.isRangeStart {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background-color: #d0ebff !important;
+  border-left: 2px solid #0c3f6b;
+}
+
+/* 종료일 강조 */
+.col.isRangeEnd {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background-color: #d0ebff !important;
+  border-right: 2px solid #0c3f6b;
+}
+
+/* 시작과 종료가 같은 날일 때 혹은 연결 부위 강조 */
+.col.isRangeStart.isRangeEnd {
+  border-radius: 8px;
+  border: 2px solid #228be6;
+}
+
 .disabled {
   background: var(--color-bg-secondary);
   cursor: not-allowed;

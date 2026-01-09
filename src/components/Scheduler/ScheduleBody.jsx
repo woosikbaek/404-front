@@ -3,7 +3,7 @@ import Manager from './manager';
 import { useState } from 'react';
 import styles from './ScheduleBody.module.css';
 
-const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, selectedEmp, events, saveSchedule, holidays = [] }) => {
+const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, selectedEmp, events, saveSchedule, holidays = [], selectedRange, setSelectedRange }) => {
 
   const STATUS_COLORS = {
     '출근': styles.work,
@@ -42,24 +42,24 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
       const formattedDate = format(day, 'd');
       const dateStr = format(day, 'yyyy-MM-dd');
       const isCurrentMonth = isSameMonth(day, monthStart);
-
       const isSunday = getDay(day) === 0;
       const isSaturday = getDay(day) === 6;
-
-
       const holiday = holidays.find(h => h.date === dateStr);
       const isHoliday = !!holiday;
-
       const dayEvents = events.filter(event => event.workDate === dateStr);
-      
+      const isRange = selectedRange.start && selectedRange.end && dateStr >= selectedRange.start && dateStr <= selectedRange.end;
+      const isRangeStart = dateStr === selectedRange.start;
+      const isRangeEnd = dateStr === selectedRange.end;
+
       days.push(
         <div
-          className={`${styles.col} ${!isCurrentMonth
-            ? styles.disabled
-            : isSameDay(day, selectedDate)
-              ? styles.selected
-              : styles.valid
-            }`}
+          className={`${styles.col} 
+          ${!isCurrentMonth ? styles.disabled : styles.valid}
+          ${isSameDay(day, selectedDate) ? styles.selected : ''}
+          ${isRange ? styles.isRange : ''} 
+          ${isRangeStart ? styles.isRangeStart : ''}
+          ${isRangeEnd ? styles.isRangeEnd : ''}
+          `}
           key={day.toString()}
           onClick={() => handleDateClick(cloneDay)}
         >
@@ -73,7 +73,7 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
           </span>
 
 
-            {/* 공휴일 표시 */}
+          {/* 공휴일 표시 */}
           {isCurrentMonth && isHoliday && holiday &&
             <div className={styles.holidayLabel}>
               {holiday.label}
@@ -124,11 +124,16 @@ const ScheduleBody = ({ currentMonth, selectedDate, onDateClick, isAdmin, select
     {isManagerOpen &&
       <Manager
         date={clickedDate}
+        range={selectedRange.start && selectedRange.end ? selectedRange : null}
         selectedEmp={selectedEmp}
-        onClose={() => setIsManagerOpen(false)}
+        onClose={() => {
+          setIsManagerOpen(false)
+          setSelectedRange({ start: '', end: '' })
+        }}
         onSave={(data) => {
           saveSchedule(data)
           setIsManagerOpen(false);
+          setSelectedRange({ start: '', end: '' })
         }}
       />}
   </div>;

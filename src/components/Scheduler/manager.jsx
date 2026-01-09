@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import styles from './manager.module.css';
 
-const Manager = ({ date, selectedEmp, onClose, onSave }) => {
+const Manager = ({ date, selectedEmp, onClose, onSave, range }) => {
   const [type, setType] = useState('결근');
 
   const typeOptions = [
@@ -15,26 +15,28 @@ const Manager = ({ date, selectedEmp, onClose, onSave }) => {
   ];
 
   const handleSave = () => {
-    if (!selectedEmp || selectedEmp.id === 'all') {
-      alert('사원을 선택 해 주세요.');
-      return;
-    }
-
+    
     const selectedOption = typeOptions.find(opt => opt.value === type);
     
     const payload = {
       employeeId: selectedEmp.id,
-      date: format(date, 'yyyy-MM-dd'),
+      date: range ? range.start :format(date, 'yyyy-MM-dd'),
       status: selectedOption.value,
     };
+    
+    if (range) {
+      payload.endDate = range.end;
+    }
+    console.log(payload);
+
     onSave(payload);
   };
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-        <h3 className={styles.title}>{format(date, 'MM월 dd일')}</h3>
-        <p className={styles.info}>이름: <strong>{selectedEmp ? selectedEmp.name : '선택된 사원 없음'}</strong></p>
+        <h3 className={styles.title}>{range ? `${range.start} ~ ${range.end}` : format(date, 'MM월 dd일')}</h3>
+        <p className={styles.info}>이름: <strong>{selectedEmp.name}</strong></p>
 
         <div className={styles.section}>
           <div className={styles.buttonGrid}>
