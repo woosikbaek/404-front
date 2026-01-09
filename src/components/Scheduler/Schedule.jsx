@@ -19,6 +19,7 @@ const Schedule = () => {
   const [empList, setEmpList] = useState([]);
   const [selectedEmp, setSelectedEmp] = useState(null);
   const [selectedRange, setSelectedRange] = useState({ start: '', end: ''});
+  const [selectedBranch, setSelectedBranch] = useState('전체 지점');
 
   const [isAdmin, setIsAdmin] = useState(true);
 
@@ -62,6 +63,12 @@ const Schedule = () => {
 
   // 특정 사원, 날짜 변경 시 데이터 로드
   useEffect(() => {
+    // 강동이 아니면 데이터를 비우고 반환
+    if (selectedBranch !== '강동') {
+      setEvents([]);
+      return;
+    }
+
     if (!selectedEmp || !stompClientRef.current) return;
 
     const year = format(currentMonth, 'yyyy');
@@ -134,7 +141,7 @@ const Schedule = () => {
         });
       });
     }
-  }, [selectedEmp, currentMonth, empList]);
+  }, [selectedEmp, currentMonth, empList, selectedBranch]);
   
   // 수정, 삭제 요청 처리 함수
   const saveSchedule = (payload) => {
@@ -178,6 +185,8 @@ const Schedule = () => {
         onSaveRange={saveSchedule}
         selectedRange={selectedRange}
         setSelectedRange={setSelectedRange}
+        selectedBranch={selectedBranch}
+        setSelectedBranch={setSelectedBranch}
       />
 
       <ScheduleDays />

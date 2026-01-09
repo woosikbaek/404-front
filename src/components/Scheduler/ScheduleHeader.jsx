@@ -3,7 +3,8 @@ import { format } from 'date-fns';
 import styles from './ScheduleHeader.module.css';
 import Salarys from './Salarys';
 
-const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedEmp, setSelectedEmp, empList, onSaveRange, selectedRange, setSelectedRange }) => {
+const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedEmp, setSelectedEmp, empList, selectedBranch, setSelectedBranch, onSaveRange, selectedRange, setSelectedRange }) => {
+  // [수정 포인트 1] 모달 열림 상태 관리
   const [isSalaryModalOpen, setIsSalaryModalOpen] = useState(false);
 
   return (
@@ -11,7 +12,7 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
       <div className={`${styles.col} ${styles.colEnd}`}>
         <i className="fa-solid fa-angle-left" onClick={prevMonth}></i>
       </div>
-      
+
       <div className={`${styles.col} ${styles.colStart}`}>
         <span className={styles.text}>
           <span className={styles.year}>
@@ -53,21 +54,43 @@ const ScheduleHeader = ({ currentMonth, prevMonth, nextMonth, isAdmin, selectedE
           </div>
           </>
         )}
+            <div className={styles.branchSelect}>
+              <select className={styles.branchBtn} value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)}>
+                <option value="전체 지점">지역</option>
+                <option value="강동">강동</option>
+              </select>
+            </div>
 
+            {selectedBranch === '강동' && (
+              <div className={styles.adminControls}>
+                <select className={styles.selectUserBtn} value={selectedEmp ? selectedEmp.id : '선택된 사원 없음'}
+                  onChange={(e) => {
+                    const selectId = e.target.value;
+                    const fullEmp = empList.find(emp => String(emp.id) === String(selectId));
+                    setSelectedEmp(fullEmp);
+                  }}>
 
-        <div>
-          <button 
-            className={styles.employeeListBtn} 
-            onClick={() => setIsSalaryModalOpen(true)}
-          >
-            직원 목록
-          </button>
-        </div>
+                  {empList.map(emp => (
+                    <option key={emp.id} value={emp.id}>{emp.name}</option>
+                  ))}
+                </select>
+                <div>
+                  <button
+                    className={styles.employeeListBtn}
+                    onClick={() => setIsSalaryModalOpen(true)}
+                  >
+                    직원 목록
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
 
-      <Salarys 
-        isOpen={isSalaryModalOpen} 
-        onClose={() => setIsSalaryModalOpen(false)} 
+      <Salarys
+        isOpen={isSalaryModalOpen}
+        onClose={() => setIsSalaryModalOpen(false)}
       />
     </div>
   );

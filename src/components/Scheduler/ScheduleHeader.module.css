@@ -7,6 +7,13 @@
   margin-bottom: var(--spacing-16);
 }
 
+.branchSelect {
+  margin-left: var(--spacing-20);
+  display: inline-flex;
+  gap: var(--spacing-12);
+  align-items: center;
+}
+
 .col {
   display: flex;
   margin: 0 var(--spacing-8) 0 var(--spacing-8);
@@ -57,6 +64,29 @@
 .editScheduleBtn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+}
+
+.branchBtn {
+  padding: var(--spacing-8) var(--spacing-12);
+  border: var(--border-width-medium) solid var(--color-border-medium);
+  border-radius: var(--radius-6);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-500);
+  background: var(--color-bg-white);
+  color: var(--color-text-black);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+
+.branchBtn:hover {
+  border-color: var(--color-blue);
+}
+
+.branchBtn:focus {
+  outline: none;
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 3px var(--color-blue-light);
 }
 
 .selectUserBtn {

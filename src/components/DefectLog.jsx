@@ -11,9 +11,15 @@ function DefectLog() {
   const [logs, setLogs] = useState([]);
   const [selectedLog, setSelectedLog] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  // ✅ 소켓 객체의 현재 연결 상태를 초기값으로 직접 사용
   const [connected, setConnected] = useState(socket.connected);
   const [activeTab, setActiveTab] = useState('CAMERA');
+
+  // 필터 상태 관리
+  const [searchCarId, setSearchCarId] = useState('');
+  const [sortOrder, setSortOrder] = useState('newest'); 
+  const [filterYear, setFilterYear] = useState('all');
+  const [filterMonth, setFilterMonth] = useState('all');
+  const [filterSensorType, setFilterSensorType] = useState('all');
 
   const getImageUrl = (path) => {
     if (!path) return '';
@@ -21,7 +27,6 @@ function DefectLog() {
     return `${API_BASE}/camera/${cleanPath}`;
   };
 
-  // 1. 초기 데이터 로드
   useEffect(() => {
     fetch(`${API_BASE}/camera/defects`)
       .then(res => res.json())
@@ -40,34 +45,20 @@ function DefectLog() {
       .catch(err => console.error('FETCH ERROR:', err));
   }, []);
 
-  // 2. 실시간 소켓 수신 및 연결 상태 관리
   useEffect(() => {
-    // 마운트 시점 상태 확인
     setConnected(socket.connected);
-
     const onConnect = () => setConnected(true);
     const onDisconnect = () => setConnected(false);
-
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
 
     socket.on('camera_defect', data => {
-      setLogs(prev => [{ 
-        ...data, 
-        isCamera: true, 
-        type: '외관불량', 
-        images: data.images || [] 
-      }, ...prev]);
+      setLogs(prev => [{ ...data, isCamera: true, type: '외관불량', images: data.images || [] }, ...prev]);
       if (activeTab === 'CAMERA') setCurrentPage(1);
     });
 
     socket.on('sensor_defect', data => {
-      setLogs(prev => [{ 
-        ...data, 
-        isCamera: false, 
-        type: `${(data.device || '센서').toUpperCase()} 센서불량`, 
-        images: [] 
-      }, ...prev]);
+      setLogs(prev => [{ ...data, isCamera: false, type: `${(data.device || '센서').toUpperCase()} 센서불량`, images: [] }, ...prev]);
       if (activeTab === 'SENSOR') setCurrentPage(1);
     });
 
@@ -79,23 +70,96 @@ function DefectLog() {
     };
   }, [activeTab]);
 
-  const filteredLogs = useMemo(() => {
-    return activeTab === 'CAMERA' 
-      ? logs.filter(l => l.isCamera) 
-      : logs.filter(l => !l.isCamera);
-  }, [logs, activeTab]);
+  // 필터링 로직 개선: 차량번호 완전 일치 처리
+  const filteredAndSortedLogs = useMemo(() => {
+    let result = logs.filter(l => (activeTab === 'CAMERA' ? l.isCamera : !l.isCamera));
+    
+    // [수정] 차량번호 검색: 값이 있을 때만 완전 일치(===) 검사
+    if (searchCarId.trim() !== '') {
+      result = result.filter(l => String(l.car_id) === searchCarId.trim());
+    }
 
-  const totalPages = Math.ceil(filteredLogs.length / ITEMS_PER_PAGE);
+    if (activeTab === 'SENSOR' && filterSensorType !== 'all') {
+      result = result.filter(l => l.type.includes(filterSensorType.toUpperCase()));
+    }
+    
+    if (filterYear !== 'all') {
+      result = result.filter(l => new Date(l.created_at).getFullYear() === parseInt(filterYear));
+    }
+    
+    if (filterMonth !== 'all') {
+      result = result.filter(l => new Date(l.created_at).getMonth() + 1 === parseInt(filterMonth));
+    }
+
+    result.sort((a, b) => {
+      const timeA = new Date(a.created_at).getTime();
+      const timeB = new Date(b.created_at).getTime();
+      return sortOrder === 'newest' ? timeB - timeA : timeA - timeB;
+    });
+    return result;
+  }, [logs, activeTab, searchCarId, sortOrder, filterYear, filterMonth, filterSensorType]);
+
+  const totalPages = Math.ceil(filteredAndSortedLogs.length / ITEMS_PER_PAGE);
   const currentGroup = Math.floor((currentPage - 1) / PAGES_PER_GROUP);
   const startPage = currentGroup * PAGES_PER_GROUP + 1;
   const endPage = Math.min(startPage + PAGES_PER_GROUP - 1, totalPages);
-  const pagedLogs = filteredLogs.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const pagedLogs = filteredAndSortedLogs.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+  const years = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 5 }, (_, i) => currentYear - i);
+  }, []);
 
   return (
     <div>
       <Header connected={connected} />
       <div className={styles.defectLogContainer}>
         <h2 className={styles.defectLogTitle}>불량 로그</h2>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterLeft}>
+            <div className={styles.searchContainer}>
+              <input 
+                type="text" 
+                className={styles.slimInput}
+                placeholder="차량번호 검색"
+                value={searchCarId}
+                onChange={(e) => { setSearchCarId(e.target.value); setCurrentPage(1); }}
+              />
+              {searchCarId && (
+                <button className={styles.clearBtn} onClick={() => setSearchCarId('')}>✕</button>
+              )}
+            </div>
+          </div>
+          
+          <div className={styles.filterRight}>
+            <select className={styles.slimSelect} value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+              <option value="newest">최신순</option>
+              <option value="oldest">오래된순</option>
+            </select>
+
+            <select className={styles.slimSelect} value={filterYear} onChange={(e) => { setFilterYear(e.target.value); setCurrentPage(1); }}>
+              <option value="all">전체 연도</option>
+              {years.map(y => <option key={y} value={y}>{y}년</option>)}
+            </select>
+
+            <select className={styles.slimSelect} value={filterMonth} onChange={(e) => { setFilterMonth(e.target.value); setCurrentPage(1); }}>
+              <option value="all">전체 월</option>
+              {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
+                <option key={m} value={m}>{m}월</option>
+              ))}
+            </select>
+
+            {activeTab === 'SENSOR' && (
+              <select className={styles.slimSelect} value={filterSensorType} onChange={(e) => { setFilterSensorType(e.target.value); setCurrentPage(1); }}>
+                <option value="all">모든 센서</option>
+                <option value="LED">LED</option>
+                <option value="BUZZER">BUZZER</option>
+                <option value="WHEEL">WHEEL</option>
+              </select>
+            )}
+          </div>
+        </div>
 
         <div className={styles.tabMenu}>
           <button 
@@ -122,7 +186,7 @@ function DefectLog() {
 
         <div className={styles.logList}>
           {pagedLogs.length === 0 ? (
-            <div className={styles.noLogs}>데이터 없음</div>
+            <div className={styles.noLogs}>조건에 맞는 데이터 없음</div>
           ) : (
             pagedLogs.map((log, idx) => (
               <div key={idx} className={styles.logRow} onClick={() => setSelectedLog(log)}>
@@ -147,29 +211,11 @@ function DefectLog() {
         </div>
 
         <div className={styles.pagination}>
-          <button 
-            className={styles.navBtn} 
-            disabled={currentPage === 1} 
-            onClick={() => setCurrentPage(p => p - 1)}
-          >
-            ‹
-          </button>
+          <button className={styles.navBtn} disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>‹</button>
           {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map(p => (
-            <button 
-              key={p} 
-              className={`${styles.pageBtn} ${p === currentPage ? styles.active : ''}`} 
-              onClick={() => setCurrentPage(p)}
-            >
-              {p}
-            </button>
+            <button key={p} className={`${styles.pageBtn} ${p === currentPage ? styles.active : ''}`} onClick={() => setCurrentPage(p)}>{p}</button>
           ))}
-          <button 
-            className={styles.navBtn} 
-            disabled={currentPage === totalPages} 
-            onClick={() => setCurrentPage(p => p + 1)}
-          >
-            ›
-          </button>
+          <button className={styles.navBtn} disabled={currentPage === totalPages || totalPages === 0} onClick={() => setCurrentPage(p => p + 1)}>›</button>
         </div>
 
         {selectedLog && (
@@ -179,12 +225,7 @@ function DefectLog() {
               <div className={styles.modalImageContainer}>
                 {selectedLog.images.length > 0 ? (
                   selectedLog.images.map((img, i) => (
-                    <img 
-                      key={i} 
-                      src={getImageUrl(img)} 
-                      alt="detail" 
-                      style={{ maxWidth: selectedLog.images.length === 1 ? '95%' : '48%' }} 
-                    />
+                    <img key={i} src={getImageUrl(img)} alt="detail" />
                   ))
                 ) : (
                   <div className={styles.noImage}>이미지 없음</div>
