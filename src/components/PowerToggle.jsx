@@ -9,7 +9,6 @@ function PowerToggle({ onPowerChange }) {
     setIsLoading(true);
     const newPowerState = !isPowerOn;
     
-    // 현재 상태에 따라 엔드포인트 결정
     const apiBase = import.meta.env.VITE_API_BASE_URL;
     // 현재 상태에 따라 엔드포인트 결정
     const endpoint = isPowerOn 
