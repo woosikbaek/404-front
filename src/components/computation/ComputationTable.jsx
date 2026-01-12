@@ -9,8 +9,6 @@ const ComputationTable = ({ employeeList, isLoading, onLeaveClick }) => {
     );
   }
 
-
-  console.log(employeeList);
   return (
     <table className={styles.table}>
       <thead>

@@ -33,7 +33,6 @@ function Header({ connected = false }) {
     const timer = setTimeout(() => {
       setIsCommuted(false); // 00:05분에 초기화
       localStorage.removeItem('isCommuted'); // localStorage도 초기화
-      console.log('자정 5분: 출근 상태 초기화됨');
     }, timeToReset);
 
     return () => clearTimeout(timer);
@@ -55,7 +54,6 @@ function Header({ connected = false }) {
 
     // 로컬스토리지에서 사원 ID 가져오기
     const employeeId = localStorage.getItem('employeeId');
-    console.log(employeeId);
 
     if (!employeeId) {
       alert("사원 정보(ID)를 찾을 수 없습니다. 다시 로그인해주세요.");

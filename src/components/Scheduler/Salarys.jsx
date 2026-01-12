@@ -22,9 +22,6 @@ const Salarys = ({ isOpen, onClose }) => {
       const empData = await empRes.json();
       const salaryMap = await salaryRes.json(); // 원본: {5: 120000, 6: 0, ...}
 
-      console.log("직원 데이터:", empData);
-      console.log("급여 데이터(Map):", salaryMap);
-
       // 데이터 매칭 로직 수정
       const combined = empData.map(emp => {
         // salaryMap에서 emp.id를 키(key)로 사용하여 급여를 바로 가져옵니다.
