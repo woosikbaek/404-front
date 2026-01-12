@@ -19,12 +19,14 @@ export const socket = io(API_BASE, {
 export const getStompClient = () => {
     const sock = new SockJS(API_CHAT);
     const stompClient = Stomp.over(sock);
+    stompClient.debug = () => {};
     return stompClient;
 };
 // 3. 스케줄 관리 클라이언트 생성 함수 (8080번 서버용)
 export const getSchedulerClient = () => {
     const sock = new SockJS(API_SCHEDULER);
     const stompClient = Stomp.over(sock);
+    stompClient.debug = () => {};
     return stompClient;
 };
 // 기본적으로는 Socket.io를 내보냄
