@@ -1,14 +1,16 @@
 .container {
   padding: 40px;
   background-color: #fff9f8;
-  min-height: 100vh;
+  min-height: 88vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  border-radius: 10px;
 }
 
 .dashboardCard {
   width: 100%;
+  margin-top: 35px;
   max-width: 1200px;
   background: white;
   border-radius: 25px;

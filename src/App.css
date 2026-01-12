@@ -4,40 +4,36 @@
   padding: 0;
 }
 
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  background: #d7dbdf;
+  /* 가로 튐 방지 및 전체적인 레이아웃 고정 */
+  overflow-y: scroll; 
+}
+
+/* 1. 최상위 컨테이너: 상하 대칭 유지 */
 .app-container {
   min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
   background: #d7dbdf;
+  padding: 15px 0; 
+}
+
+/* 2. 메인 콘텐츠 박스 */
+.app-main {
+  max-width: 1600px;
+  width: 97%; 
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
 
-.logout-button {
-  padding: 8px 20px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s;
-}
-
-.logout-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-.app-main {
-  flex: 1;
-  background-color: #d7dbdf;
-  max-width: 1600px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-/* 탭 스타일 */
+/* 3. 탭 버튼 영역 (디자인 100% 보존) */
 .tab-container {
   display: flex;
   gap: 8px;
@@ -46,6 +42,7 @@
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
 .tab-button {
@@ -59,49 +56,61 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
 }
 
 .tab-button.active {
-  background: #d7dbdf;
+  background: #d7dbdf; 
   color: #222;
-  box-shadow: none;
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
+/* 4. 탭 내용: 스케줄 탭 덜컹거림 방지의 핵심 */
 .tab-content {
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeInOnly 0.2s ease-in-out;
+  width: 100%;
+  
+  /* [수정] min-height만 쓰면 내부 콘텐츠(달력 등)가 이를 뚫을 때 덜컹거립니다.
+     창 모드에서는 860px로 높이를 아예 고정(height)해버리는 것이 가장 안전합니다. */
+  height: 860px; 
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* 내부 요소가 박스를 밀어내는 것 방지 */
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+/* F11(전체화면) 시 설정 */
+@media screen and (display-mode: fullscreen) {
+  .tab-content {
+    /* F11 시에도 height를 고정하여 탭 전환 시 1px도 안 움직이게 합니다. */
+    height: calc(100vh - 160px); 
+    min-height: calc(100vh - 160px);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
-/* .app-footer {
-  background-color: #1f2937;
-  color: white;
-  text-align: center;
-  padding: 0.75rem;
-  margin-top: auto;
+/* 5. 헤더 위치 고정 (디자인 유지) */
+.defectLogTitle, 
+.dashboardContainer h2, 
+.cardHeader h2,
+.calendar .text {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #222 !important;
+  height: 40px !important; 
+  margin: 0 0 16px 0 !important;
+  display: flex;
+  align-items: center;
+  padding: 0 !important;
 }
 
-.app-footer p {
-  font-size: 0.8rem;
-  opacity: 0.9;
-} */
+/* 6. 내부 컨테이너: 스케줄 탭(달력) 대응 */
+.defectLogContainer, 
+.dashboardContainer,
+.calendar {
+  padding: 0 !important;
+  flex: 1;
+  /* 내부 콘텐츠가 많아지면 박스 안에서만 스크롤되도록 설정 */
+  overflow-y: auto; 
+}
+
+@keyframes fadeInOnly {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
