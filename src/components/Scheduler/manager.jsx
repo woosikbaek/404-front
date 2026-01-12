@@ -27,7 +27,7 @@ const Manager = ({ date, selectedEmp, onClose, onSave, range }) => {
     if (range) {
       payload.endDate = range.end;
     }
-    console.log(payload);
+
 
     onSave(payload);
   };
