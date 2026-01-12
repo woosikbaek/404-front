@@ -8,11 +8,11 @@ html, body, #root {
   height: 100%;
   width: 100%;
   background: #d7dbdf;
-  /* 가로 튐 방지 및 전체적인 레이아웃 고정 */
-  overflow-y: scroll; 
+  /* [수정] 강제 스크롤바 생성 중단. 필요할 때만 브라우저 스크롤이 생기게 함 */
+  overflow-y: auto; 
 }
 
-/* 1. 최상위 컨테이너: 상하 대칭 유지 */
+/* 1. 최상위 컨테이너 */
 .app-container {
   min-height: 100vh;
   width: 100%;
@@ -33,7 +33,7 @@ html, body, #root {
   flex-direction: column;
 }
 
-/* 3. 탭 버튼 영역 (디자인 100% 보존) */
+/* 3. 탭 버튼 영역 */
 .tab-container {
   display: flex;
   gap: 8px;
@@ -63,29 +63,26 @@ html, body, #root {
   color: #222;
 }
 
-/* 4. 탭 내용: 스케줄 탭 덜컹거림 방지의 핵심 */
+/* 4. 탭 내용 */
 .tab-content {
   animation: fadeInOnly 0.2s ease-in-out;
   width: 100%;
-  
-  /* [수정] min-height만 쓰면 내부 콘텐츠(달력 등)가 이를 뚫을 때 덜컹거립니다.
-     창 모드에서는 860px로 높이를 아예 고정(height)해버리는 것이 가장 안전합니다. */
   height: 860px; 
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* 내부 요소가 박스를 밀어내는 것 방지 */
+  /* [수정] 내부 스크롤바가 생기지 않도록 visible 처리하여 브라우저 스크롤로 통합 */
+  overflow: visible; 
 }
 
 /* F11(전체화면) 시 설정 */
 @media screen and (display-mode: fullscreen) {
   .tab-content {
-    /* F11 시에도 height를 고정하여 탭 전환 시 1px도 안 움직이게 합니다. */
     height: calc(100vh - 160px); 
     min-height: calc(100vh - 160px);
   }
 }
 
-/* 5. 헤더 위치 고정 (디자인 유지) */
+/* 5. 헤더 위치 고정 */
 .defectLogTitle, 
 .dashboardContainer h2, 
 .cardHeader h2,
@@ -100,14 +97,14 @@ html, body, #root {
   padding: 0 !important;
 }
 
-/* 6. 내부 컨테이너: 스케줄 탭(달력) 대응 */
+/* 6. 내부 컨테이너: 개별 스크롤 완전 제거 */
 .defectLogContainer, 
 .dashboardContainer,
 .calendar {
   padding: 0 !important;
   flex: 1;
-  /* 내부 콘텐츠가 많아지면 박스 안에서만 스크롤되도록 설정 */
-  overflow-y: auto; 
+  /* [수정] 내부의 개별 스크롤바 원천 차단 (전체 스크롤바 하나로 통합됨) */
+  overflow-y: visible !important; 
 }
 
 @keyframes fadeInOnly {
