@@ -4,7 +4,7 @@
 
 <div align="center">
   <a href="https://www.youtube.com/watch?v=gPBmVkVSfhc">
-    <img src="https://img.youtube.com/vi/pIhjj_DyJ7Q/maxresdefault.jpg" width="80%" alt="404found 2차 프로젝트 시연영상">
+    <img src="https://img.youtube.com/vi/gPBmVkVSfhc/maxresdefault.jpg" width="80%" alt="404found 2차 프로젝트 시연영상">
     <br>
     <img src="https://img.shields.io/badge/YouTube-Watch_Video-red?style=for-the-badge&logo=youtube" alt="Youtube Button">
   </a>
