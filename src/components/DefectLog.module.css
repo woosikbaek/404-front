@@ -10,6 +10,78 @@
   color: var(--color-gray-800);
 }
 
+/* 슬림해진 필터 섹션 */
+.filterSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-radius: var(--radius-8);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid var(--color-border-medium);
+}
+
+.filterLeft {
+  flex: 1;
+}
+
+.filterRight {
+  display: flex;
+  gap: 8px;
+}
+
+/* Input과 Select 공통 스타일 (높이 통일 및 슬림화) */
+.slimInput, .slimSelect {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-4);
+  font-size: 13px;
+  color: #333 !important;
+  background-color: #f9f9f9 !important;
+  transition: border-color 0.2s;
+}
+
+.slimInput {
+  width: 220px;
+}
+
+.slimInput:focus, .slimSelect:focus {
+  border-color: #1a2a3a;
+  outline: none;
+  background-color: #ffffff !important;
+}
+
+.slimSelect {
+  cursor: pointer;
+  min-width: 90px;
+}
+
+.tabMenu {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+}
+
+.tabBtn {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: #666;
+}
+
+.activeTab {
+  color: #1a2a3a;
+  border-bottom: 3px solid #1a2a3a;
+  margin-bottom: -2px;
+}
+
 .logHeader,
 .logRow {
   display: grid;
@@ -60,15 +132,13 @@
   gap: 6px;
 }
 
-/* 유형: 빨간색, 얇게 */
 .logColType {
   grid-column: 4;
-  text-align: center;
-  font-weight: 400;
   text-align: left;
+  font-weight: 400;
+  white-space: nowrap;
 }
 
-/* 결과: 빨간색, 적당한 굵기 (600으로 조정) */
 .logColResult {
   grid-column: 6;
   text-align: center;
@@ -99,7 +169,6 @@
   color: var(--color-text-secondary);
 }
 
-/* 페이지네이션 */
 .pagination {
   display: flex;
   justify-content: center;
@@ -123,7 +192,7 @@
 
 .navBtn {
   font-size: var(--font-size-18);
-  color: #000000 !important; /* 화살표 검은색 */
+  color: #000000 !important;
   background-color: #f0f0f0;
 }
 
@@ -137,12 +206,11 @@
 }
 
 .pageBtn.active {
-  background-color: #1a2a3a; /* 어두운 남색 */
+  background-color: #1a2a3a;
   color: #ffffff;
   border-color: #1a2a3a;
 }
 
-/* 모달 디자인 (800x600 고정) */
 .imageModal {
   position: fixed;
   inset: 0;
@@ -172,15 +240,17 @@
   align-items: center;
   margin-bottom: var(--spacing-8);
   overflow: hidden;
+  background: var(--color-bg-secondary); 
+  border-radius: var(--radius-6);
+  border: var(--border-width-thin) solid var(--color-border-medium);
 }
 
-.modalImage {
+.modalImageContainer img {
   width: auto;
   height: 100%;
-  max-width: calc(50% - 10px); 
+  max-width: 48%; 
   object-fit: contain;
   border-radius: var(--radius-6);
-  background: #f9f9f9;
 }
 
 .noImage {
@@ -219,49 +289,3 @@
   font-size: var(--font-size-14);
   color: var(--color-gray-800);
 }
-
-.tabMenu {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #ddd;
-}
-
-.tabBtn {
-  padding: 10px 20px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  color: #666;
-}
-
-.activeTab {
-  color: #1a2a3a; /* 포인트 컬러 */
-  border-bottom: 3px solid #1a2a3a;
-  margin-bottom: -2px; /* border-bottom 겹치기 */
-}
-
-/* 이미지 없는 센서 모달용 */
-.noImagePlaceholder {
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  color: #999;
-}
-
-.activeTab::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: #1a2a3a;
-}
-

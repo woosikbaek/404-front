@@ -8,8 +8,8 @@ import socket from '../utils/socket';
 const PROCESS_STEPS = [
   { id: 'start', label: 'START' },
   { id: 'sensor', label: '센서 확인' },
-  { id: 'case', label: '케이스 확인' },
-  { id: 'drive', label: '드라이브 확인' },
+  { id: 'case', label: '외관 확인' },
+  { id: 'drive', label: '주행 확인' },
   { id: 'end', label: 'END' }
 ];
 
@@ -22,13 +22,9 @@ function Progress() {
   const endTimerRef = useRef(null);
 
   useEffect(() => {
-    const handleConnect = () => {
-      console.log('🔌 Progress Socket Connected');
-    };
 
     // progress 이벤트 처리 (백엔드에서 모든 진행 상태를 'progress' 이벤트로 보냄)
     const handleProgress = (data) => {
-      console.log(' Progress Event:', data);
       
       if (!data || typeof data !== 'object') {
         return;
@@ -74,7 +70,6 @@ function Progress() {
 
     // 외관 불량 이벤트 처리
     const handleCameraDefect = (data) => {
-      console.log('⚠️ Camera Defect Event:', data);
       if (data && data.car_id && currentCarId === data.car_id) {
         // 외관 불량은 이미지가 있거나 result가 DEFECT인 경우
         const isDefect = (data.images && data.images.length > 0) || data.result === 'DEFECT';
@@ -87,14 +82,12 @@ function Progress() {
           
           // case 단계를 'error'로 설정하고, end도 즉시 'error'로 설정
           dispatch(setStepError({ stepId: 'case' }));
-          dispatch(setEnd({ status: 'error' }));
         }
       }
     };
 
     // 센서 불량 이벤트 처리
     const handleSensorDefect = (data) => {
-      console.log('⚠️ Sensor Defect Event:', data);
       if (data && data.car_id && currentCarId === data.car_id) {
         // device 필드나 type 필드를 확인하여 어떤 단계인지 판단
         const device = (data.device || '').toUpperCase();
@@ -138,24 +131,17 @@ function Progress() {
     };
 
 
-    const handleDisconnect = () => {
-      console.log('🔌 Progress Socket Disconnected');
-    };
 
     // 이벤트 리스너 등록
-    socket.on('connect', handleConnect);
     socket.on('progress', handleProgress);
     socket.on('camera_defect', handleCameraDefect);
     socket.on('sensor_defect', handleSensorDefect);
-    socket.on('disconnect', handleDisconnect);
 
     return () => {
       // 이벤트 리스너 제거
-      socket.off('connect', handleConnect);
       socket.off('progress', handleProgress);
       socket.off('camera_defect', handleCameraDefect);
       socket.off('sensor_defect', handleSensorDefect);
-      socket.off('disconnect', handleDisconnect);
       
       // 타이머 정리
       if (endTimerRef.current) {

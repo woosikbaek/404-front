@@ -3,97 +3,304 @@
   bottom: 20px;
   right: 20px;
   z-index: 1000;
-  font-family: sans-serif;
+  transition: opacity 0.3s ease;
 }
 
 .messageContent {
   font-size: 14px;
+  line-height: 1.4;
   color: #333;
 }
 
 .chatBox {
-  width: 320px;
-  height: 450px;
-  background-color: white;
+  width: 350px;
+  height: 500px;
+  background-color: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid #ddd;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 전체화면 모드 스타일 */
+.maximized {
+  width: 90vw !important;
+  height: 85vh !important;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 
 .header {
-  padding: 12px;
-  background-color: #007bff;
+  padding: 15px;
+  background-color: #ffcdc5;
   color: white;
   display: flex;
   justify-content: space-between;
-  font-weight: bold;
+  align-items: center;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.actionBtn, .closeBtn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 5px;
 }
 
 .messageArea {
   flex: 1;
   padding: 15px;
   overflow-y: auto;
-  background-color: #f4f7f6;
+  background-color: #f8f9fa;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .msgBubble {
-  padding: 8px 12px;
+  padding: 10px 14px;
   background-color: white;
   border-radius: 8px;
-  font-size: 14px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   max-width: 80%;
+  align-self: flex-start;
+}
+
+.senderName {
+  display: block;
+  font-size: 11px;
+  color: #ffcdc5;
+  margin-bottom: 4px;
 }
 
 .joinText {
-  text-align: center;
-  font-size: 12px;
-  color: #777;
-  background: #eee;
-  padding: 3px 10px;
-  border-radius: 10px;
   align-self: center;
+  background-color: #e9ecef;
+  color: #666;
+  font-size: 12px;
+  padding: 5px 15px;
+  border-radius: 20px;
 }
 
 .inputArea {
   display: flex;
-  padding: 10px;
+  padding: 15px;
   background: white;
   border-top: 1px solid #eee;
 }
 
 .input {
   flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #303031;
   outline: none;
 }
 
 .sendBtn {
-  margin-left: 5px;
-  padding: 8px 15px;
-  background-color: #007bff;
+  margin-left: 8px;
+  padding: 0 15px;
+  background-color: #ffcdc5;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+}
+
+.sendBtn:disabled {
+  background-color: #ccc;
 }
 
 .openBtn {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #007bff;
+  background-color: #ffcdc5;
   color: white;
   border: none;
   font-size: 24px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* 슬라이더 전체 감싸는 영역 */
+.sliderWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2); /* 헤더 안에서 살짝 구분되게 */
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.sliderIcon {
+  font-size: 12px;
+  color: white;
+  user-select: none;
+}
+
+/* 슬라이더 본체 커스텀 */
+.opacitySlider {
+  -webkit-appearance: none; /* 기본 스타일 제거 */
+  width: 60px;
+  height: 4px; /* 선 굵기 */
+  background: rgba(255, 255, 255, 0.5); /* 선 색상 */
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* 슬라이더 손잡이 (Chrome, Safari, Edge) */
+.opacitySlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: white; /* 손잡이는 화이트로 포인트 */
+  border-radius: 50%;
+  border: 2px solid #ffcdc5; /* 테두리는 컨셉컬러 */
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
+}
+
+.opacitySlider::-webkit-slider-thumb:hover {
+  transform: scale(1.2); /* 마우스 올리면 살짝 커짐 */
+  background: #fff9f8;
+}
+
+/* 슬라이더 손잡이 (Firefox) */
+.opacitySlider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  border: 2px solid #ffcdc5;
+  cursor: pointer;
+}
+
+/* 내 메시지(우측 정렬) 추가 제안 */
+.myMsgBubble {
+  align-self: flex-end;
+  background-color: #ffcdc5;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 12px 12px 0 12px; /* 오른쪽 아래만 각지게 */
+  box-shadow: 0 2px 5px rgba(255, 205, 197, 0.4);
+  max-width: 80%;
+}
+
+/* scrollvar section */
+.messageArea {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 스크롤바 전체 너비 */
+.messageArea::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* 스크롤바 트랙(배경) */
+.messageArea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* [요청] 스크롤바 바(막대) 색상 수정 */
+.messageArea::-webkit-scrollbar-thumb {
+  background: #ffcdc5;
+  border-radius: 10px;
+}
+
+.messageArea::-webkit-scrollbar-thumb:hover {
+  background: #ffb5a7; /* 호버 시 약간 진하게 */
+}
+
+/* [디테일 3] Input Placeholder 색상 화이트로 변경 */
+.input::placeholder {
+  color: white;
+  opacity: 0.8; /* 배경이 밝으면 안 보일 수 있어 투명도 살짝 조절 */
+}
+
+/* 만약 배경색도 placeholder가 잘 보이게 바꾸고 싶다면 아래 참고 */
+.input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  background-color: #ffcdc5; /* 배경이 파란색이어야 화이트 글씨가 잘 보입니다 */
+  color: white; /* 입력하는 글자도 화이트 */
+}
+
+.myMsgWrapper {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  max-width: 80%;
+}
+
+.otherMsgWrapper {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 80%;
+}
+
+.myMsgRow, .otherMsgRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.myMsgRow { flex-direction: row-reverse; } /* 내 메시지는 시간이 왼쪽에 표시 */
+
+.myMsgBubble {
+  padding: 10px 14px;
+  background-color: #ffcdc5;
+  color: white;
+  border-radius: 15px 15px 0 15px; /* 꼬리 모양 디테일 */
+  box-shadow: 0 2px 5px rgba(255, 205, 197, 0.4);
+}
+
+.msgBubble {
+  padding: 10px 14px;
+  background-color: white;
+  border-radius: 15px 15px 15px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid #ffeae7;
+}
+
+.chatTime {
+  font-size: 9px;
+  color: #aaa;
+  margin-bottom: 2px;
+}
+
+/* 슬라이더 래퍼 추가 */
+.sliderWrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
 }

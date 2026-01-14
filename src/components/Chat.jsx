@@ -4,101 +4,138 @@ import styles from './Chat.module.css';
 
 const Chat = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
+  const [opacity, setOpacity] = useState(1);
   const [messages, setMessages] = useState([]);
   const [userData, setUserData] = useState({
-    username: 'User' + Math.floor(Math.random() * 100),
+    username: localStorage.getItem('name') || '익명',
     connected: false,
     message: ''
   });
 
   const stompClientRef = useRef(null);
   const scrollRef = useRef(null);
+  const isSubscribed = useRef(false);
 
-  // 1. 소켓 연결 설정
+  const scrollToBottom = (smooth = false) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: smooth ? 'smooth' : 'auto',
+      });
+    }
+  };
+
   useEffect(() => {
+    if (stompClientRef.current?.connected && isSubscribed.current) return;
+
     const client = getStompClient();
     stompClientRef.current = client;
 
     client.connect({}, () => {
       setUserData(prev => ({ ...prev, connected: true }));
 
-      // 구독 시작
-      client.subscribe('/topic/public', (payload) => {
-        const newMessage = JSON.parse(payload.body);
-        console.log("서버에서 받은 메시지 전체 구조:", newMessage); // 이 로그를 꼭 확인하세요!
-        setMessages(prev => [...prev, newMessage]);
-      });
+      if (!isSubscribed.current) {
+        client.subscribe('/topic/public', (payload) => {
+          const newMessage = JSON.parse(payload.body);
+          // 시간 정보 추가
+          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      // 입장 알림 발송
-      client.send("/app/chat.addUser", {}, JSON.stringify({
-        sender: userData.username,
-        type: 'JOIN',
-        content: `${userData.username}님이 입장하셨습니다.`
-      }));
+          setMessages(prev => {
+            const isDuplicate = prev.length > 0 &&
+              prev[prev.length - 1].content === newMessage.content &&
+              prev[prev.length - 1].sender === newMessage.sender;
+
+            return isDuplicate ? prev : [...prev, { ...newMessage, time }];
+          });
+        });
+
+        isSubscribed.current = true;
+
+        client.send("/app/chat.addUser", {}, JSON.stringify({
+          sender: userData.username,
+          type: 'JOIN',
+          content: `${userData.username}님이 입장하셨습니다.`
+        }));
+      }
     }, (err) => {
-      console.error("STOMP 연결 실패:", err);
       setUserData(prev => ({ ...prev, connected: false }));
+      isSubscribed.current = false;
     });
 
     return () => {
       if (stompClientRef.current?.connected) {
         stompClientRef.current.disconnect();
+        isSubscribed.current = false;
       }
     };
   }, []);
 
-  // 2. 메시지 수신 시 하단 스크롤
+  // 메시지 수신 시 부드러운 스크롤, 창 열 때는 즉시 스크롤
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    if (isOpen) {
+      const isNewMessage = messages.length > 0;
+      setTimeout(() => scrollToBottom(isNewMessage), 50);
     }
-  }, [messages]);
+  }, [messages, isOpen]);
 
-  // 3. 메시지 전송 함수
   const sendValue = (type, content) => {
     if (stompClientRef.current?.connected) {
       const chatMessage = {
         sender: userData.username,
-        content: content || userData.message,
+        content: (content || userData.message).trim(),
         type: type
       };
+      if (!chatMessage.content && type === 'CHAT') return;
 
       const destination = type === 'JOIN' ? "/app/chat.addUser" : "/app/chat.sendMessage";
       stompClientRef.current.send(destination, {}, JSON.stringify(chatMessage));
-
-      if (type === 'CHAT') {
-        setUserData(prev => ({ ...prev, message: '' }));
-      }
+      if (type === 'CHAT') setUserData(prev => ({ ...prev, message: '' }));
     }
   };
 
+  const chatBoxClass = `${styles.chatBox} ${isMaximized ? styles.maximized : ''}`;
+
   return (
-    <div className={styles.floatingContainer}>
+    <div className={styles.floatingContainer} style={{ opacity: opacity }}>
       {isOpen ? (
-        <div className={styles.chatBox}>
+        <div className={chatBoxClass}>
           <div className={styles.header}>
-            <span>실시간 채팅 ({userData.connected ? "온라인" : "연결안됨"})</span>
-            <button onClick={() => setIsOpen(false)} className={styles.closeBtn}>X</button>
+            <div className={styles.headerLeft}>
+              <span>사내채팅</span>
+            </div>
+            <div className={styles.headerRight}>
+              <div className={styles.sliderWrapper}>
+                <span className={styles.sliderIcon}>🌓</span>
+                <input
+                  type="range" min="0.3" max="1" step="0.1"
+                  value={opacity}
+                  onChange={(e) => setOpacity(e.target.value)}
+                  className={styles.opacitySlider}
+                />
+              </div>
+              <button onClick={() => setIsMaximized(!isMaximized)} className={styles.actionBtn}>
+                {isMaximized ? '🗗' : '🗖'}
+              </button>
+              <button onClick={() => setIsOpen(false)} className={styles.closeBtn}>✕</button>
+            </div>
           </div>
 
           <div ref={scrollRef} className={styles.messageArea}>
             {messages.map((msg, index) => {
               const isJoin = msg.type === 'JOIN';
-              // 서버에서 오는 데이터 키값이 다를 경우를 대비해 변수로 할당 (null 체크)
-              const sender = msg.sender || "알 수 없음";
-              const content = msg.content || msg.message || ""; // content가 없으면 message라도 시도
+              const isMine = msg.sender === userData.username;
 
               return (
-                <div
-                  key={index}
-                  className={isJoin ? styles.joinText : styles.msgBubble}
-                >
-                  {!isJoin && (
-                    <div style={{ marginBottom: '4px' }}>
-                      <b style={{ color: '#007bff', fontSize: '11px' }}>{sender}</b>
+                <div key={index} className={isJoin ? styles.joinText : (isMine ? styles.myMsgWrapper : styles.otherMsgWrapper)}>
+                  {!isJoin && !isMine && <b className={styles.senderName}>{msg.sender}</b>}
+                  <div className={isMine ? styles.myMsgRow : styles.otherMsgRow}>
+                    <div className={isJoin ? styles.joinText : (isMine ? styles.myMsgBubble : styles.msgBubble)}>
+                      <span className={styles.messageContent}>{msg.content || msg.message}</span>
                     </div>
-                  )}
-                  <span className={styles.messageContent}>{content}</span>
+                    {/* 시간 표시 추가 */}
+                    {!isJoin && <span className={styles.chatTime}>{msg.time}</span>}
+                  </div>
                 </div>
               );
             })}
@@ -111,7 +148,7 @@ const Chat = () => {
               value={userData.message}
               onChange={(e) => setUserData({ ...userData, message: e.target.value })}
               onKeyDown={(e) => e.key === 'Enter' && sendValue('CHAT')}
-              placeholder={userData.connected ? "메시지 입력..." : "서버 연결 중..."}
+              placeholder="메시지 입력..."
               disabled={!userData.connected}
             />
             <button

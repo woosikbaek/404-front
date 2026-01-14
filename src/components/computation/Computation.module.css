@@ -1,0 +1,63 @@
+/* 1. 배경 컨테이너: 스크롤 절대 방지 */
+.container {
+  width: 100%;
+  padding: 40px;
+  background-color: #fff9f8;
+  
+  /* [핵심] 부모의 패딩/마진 때문에 밀려 내려가는 걸 고려해서 
+     15px보다 조금 더 넉넉하게 빼줘야 스크롤바가 안 생깁니다. */
+  height: calc(100vh - 40px); 
+  
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  
+  border-radius: 10px; 
+  /* [핵심] 내부에서 어떤 일이 있어도 이 컨테이너에 스크롤바가 생기지 않게 함 */
+  overflow: hidden !important; 
+}
+
+/* 2. 월급 카드 */
+.dashboardCard {
+  width: 100%;
+  max-width: 1200px;
+  /* 카드가 너무 위로 붙지 않게 유지 */
+  margin-top: 60px; 
+  
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(175, 173, 172, 0.4);
+  border: 3px solid #ffcdc5;
+  display: flex;
+  flex-direction: column;
+  
+  /* 카드가 배경 바닥 둥글기를 절대 침범하지 못하게 높이 제한 */
+  max-height: calc(100% - 100px);
+  overflow: hidden;
+}
+
+/* 3. 카드 내부 테이블 영역 */
+.tableArea {
+  padding: 25px;
+  flex: 1;
+  /* 카드 안에서만 스크롤이 되게 하고 싶은 게 아니라면 여기도 hidden 처리 */
+  overflow-y: auto; 
+}
+
+/* ------------------------------------------------ */
+/* [추가] F11(전체화면) 시 스크롤바 생김 방지 보정 */
+/* ------------------------------------------------ */
+@media screen and (display-mode: fullscreen) {
+  .container {
+    /* 전체화면에서는 브라우저 상단바가 사라지므로 높이를 다시 칼같이 맞춤 */
+    height: calc(100vh - 20px); 
+    padding: 30px;
+  }
+
+  .dashboardCard {
+    /* 전체화면 시 카드 위치 미세 조정 */
+    margin-top: 40px;
+    max-height: calc(100% - 60px);
+  }
+}
