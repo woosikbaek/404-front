@@ -8,8 +8,8 @@ import socket from '../utils/socket';
 const PROCESS_STEPS = [
   { id: 'start', label: 'START' },
   { id: 'sensor', label: '센서 확인' },
-  { id: 'case', label: '케이스 확인' },
-  { id: 'drive', label: '드라이브 확인' },
+  { id: 'case', label: '외관 확인' },
+  { id: 'drive', label: '주행 확인' },
   { id: 'end', label: 'END' }
 ];
 
@@ -82,7 +82,6 @@ function Progress() {
           
           // case 단계를 'error'로 설정하고, end도 즉시 'error'로 설정
           dispatch(setStepError({ stepId: 'case' }));
-          dispatch(setEnd({ status: 'error' }));
         }
       }
     };
