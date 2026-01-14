@@ -2,6 +2,14 @@
 
 자동차 검사 공정의 실시간 모니터링 및 불량 관리를 위한 웹 애플리케이션입니다. WebSocket을 통한 실시간 데이터 수신, Redux를 활용한 전역 상태 관리, 그리고 직관적인 UI를 제공합니다.
 
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=pIhjj_DyJ7Q">
+    <img src="https://img.youtube.com/vi/pIhjj_DyJ7Q/maxresdefault.jpg" width="80%" alt="404found 2차 프로젝트 시연영상">
+    <br>
+    <img src="https://img.shields.io/badge/YouTube-Watch_Video-red?style=for-the-badge&logo=youtube" alt="Youtube Button">
+  </a>
+</div>
+
 ## 📋 목차
 
 - [기술 스택](#기술-스택)
