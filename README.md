@@ -8,11 +8,9 @@
     <br>
     <img src="https://img.shields.io/badge/YouTube-Watch_Video-red?style=for-the-badge&logo=youtube" alt="Youtube Button">
   </a>
-</div>
-
-<div align="center">
   <img src="#notion-app > div > div > div.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div > div:nth-child(2) > img">
 </div>
+
 
 ## 📋 목차
 
