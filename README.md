@@ -8,7 +8,7 @@
     <br>
     <img src="https://img.shields.io/badge/YouTube-Watch_Video-red?style=for-the-badge&logo=youtube" alt="Youtube Button">
   </a>
-  "#notion-app > div > div > div.notion-overlay-container.notion-default-overlay-container > div:nth-child(2) > div > div > div:nth-child(2) > img"
+  <img width="735" height="826" alt="Image" src="https://github.com/user-attachments/assets/4de2ba9a-4110-4a23-9d0d-e993ca7cc5cb" />
 </div>
 
 
